@@ -1,0 +1,87 @@
+.login-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(180deg, #1861bf 50%, 
+    #e7e7e7 50%);
+  }
+  
+.header-of-hotel-billing{
+    color: white;
+    margin-bottom: 12px;
+    padding-bottom: 15px;
+    font-size: 50px;
+  font-weight: 600;
+  text-align: center;
+  /* font-family: "Crimson Text", serif;
+  font-weight: 600; */
+}
+
+
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    margin-top: 10px;
+    
+    
+  }
+  
+  .login-box {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 350px;
+    margin-top: 0%;
+
+    
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    /* margin-top: 40px; */
+  }
+  
+  .bi-person-circle {
+    font-size: 2.5rem;
+  }
+  
+  button {
+    background-color: #0d6efd;
+  }
+  
+  button:hover {
+    background-color: #0b5ed7;
+  }
+  
+  /* Responsive styles for mobile devices */
+@media (max-width: 576px) {
+
+ 
+ 
+  .header-of-hotel-billing {
+    font-size: 30px;
+  }
+
+  .login-box {
+    width: 95%;
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .bi-person-circle {
+    font-size: 2rem;
+  }
+
+  button {
+    font-size: 0.875rem;
+  }
+}
