@@ -1,0 +1,53 @@
+/* src/components/Sidebar.css */
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    background-color: #343a40;
+    color: white;
+    transition: width 0.3s;
+    padding-top: 20px;
+    overflow-x: hidden;
+    z-index: 500;
+  }
+  
+  .sidebar.collapsed {
+    width: 60px;
+  }
+  
+  .sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    height: 35px;
+  }
+  
+  .sidebar .nav-link:hover {
+    background-color: #495057;
+  }
+  
+  .sidebar .nav-link span {
+    margin-left: 10px;
+  }
+  
+  .sidebar .toggle-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: #495057;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  
