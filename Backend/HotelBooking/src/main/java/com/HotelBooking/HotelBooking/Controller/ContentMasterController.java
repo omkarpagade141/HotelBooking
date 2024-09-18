@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,12 +103,16 @@ public class ContentMasterController {
 	   @DeleteMapping("/{contentId}")
 		public ResponseEntity<?> deleteContent(@PathVariable Long contentId ) {
 			try {
-		        contentMasterService.deleteById(contentId);
-				return new ResponseEntity<>(true, HttpStatus.OK);
+				Optional<ContentMaster> CheckcontentMaster =contentMasterService.getContentById(contentId);
+				if(CheckcontentMaster.isPresent()) {
+			        contentMasterService.deleteById(contentId);
+					return new ResponseEntity<>(true, HttpStatus.OK);
+
+				}
+				return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
 			} catch (Exception e) {
 				return new ResponseEntity<>("something Wrong on server", HttpStatus.NOT_FOUND);
 			}
-			
 		}
 	   
 	   @PutMapping("/{contentId}")
@@ -165,5 +170,11 @@ public class ContentMasterController {
 	        ContentMaster savedContentMaster = contentMasterService.save(existingContentMaster);
 	        return new ResponseEntity<>(savedContentMaster, HttpStatus.OK);
 	    }
+	   
+	   @GetMapping("/content-field")
+	  public ResponseEntity <List<Map<String,Object>>> getSelectedContainFields(){
+		 List<  Map<String,Object>> contentFields= contentMasterService.getSelectedContainFields();
+		    return new ResponseEntity<>(contentFields, HttpStatus.OK);
+	   }
 	}
 

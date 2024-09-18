@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 public class ContentMaster {
 
 	  @Id
-	    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long contentId;
 
 	    private String contentTitle;
