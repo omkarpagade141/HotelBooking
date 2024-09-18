@@ -61,9 +61,10 @@ public class SectionMasterController {
 	@DeleteMapping("/{sectionId}")
 	public ResponseEntity<?> delete(@PathVariable long sectionId) {
 		try {
-			sectionMasterService.deleteSection(sectionId);
-			return new ResponseEntity<>(true, HttpStatus.OK);
+			boolean isdelete=sectionMasterService.deleteSection(sectionId);
+			return new ResponseEntity<>(isdelete, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>("something Wrong on server", HttpStatus.NOT_FOUND);
 		}
 		

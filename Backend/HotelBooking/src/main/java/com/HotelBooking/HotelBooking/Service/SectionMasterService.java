@@ -16,7 +16,7 @@ public interface SectionMasterService {
 
 	Optional<SectionMaster> getSectionById(Long sectionId);
 
-	public void deleteSection(long sectionId);
+	public Boolean deleteSection(long sectionId);
 
 	public SectionMaster updateSection(long sectionId, SectionMaster master);
 
