@@ -2,6 +2,7 @@ package com.HotelBooking.HotelBooking.Service.Impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,12 @@ public class ContentMasterServiceImpl implements ContentMasterService{
 	@Override
 	public void deleteById(Long contentId) {
 		 contentMasterRepository.deleteById(contentId);;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> getSelectedContainFields() {
+		return contentMasterRepository.getSelectedContainFields();
 	}
 
 
