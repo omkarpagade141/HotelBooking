@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -14,21 +13,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.HotelBooking.HotelBooking.Entity.CustomerMaster;
-import com.HotelBooking.HotelBooking.Repository.CustomerMasterRepository;
-import com.HotelBooking.HotelBooking.Service.CustomerMasterService;
+import com.HotelBooking.HotelBooking.Entity.BookingMaster;
+import com.HotelBooking.HotelBooking.Repository.BookingMasterRepository;
+import com.HotelBooking.HotelBooking.Service.BookingMasterService;
 
 @Service
-public class CustomerMasterServiceImpl implements CustomerMasterService {
-	@Autowired
-	CustomerMasterRepository customerMasterRepository;
+public class BookingMasterServiceImpl implements BookingMasterService{
 
+	@Autowired
+	BookingMasterRepository bookingMasterRepository;
+	
 	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images";
 
 	@Override
-	public CustomerMaster addCustomer(CustomerMaster customerMaster,MultipartFile file) throws IOException {
-		Optional<CustomerMaster> master = customerMasterRepository.findByMobileNumber(customerMaster.getMobileNumber());
-		if (!master.isPresent()) {
+	public BookingMaster addBooking(BookingMaster bookingMaster,MultipartFile file) throws IOException {
+		if (bookingMaster!=null) {
 			if (file != null && !file.isEmpty()) {
 				// Get the current date and time
 				LocalDateTime now = LocalDateTime.now();
@@ -52,40 +51,36 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 				Files.write(fileNameAndPath, file.getBytes());
 
 				// Set the new file name in customerMaster object
-				customerMaster.setPhoto(newFileName);
+				bookingMaster.setImage(newFileName);
 			}
-			if(customerMaster.getAddedOn()==null) {
-				customerMaster.setAddedOn(LocalDate.now());
-			}
-			return customerMasterRepository.save(customerMaster);
-		} else {
-			return null;
+
+		
+			
 		}
+		System.out.println(bookingMaster);
+		return bookingMasterRepository.save(bookingMaster);
 	}
 
 	@Override
-	public List<CustomerMaster> getAllCustomer() {
-		return customerMasterRepository.findAll();
-
+	public List<BookingMaster> getallBooking() {
+		return bookingMasterRepository.findAll();
 	}
 
 	@Override
-	public Optional<CustomerMaster> getCustomeById(long customerId) {
-		return customerMasterRepository.findById(customerId);
-
+	public Optional<BookingMaster> getBooking(long bookingId) {
+		return bookingMasterRepository.findById(bookingId);
+		
 	}
 
 	@Override
-	public void DeleteCustomer(long customerId) {
-		customerMasterRepository.deleteById(customerId);
-
+	public void deleteBooking(long bookingId) {
+		bookingMasterRepository.deleteById(bookingId);
+		
 	}
 
 	@Override
-	public CustomerMaster UpdateCustomer(long customerId, CustomerMaster customerMaster, MultipartFile file)
-			throws IOException {
-		Optional<CustomerMaster> master1 = customerMasterRepository.findById(customerId);
-		CustomerMaster master = master1.get();
+	public BookingMaster updateBooking(long bookingId, BookingMaster bookingMaster,MultipartFile file) throws IOException {
+		
 		if (file != null && !file.isEmpty()) {
 			// Get the current date and time
 			LocalDateTime now = LocalDateTime.now();
@@ -109,23 +104,25 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 			Files.write(fileNameAndPath, file.getBytes());
 
 			// Set the new file name in customerMaster object
-			customerMaster.setPhoto(newFileName);
+			bookingMaster.setImage(newFileName);
 		}
-
-		master.setFullName(customerMaster.getFullName());
-		master.setBuildingFlatNumber(customerMaster.getBuildingFlatNumber());
-		master.setCity(customerMaster.getCity());
-		master.setEmail(customerMaster.getEmail());
-		master.setLocality(customerMaster.getLocality());
-		master.setMobileNumber(customerMaster.getMobileNumber());
-		master.setPincode(customerMaster.getPincode());
-		if (customerMaster.getPhoto() == null) {
-			master.setPhoto(master.getPhoto());
-		} else {
-			master.setPhoto(customerMaster.getPhoto());
+		Optional<BookingMaster>  Master=bookingMasterRepository.findById(bookingId);
+		
+		
+		if(Master.isPresent()) {
+			BookingMaster master2=Master.get();
+			master2.setCheckInDate(bookingMaster.getCheckInDate());
+			master2.setCheckInTime(bookingMaster.getCheckInTime());
+			master2.setCheckOutDate(bookingMaster.getCheckOutDate());
+			master2.setCheckOutTime(bookingMaster.getCheckOutTime());
+			master2.setInvoiceamount(bookingMaster.getInvoiceamount());
+			master2.setImage(bookingMaster.getImage());
+			bookingMasterRepository.save(master2);
+			return master2;
 		}
-		return customerMasterRepository.save(master);
+		return null;
 
 	}
+	
 
 }
