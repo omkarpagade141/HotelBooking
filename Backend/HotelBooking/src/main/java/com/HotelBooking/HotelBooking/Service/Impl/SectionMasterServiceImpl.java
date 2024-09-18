@@ -43,9 +43,16 @@ public class SectionMasterServiceImpl implements SectionMasterService {
 	}
 
 	@Override
-	public void deleteSection(long sectionId) {
-
-		sectionMasterRepositiry.deleteById(sectionId);
+	public Boolean deleteSection(long sectionId) {
+		Optional<SectionMaster> master = sectionMasterRepositiry.findById(sectionId);
+	if(master.isPresent()){
+		SectionMaster master2 = master.get();
+		if (master2 != null) {
+			sectionMasterRepositiry.deleteById(sectionId);
+			return true;
+		}
+		}
+		return false;
 
 	}
 
