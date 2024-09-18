@@ -1,0 +1,40 @@
+.adminOptoion li{
+    list-style: none;
+    font-size: 18px;
+    text-align: center;
+}
+.adminIConBtnInNav{
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding-top: 5px;
+    /* border: 1px solid red; */
+    
+}
+.adminIConBtnInNav :hover{
+    background-color: #1756a8;
+}
+.adminButtonsListNav{
+    background-color: white;
+    position: relative;
+}
+.adminButtonsListNav div{
+    margin-right: 20px;
+}
+.adminButtonsListNav ul{
+list-style: none;
+margin-top: 3px;
+}
+.adminButtonsListNav ul li{
+margin-top: 10px;
+cursor: pointer;
+}
+.liInNavAdmin{
+    /* background-color: #f2f2f2; */
+}
+ 
+.navMainDiv{
+    /* border: 1px solid red; */
+    padding-right: 10px;
+}
