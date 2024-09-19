@@ -50,4 +50,9 @@
     cursor: pointer;
   }
   
+  .nav-link.active {
+    color: #a5c6e9; /* Change to your desired active color */
+    font-weight: bold; /* Optional: make it bold */
+    background-color: rgba(0, 0, 0, 0.555); /* Optional: background color */
+  }
   

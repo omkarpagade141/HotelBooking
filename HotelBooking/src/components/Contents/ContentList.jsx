@@ -38,9 +38,9 @@ const ContentList = () => {
               striped
               bordered
               hover
-              styel={{ textAlign: "center", padding: "15px", fontSize: "25px" }}
+              style={{ textAlign: "center", fontSize: "16px" }}
             >
-              <thead style={{ fontSize: "20px" }}>
+              <thead style={{ fontSize: "16 px" }}>
                 <tr>
                   <th>Section Id</th>
                   <th>Content Id</th>
@@ -50,30 +50,7 @@ const ContentList = () => {
                 </tr>
               </thead>
               <tbody>
-                {
-                  /* {rows.map((row, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{row._id}</td>
-                    <td>{row.secName}</td>
-                    <td>{row.conTitle}</td>
-                    <td>
-                      <Dropdown>
-                        <Dropdown.Toggle variant="primary">
-                          {row.Action}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item>View</Dropdown.Item>
-                          <Dropdown.Item>Edit</Dropdown.Item>
-                          <Dropdown.Item>Edit</Dropdown.Item>
-                          <Dropdown.Item>Add Photo</Dropdown.Item>
-                          <Dropdown.Item>Add Video</Dropdown.Item>
-                          <Dropdown.Item>Delete</Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </td>
-                  </tr> }
-                ))}*/
+            
                   <tr>
                     <td>1</td>
                     <td>Cost</td>
@@ -81,7 +58,7 @@ const ContentList = () => {
                     <td>120</td>
                     <td>
                       <Dropdown>
-                        <Dropdown.Toggle variant="primary">
+                        <Dropdown.Toggle variant="primary" style={{height:'30px'}}>
                           Action
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
@@ -95,161 +72,8 @@ const ContentList = () => {
                       </Dropdown>
                     </td>
                   </tr>
-                }
-                {/* <tr>
-                  <td>1</td>
-                  <td>Cost</td>
-                  <td>101</td>
-                  <td>120</td>
-                  <td>
-                    {" "}
-                    <Dropdown>
-                      <Dropdown.Toggle variant="primary">
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Cost</td>
-                  <td>101</td>
-                  <td>120</td>
-                  <td>
-                    {" "}
-                    <Dropdown>
-                      <Dropdown.Toggle variant="primary">
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Cost</td>
-                  <td>101</td>
-                  <td>120</td>
-                  <td>
-                    {" "}
-                    <Dropdown>
-                      <Dropdown.Toggle variant="primary">
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Cost</td>
-                  <td>101</td>
-                  <td>120</td>
-                  <td>
-                    {" "}
-                    <Dropdown>
-                      <Dropdown.Toggle variant="primary">
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Cost</td>
-                  <td>101</td>
-                  <td>120</td>
-                  <td>
-                    {" "}
-                    <Dropdown>
-                      <Dropdown.Toggle variant="primary">
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Cost</td>
-                  <td>101</td>
-                  <td>120</td>
-                  <td>
-                    {" "}
-                    <Dropdown>
-                      <Dropdown.Toggle variant="primary">
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Cost</td>
-                  <td>101</td>
-                  <td>120</td>
-                  <td>
-                    {" "}
-                    <Dropdown>
-                      <Dropdown.Toggle variant="primary">
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
-                </tr>*/}
+                
+             
               </tbody>
             </Table>
             <div>
