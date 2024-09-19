@@ -1,0 +1,26 @@
+/* ViewCustomer.css */
+
+.MuiTab-root {
+    background-color: rgb(221, 114, 114);
+    width: 200px; /* Set your custom width */
+    height: 50px; /* Set your custom height */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  
+  .MuiTab-root:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Optional: add hover effect */
+  }
+  
+  .Mui-selected {
+    background-color: rgba(6, 6, 20, 0.1); 
+    color: #000; 
+  }
+  
+  .MuiTabs-root {
+    border-bottom: none; /* Optional: remove bottom border */
+  }
+  
+  .MuiTabPanel-root {
+    padding: 20px; /* Add some padding to tab content */
+  }
+  
