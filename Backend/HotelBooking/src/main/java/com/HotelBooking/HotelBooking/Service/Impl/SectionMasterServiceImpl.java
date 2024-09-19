@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.HotelBooking.HotelBooking.Entity.SectionMaster;
@@ -43,16 +45,17 @@ public class SectionMasterServiceImpl implements SectionMasterService {
 	}
 
 	@Override
-	public Boolean deleteSection(long sectionId) {
+	public ResponseEntity<Boolean> deleteSection(long sectionId) {
 		Optional<SectionMaster> master = sectionMasterRepositiry.findById(sectionId);
 	if(master.isPresent()){
 		SectionMaster master2 = master.get();
 		if (master2 != null) {
 			sectionMasterRepositiry.deleteById(sectionId);
-			return true;
+			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
 		}
-		return false;
+	 return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+	
 
 	}
 
