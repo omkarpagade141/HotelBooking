@@ -16,6 +16,7 @@ import AddExpense from "../Expenses/AddExpense";
 import AddIncome from "../Income/AddIncome";
 import ListExpense from "../Expenses/ListExpense";
 import ViewIncome from "../Income/ViewIncome";
+import ViewCustomerTabs from "../Customer/ViewCustomerTabs";
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -44,6 +45,7 @@ const Home = () => {
             <Route path="/addIncome" element={<AddIncome />} />
             <Route path="/listExpense" element={<ListExpense />} />
             <Route path="/viewIncome" element={<ViewIncome />} />
+            <Route path="/viewCustomer" element={<ViewCustomerTabs />} />
           </Routes>
         </div>
       </div>
