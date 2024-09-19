@@ -1,26 +1,25 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col, Card, Button, Table } from "react-bootstrap";
 
-const sectionA = [
-  {
-    secId: 1,
-    secName: "asdfg",
-  },
-  {
-    secId: 2,
-    secName: "kjmhgn",
-  },
-  {
-    secId: 3,
-    secName: "jmghnh",
-  },
-  {
-    secId: 4,
-    secName: "yukyiiy",
-  },
-];
+// const sectionA = [
+//   {
+//     secId: 1,
+//     secName: "asdfg",
+//   },
+//   {
+//     secId: 2,
+//     secName: "kjmhgn",
+//   },
+//   {
+//     secId: 3,
+//     secName: "jmghnh",
+//   },
+//   {
+//     secId: 4,
+//     secName: "yukyiiy",
+//   },
+// ];
 function Section() {
   return (
     <div>
@@ -35,7 +34,7 @@ function Section() {
                 <Col xs md={12}>
                   <input
                     style={{
-                      width:'100%',
+                      width: "100%",
                       marginBottom: "20px",
                       padding: "4px",
                     }}
@@ -50,7 +49,6 @@ function Section() {
                 style={{
                   fontsize: "120px ",
                   backgroundColor: "#1861bf",
-                  
                 }}
               >
                 <FontAwesomeIcon
@@ -85,11 +83,10 @@ function Section() {
                   </div>
                 </Col>
                 <Col xs md={6} style={{ fontSize: "18px" }}>
-                  
                   <input
                     type="text"
-                     placeholder="Search"
-                     style={{width:'100%'}}
+                    placeholder="Search"
+                    style={{ width: "100%" }}
                   />
                 </Col>
               </Row>
@@ -107,9 +104,7 @@ function Section() {
                   </tr>
                 </thead>
                 <tbody>
-                  
-
-                  
+                  <tr></tr>
                   <tr>
                     <td>1</td>
                     <td>Cost</td>
@@ -126,16 +121,11 @@ function Section() {
                     <td>1</td>
                     <td>Cost</td>
                   </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Cost</td>
-                  </tr>
-                  
                 </tbody>
               </Table>
             </Card.Body>
             <div>
-              <Row style={{marginLeft:'10px'}}>
+              <Row style={{ marginLeft: "10px" }}>
                 <Col xs md={6} style={{ fontSize: "17px" }}>
                   <p>showing 1 to 10 of 19 entries</p>
                 </Col>
