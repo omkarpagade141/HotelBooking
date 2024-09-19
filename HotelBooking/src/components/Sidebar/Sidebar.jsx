@@ -13,6 +13,11 @@ import {
   faList,
   faObjectGroup,
   faListAlt,
+  faMoneyBills,
+  faRupee,
+  faRupiahSign,
+  faRupeeSign,
+  faIndianRupee,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
@@ -87,16 +92,64 @@ const Sidebar = ({ collapsed, onToggle }) => {
             </Nav.Item>
           </>
         )}
+        <Nav.Item>
+          <Link
+            className="nav-link"
+            onClick={() => setContentToggle(!contentToggle)}
+          >
+            <FontAwesomeIcon icon={faMoneyBills} />
+            {!collapsed && <span>Expenses</span>}
+          </Link>
+        </Nav.Item>
+        {contentToggle && (
+          <>
+            <Nav.Item style={{ marginLeft: "20px" }}>
+              <Link to="/home/addExpense" className="nav-link">
+                <FontAwesomeIcon icon={faPlus} />
+                {!collapsed && <span>Add Expense</span>}
+              </Link>
+            </Nav.Item>
 
-     
-       
+            <Nav.Item style={{ marginLeft: "20px" }}>
+              <Link to="/home/listExpense" className="nav-link">
+                <FontAwesomeIcon icon={faList} />
+                {!collapsed && <span>Expense List</span>}
+              </Link>
+            </Nav.Item>
+          </>
+        )}
+        <Nav.Item>
+          <Link
+            className="nav-link"
+            onClick={() => setContentToggle(!contentToggle)}
+          >
+            <FontAwesomeIcon icon={faIndianRupee} />
+            {!collapsed && <span>Income</span>}
+          </Link>
+        </Nav.Item>
+        {contentToggle && (
+          <>
+            <Nav.Item style={{ marginLeft: "20px" }}>
+              <Link to="/home/addIncome" className="nav-link">
+                <FontAwesomeIcon icon={faPlus} />
+                {!collapsed && <span>Add Income</span>}
+              </Link>
+            </Nav.Item>
+
+            <Nav.Item style={{ marginLeft: "20px" }}>
+              <Link to="/home/viewIncome" className="nav-link">
+                <FontAwesomeIcon icon={faList} />
+                {!collapsed && <span>View Income</span>}
+              </Link>
+            </Nav.Item>
+          </>
+        )}
         <Nav.Item>
           <Link to="/home/settingMaster" className="nav-link">
             <FontAwesomeIcon icon={faCog} />
             {!collapsed && <span>Settings</span>}
           </Link>
         </Nav.Item>
-
 
         <Nav.Item>
           <Link to="/home/enquiry" className="nav-link">

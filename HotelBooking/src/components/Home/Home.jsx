@@ -12,6 +12,10 @@ import ListCustomers from "../Customer/ListCustomers";
 import Dashboaed from "../Dashboard/Dashboaed";
 import SettingMaster from "../Settings/SettingMaster";
 import Enquiry from "../Enquiry/Enquiry";
+import AddExpense from "../Expenses/AddExpense";
+import AddIncome from "../Income/AddIncome";
+import ListExpense from "../Expenses/ListExpense";
+import ViewIncome from "../Income/ViewIncome";
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -36,6 +40,10 @@ const Home = () => {
             <Route path="/listCustomer" element={<ListCustomers />} />
             <Route path="/settingMaster" element={<SettingMaster />} />
             <Route path="/enquiry" element={<Enquiry />} />
+            <Route path="/addExpense" element={<AddExpense />} />
+            <Route path="/addIncome" element={<AddIncome />} />
+            <Route path="/listExpense" element={<ListExpense />} />
+            <Route path="/viewIncome" element={<ViewIncome />} />
           </Routes>
         </div>
       </div>
