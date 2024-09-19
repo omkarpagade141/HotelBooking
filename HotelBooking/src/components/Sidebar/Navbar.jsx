@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faCog, faEnvelope, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faKey, faSignOutAlt, faBars } from '@fortawesome/free-solid-svg-icons';
 import { Row, Col } from 'react-bootstrap';
 import './Navbar.css'
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -35,8 +35,8 @@ function Navbar({ onToggle }) {
               <Col xs={3} className='adminButtonsListNav'>
                 <div>
                   <ul>
-                    <li className='liInNavAdmin'> Change Password</li>
-                    <li className='liInNavAdmin' onClick={ handleLogout}>  Logout</li>
+                    <li className='liInNavAdmin'><FontAwesomeIcon icon={faKey} style={{marginRight:'7px'}} /> Change Password</li>
+                    <li className='liInNavAdmin' onClick={ handleLogout}><FontAwesomeIcon icon={faSignOutAlt} style={{marginRight:'7px'}}/>  Logout</li>
                   </ul>
                 </div>
               </Col>

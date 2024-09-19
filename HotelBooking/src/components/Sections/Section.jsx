@@ -1,26 +1,62 @@
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faTrash,faEdit,faSave } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col, Card, Button, Table } from "react-bootstrap";
+import axios from 'axios'
 
-// const sectionA = [
-//   {
-//     secId: 1,
-//     secName: "asdfg",
-//   },
-//   {
-//     secId: 2,
-//     secName: "kjmhgn",
-//   },
-//   {
-//     secId: 3,
-//     secName: "jmghnh",
-//   },
-//   {
-//     secId: 4,
-//     secName: "yukyiiy",
-//   },
-// ];
+ 
 function Section() {
+  const [sectionName, setSectionName] = useState('')
+  const [sections, setSections] = useState([])
+  const [editingRow, setEditingRow] = useState(null)
+  const [updatedSectionName, setUpdatedSectionName] = useState('')
+
+  const handleAddSection = async () => {
+    const response = await axios.post('http://localhost:8080/api/section', { "name": sectionName })
+
+    if (response.status == 201) {
+      fetchSections()
+      alert("Section Added Successfully")
+
+    }
+  }
+
+  const handleDeleteSection = async (id) => {
+    const response = axios.delete(`http://localhost:8080/api/section/${id}`)
+
+    if (response.s) {
+      
+    }
+    fetchSections()
+  }
+
+  const fetchSections = async () => {
+    const response = await axios.get('http://localhost:8080/api/section')
+    setSections(response.data)
+    //  console.log(response.data);
+
+  }
+
+  useEffect(() => {
+    fetchSections()
+
+  }, [])
+
+  const handleEdit=async(section)=>{
+    if (updatedSectionName=='') {
+   await axios.put(`http://localhost:8080/api/section/${section.sectionId}`,{"name":section.name}) 
+    fetchSections()
+    setUpdatedSectionName('')
+    setEditingRow(null)
+    return;
+    }
+
+    await axios.put(`http://localhost:8080/api/section/${section.sectionId}`,{"name":updatedSectionName})
+    fetchSections()
+    setEditingRow(null)
+    
+
+  }
   return (
     <div>
       <Row>
@@ -33,22 +69,24 @@ function Section() {
               <Row>
                 <Col xs md={12}>
                   <input
+                    value={sectionName}
+                    onChange={(e) => setSectionName(e.target.value)}
                     style={{
-                      width: "100%",
+                      width: '100%',
                       marginBottom: "20px",
                       padding: "4px",
                     }}
                     type="text "
-                    value=""
                     placeholder="Add Section"
                   />
                 </Col>
               </Row>
 
               <Button
+                onClick={handleAddSection}
                 style={{
                   fontsize: "120px ",
-                  backgroundColor: "#1861bf",
+                  backgroundColor: "#1861bf"
                 }}
               >
                 <FontAwesomeIcon
@@ -83,10 +121,11 @@ function Section() {
                   </div>
                 </Col>
                 <Col xs md={6} style={{ fontSize: "18px" }}>
+
                   <input
                     type="text"
                     placeholder="Search"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                   />
                 </Col>
               </Row>
@@ -101,31 +140,49 @@ function Section() {
                   <tr>
                     <th>Section Id</th>
                     <th>Section Name</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr></tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Cost</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Cost</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Cost</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Cost</td>
-                  </tr>
+                  {sections.map(section => (
+                    <tr key={section.sectionId}>
+                      <td>{section.sectionId}</td>
+                      {editingRow ? <input type="text" style={{width:'100%'}} defaultValue={section.name} 
+                      onChange={(e)=>setUpdatedSectionName(e.target.value)} /> : <td>{section.name}</td> }
+                      
+                      <td>
+                        <FontAwesomeIcon
+                          icon={faTrash}
+
+                          style={{ marginRight: "25px",cursor:'pointer' }}
+                          onClick={() => handleDeleteSection(section.sectionId)}
+                        />
+                        {editingRow ?
+                        <FontAwesomeIcon
+                         
+                         icon={faSave}
+                         style={{ marginRight: "5px",cursor:'pointer' }}
+                         onClick={() => handleEdit(section)}
+                       />
+                        :
+                         <FontAwesomeIcon
+                         
+                         icon={faEdit}
+                         style={{ marginRight: "5px",cursor:'pointer' }}
+                         onClick={() => setEditingRow(section)}
+                       /> }
+                        
+                        
+                         
+                      </td>
+                    </tr>
+                  ))}
+
                 </tbody>
               </Table>
             </Card.Body>
             <div>
-              <Row style={{ marginLeft: "10px" }}>
+              <Row style={{ marginLeft: '10px' }}>
                 <Col xs md={6} style={{ fontSize: "17px" }}>
                   <p>showing 1 to 10 of 19 entries</p>
                 </Col>
