@@ -3,6 +3,8 @@ package com.HotelBooking.HotelBooking.Service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.HotelBooking.HotelBooking.Entity.SectionMaster;
 import com.HotelBooking.HotelBooking.Entity.SectionMaster;
 
@@ -14,9 +16,9 @@ public interface SectionMasterService {
 	
 	
 
-	Optional<SectionMaster> getSectionById(Long sectionId);
+	public Optional<SectionMaster> getSectionById(Long sectionId);
 
-	public Boolean deleteSection(long sectionId);
+	public ResponseEntity<?> deleteSection(long sectionId);
 
 	public SectionMaster updateSection(long sectionId, SectionMaster master);
 
