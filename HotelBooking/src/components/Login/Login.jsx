@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { faHome, faUser, faKey, faSignOutAlt, faBars } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import './Login.css'; // Include custom styles for fine-tuning
 
@@ -21,7 +23,7 @@ const Login = () => {
           <Col>
             <h1 className='header-of-hotel-billing'>Hotel Billing</h1>
             <div className="login-box shadow-lg p-5 ">
-              <h4 className="text-center fw-bold"><i className="bi bi-person-fill"></i> SIGN IN</h4>
+              <h4 className="text-center fw-bold"><i className="bi bi-person-fill"></i><FontAwesomeIcon icon={faUser}/> SIGN IN</h4>
               <hr/>
               <Form onSubmit={(e)=>handleLogin(e)}>
                 <Form.Group controlId="formUsername" className="mb-3">
