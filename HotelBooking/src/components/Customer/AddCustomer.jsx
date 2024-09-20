@@ -20,11 +20,18 @@ function AddCustomer() {
                   <strong>Role:</strong>
                 </Col>
                 <Col xs md={8}>
-                  <Form.Select
+                  {/* <Form.Select //we can add dropdown for role, currently role=customer set
                     id="section"
                     style={{ marginBottom: "20px", padding: "5px" }}
                   >
-                  </Form.Select>
+                  </Form.Select> */}
+                  <Form.Control
+                    type="text"
+                    readOnly
+                    value='Customer'
+                    placeholder=""
+                    style={{ marginBottom: "20px", padding: "5px" }}
+                  />
                 </Col>
               </Row>
               <Row>

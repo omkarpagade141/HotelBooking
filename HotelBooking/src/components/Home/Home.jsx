@@ -9,7 +9,6 @@ import AddContent from "../Contents/AddContent";
 import ContentList from "../Contents/ContentList";
 import AddCustomer from "../Customer/AddCustomer";
 import ListCustomers from "../Customer/ListCustomers";
-import Dashboaed from "../Dashboard/Dashboaed";
 import SettingMaster from "../Settings/SettingMaster";
 import Enquiry from "../Enquiry/Enquiry";
 import AddExpense from "../Expenses/AddExpense";
@@ -17,6 +16,7 @@ import AddIncome from "../Income/AddIncome";
 import ListExpense from "../Expenses/ListExpense";
 import ViewIncome from "../Income/ViewIncome";
 import ViewCustomerTabs from "../Customer/ViewCustomerTabs";
+import Dashboard from "../Dashboard/Dashboaed";
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -33,7 +33,7 @@ const Home = () => {
           }`}
         >
           <Routes>
-            <Route path="/" element={<Dashboaed />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/content" element={<AddContent />} />
             <Route path="/content-list" element={<ContentList />} />
             <Route path="/sections" element={<Section />} />

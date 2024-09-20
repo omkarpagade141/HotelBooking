@@ -72,42 +72,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
           </>
         )}
 
-        <Nav.Item>
-          <Link to="/home/sections" className={`nav-link ${isActive('/home/sections') ? 'active' : ''}`}>
-            <FontAwesomeIcon icon={faObjectGroup} />
-            {!collapsed && <span>Sections</span>}
-          </Link>
-        </Nav.Item>
 
-        <Nav.Item>
-          <Link
-            className={`nav-link ${isActive('/home/content') || isActive('/home/content-list') ? 'active' : ''}`}
-            onClick={() => setContentToggle(!contentToggle)}
-          >
-            <FontAwesomeIcon icon={faListAlt} />
-            {!collapsed && <span>Contents</span>}
-            {!collapsed && (
-              <FontAwesomeIcon icon={contentToggle ? faChevronDown : faChevronRight} style={{ marginLeft: 'auto' }} />
-            )}
-          </Link>
-        </Nav.Item>
-        {!collapsed && contentToggle && (
-          <>
-            <Nav.Item style={{ marginLeft: "20px" }}>
-              <Link to="/home/content" className={`nav-link ${isActive('/home/content') ? 'active' : ''}`}>
-                <FontAwesomeIcon icon={faPlus} />
-                {!collapsed && <span>Add Content</span>}
-              </Link>
-            </Nav.Item>
-
-            <Nav.Item style={{ marginLeft: "20px" }}>
-              <Link to="/home/content-list" className={`nav-link ${isActive('/home/content-list') ? 'active' : ''}`}>
-                <FontAwesomeIcon icon={faList} />
-                {!collapsed && <span>Content List</span>}
-              </Link>
-            </Nav.Item>
-          </>
-        )}
 
         <Nav.Item>
           <Link
@@ -164,6 +129,42 @@ const Sidebar = ({ collapsed, onToggle }) => {
               <Link to="/home/listExpense" className={`nav-link ${isActive('/home/listExpense') ? 'active' : ''}`}>
                 <FontAwesomeIcon icon={faList} />
                 {!collapsed && <span>Expense List</span>}
+              </Link>
+            </Nav.Item>
+          </>
+        )}
+                <Nav.Item>
+          <Link to="/home/sections" className={`nav-link ${isActive('/home/sections') ? 'active' : ''}`}>
+            <FontAwesomeIcon icon={faObjectGroup} />
+            {!collapsed && <span>Sections</span>}
+          </Link>
+        </Nav.Item>
+
+        <Nav.Item>
+          <Link
+            className={`nav-link ${isActive('/home/content') || isActive('/home/content-list') ? 'active' : ''}`}
+            onClick={() => setContentToggle(!contentToggle)}
+          >
+            <FontAwesomeIcon icon={faListAlt} />
+            {!collapsed && <span>Contents</span>}
+            {!collapsed && (
+              <FontAwesomeIcon icon={contentToggle ? faChevronDown : faChevronRight} style={{ marginLeft: 'auto' }} />
+            )}
+          </Link>
+        </Nav.Item>
+        {!collapsed && contentToggle && (
+          <>
+            <Nav.Item style={{ marginLeft: "20px" }}>
+              <Link to="/home/content" className={`nav-link ${isActive('/home/content') ? 'active' : ''}`}>
+                <FontAwesomeIcon icon={faPlus} />
+                {!collapsed && <span>Add Content</span>}
+              </Link>
+            </Nav.Item>
+
+            <Nav.Item style={{ marginLeft: "20px" }}>
+              <Link to="/home/content-list" className={`nav-link ${isActive('/home/content-list') ? 'active' : ''}`}>
+                <FontAwesomeIcon icon={faList} />
+                {!collapsed && <span>Content List</span>}
               </Link>
             </Nav.Item>
           </>
