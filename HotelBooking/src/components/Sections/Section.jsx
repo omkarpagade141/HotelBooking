@@ -4,6 +4,7 @@ import { faCheckCircle, faTrash, faEdit, faSave } from "@fortawesome/free-solid-
 import { Row, Col, Card, Button, Table, Dropdown, Pagination } from "react-bootstrap";
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import apiClient from "../APIClient";
 
 function Section() {
   const [sectionName, setSectionName] = useState('');
@@ -17,7 +18,7 @@ function Section() {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:8080/api/section',
+      const response = await apiClient.post('/api/section',
         {
           "name": sectionName
         }
@@ -37,7 +38,7 @@ function Section() {
   const handleDeleteSection = async (id) => {
     const isConfirmed = confirm("Deleting this section will also delete content under this section");
     if (isConfirmed) {
-      const response = await axios.delete(`http://localhost:8080/api/section/${id}`);
+      const response = await apiClient.delete(`/api/section/${id}`);
       if (response.status === 200) {
         fetchSections();
         toast.success("Section deleted Successfully");
@@ -48,7 +49,7 @@ function Section() {
   };
 
   const fetchSections = async () => {
-    const response = await axios.get('http://localhost:8080/api/section');
+    const response = await apiClient.get('/api/section');
     setSections(response.data);
   };
 

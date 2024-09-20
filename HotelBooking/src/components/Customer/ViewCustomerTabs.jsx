@@ -7,6 +7,7 @@ import AddCustomerBooking from './AddCustomerBooking';
 import ListCustomerBookings from './ListCustomerBookings';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import apiClient from '../APIClient';
 
 const ViewCustomerTabs = () => {
   const [value, setValue] = useState(0);
@@ -16,7 +17,7 @@ const ViewCustomerTabs = () => {
 
   useEffect(() => {
     const fetchCustById = async (custId) => {
-      const response = await axios.get(`http://localhost:8080/api/customer/${custId}`)
+      const response = await apiClient.get(`/api/customer/${custId}`)
       console.log(response.data);
 
       setCustomerData(response.data)

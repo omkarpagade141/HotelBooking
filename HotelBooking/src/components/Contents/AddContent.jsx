@@ -4,6 +4,7 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import axios from "axios";
+import apiClient from "../APIClient";
 
 function AddContent() {
   const [sections, setSections] = useState([]);
@@ -18,7 +19,7 @@ function AddContent() {
   const [contentImgAltTag, setContentImgAltTag] = useState('');
 
   const fetchSections = async () => {
-    const response = await axios.get('http://localhost:8080/api/section');
+    const response = await apiClient.get('/api/section');
     setSections(response.data);
   };
 
@@ -46,7 +47,7 @@ function AddContent() {
     formdata.append('image', image);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/content', formdata, {
+      const response = await apiClient.post('/api/content', formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

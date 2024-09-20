@@ -10,6 +10,8 @@ function Navbar({ onToggle }) {
   const nevigate = useNavigate() 
 
   const handleLogout = () => {
+    sessionStorage.removeItem('jwtToken');
+    sessionStorage.removeItem('userName');
     nevigate('/')
     // window.location.href = '/';
   }
