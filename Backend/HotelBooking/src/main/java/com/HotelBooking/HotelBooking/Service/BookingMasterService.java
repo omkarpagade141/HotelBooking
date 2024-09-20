@@ -18,7 +18,7 @@ public interface BookingMasterService {
 	
 	public Optional<BookingMaster> getBooking(long bookingId);
 	
-	public ResponseEntity<?> deleteBooking(long bookingId);
+	public ResponseEntity<?> deleteBooking(long bookingId) throws IOException;
 	
 	public BookingMaster updateBooking(long bookingId ,BookingMaster bookingMaster,MultipartFile file) throws IOException;
 

@@ -30,7 +30,9 @@ public class BookingMasterController {
 	BookingMasterService bookingMasterService;
 	
 	@PostMapping("/reserve/{custId}")
-	public BookingMaster addbooking(@PathVariable long custId,@RequestPart("bookimg") BookingMaster bookingMaster,@RequestParam(value = "image",required =  false) MultipartFile file) throws IOException {
+	public BookingMaster addbooking(@PathVariable long custId,@RequestPart("booking") BookingMaster bookingMaster,@RequestParam(value = "image",required =  false) MultipartFile file) throws IOException {
+		System.out.println(bookingMaster.getCheckInDate());
+		System.out.println(bookingMaster.getCheckInTime());
 		return bookingMasterService.addBooking(custId,bookingMaster,file);
 	}
 	
@@ -53,7 +55,7 @@ public class BookingMasterController {
 		}
 	}
 	@DeleteMapping("/{bookingId}")
-	public ResponseEntity<?> deleteBooking(@PathVariable long bookingId) {
+	public ResponseEntity<?> deleteBooking(@PathVariable long bookingId) throws IOException {
 		
 		return bookingMasterService.deleteBooking(bookingId);
 

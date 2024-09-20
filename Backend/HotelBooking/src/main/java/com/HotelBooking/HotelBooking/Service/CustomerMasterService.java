@@ -17,7 +17,7 @@ public interface CustomerMasterService {
 
 	public Optional<CustomerMaster> getCustomeById(long customerId);
 
-	public ResponseEntity<?> DeleteCustomer(long customerId);
+	public ResponseEntity<?> DeleteCustomer(long customerId) throws IOException;
 
 
 	ResponseEntity<?> UpdateCustomer(long customerId, CustomerMaster customerMaster, MultipartFile file) throws IOException;

@@ -84,10 +84,18 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 	}
 
 	@Override
-	public ResponseEntity<?> deleteBooking(long bookingId) {
+	public ResponseEntity<?> deleteBooking(long bookingId) throws IOException {
 		BookingMaster bookObj = bookingMasterRepository.findById(bookingId)
 				.orElseThrow(() -> new ResourceNotFoundException("Error For Delete!!! Booking not found"));
 
+		if(bookObj.getImage() !=null)
+		{
+			Path fileNameAndPath = Paths.get(uploadDirectory, bookObj.getImage());
+			Files.delete(fileNameAndPath);
+			System.out.println("Old Booking image deleted");
+		
+		}
+		
 		bookingMasterRepository.delete(bookObj);
 
 		return ResponseEntity.ok("Booking details has been deleted for Id: " + bookingId);
