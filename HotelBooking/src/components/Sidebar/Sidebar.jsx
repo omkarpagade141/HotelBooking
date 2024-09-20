@@ -74,12 +74,12 @@ const Sidebar = ({ collapsed, onToggle }) => {
 
 
 
-        <Nav.Item>
+        {/* <Nav.Item>
           <Link
             className={`nav-link ${isActive('/home/addIncome') || isActive('/home/viewIncome') ? 'active' : ''}`}
             onClick={() => setIncomeToggle(!incomeToggle)}
           >
-            <FontAwesomeIcon icon={faIndianRupee} />
+            <FontAwesomeIcon icon={faIndianRupee} style={{marginRight:'8px'}} />
             {!collapsed && <span>Income</span>}
             {!collapsed && (
               <FontAwesomeIcon icon={incomeToggle ? faChevronDown : faChevronRight} style={{ marginLeft: 'auto' }} />
@@ -102,7 +102,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
               </Link>
             </Nav.Item>
           </>
-        )}
+        )} */}
 
         <Nav.Item>
           <Link
