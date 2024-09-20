@@ -17,7 +17,7 @@ public class CustomerMaster {
 	String fullName;
 	String mobileNumber;
 	String email;
-	String buildingFlatNumber;
+	String address;
 	String locality;
 	String city;
 	String pincode;
@@ -57,12 +57,13 @@ public class CustomerMaster {
 		this.email = email;
 	}
 
-	public String getBuildingFlatNumber() {
-		return buildingFlatNumber;
+	
+	public String getAddress() {
+		return address;
 	}
 
-	public void setBuildingFlatNumber(String buildingFlatNumber) {
-		this.buildingFlatNumber = buildingFlatNumber;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getLocality() {
@@ -109,7 +110,7 @@ public class CustomerMaster {
 	@Override
 	public String toString() {
 		return "CustomerMaster [customerId=" + customerId + ", fullName=" + fullName + ", mobileNumber=" + mobileNumber
-				+ ", email=" + email + ", buildingFlatNumber=" + buildingFlatNumber + ", locality=" + locality
+				+ ", email=" + email + ", address=" + address + ", locality=" + locality
 				+ ", city=" + city + ", pincode=" + pincode + ", photo=" + photo + "]";
 	}
 

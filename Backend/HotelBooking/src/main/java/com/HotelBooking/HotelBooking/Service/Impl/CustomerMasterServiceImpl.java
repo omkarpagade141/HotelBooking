@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.HotelBooking.HotelBooking.Entity.CustomerMaster;
+import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.CustomerMasterRepository;
 import com.HotelBooking.HotelBooking.Service.CustomerMasterService;
 
@@ -76,16 +78,27 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 	}
 
 	@Override
-	public void DeleteCustomer(long customerId) {
-		customerMasterRepository.deleteById(customerId);
-
+	public ResponseEntity<?> DeleteCustomer(long customerId) {
+		CustomerMaster custObj = customerMasterRepository.findById(customerId).orElseThrow(()-> new ResourceNotFoundException("Error for Delete!!! Customer does not exist"));
+		customerMasterRepository.delete(custObj);
+		
+		return ResponseEntity.ok("Customer has been deleted");
+		
 	}
 
 	@Override
-	public CustomerMaster UpdateCustomer(long customerId, CustomerMaster customerMaster, MultipartFile file)
+	public ResponseEntity<?> UpdateCustomer(long customerId, CustomerMaster customerMaster, MultipartFile file)
 			throws IOException {
-		Optional<CustomerMaster> master1 = customerMasterRepository.findById(customerId);
-		CustomerMaster master = master1.get();
+		CustomerMaster master = customerMasterRepository.findById(customerId).orElseThrow(()-> new ResourceNotFoundException("Error for Update!!! Customer does not exist"));
+		
+		if(master.getPhoto()!=null)
+		{
+			Path fileNameAndPath = Paths.get(uploadDirectory, master.getPhoto());
+			Files.delete(fileNameAndPath);
+			System.out.println("Customer Profile pic deleted");
+		}
+		
+		
 		if (file != null && !file.isEmpty()) {
 			// Get the current date and time
 			LocalDateTime now = LocalDateTime.now();
@@ -113,18 +126,19 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		}
 
 		master.setFullName(customerMaster.getFullName());
-		master.setBuildingFlatNumber(customerMaster.getBuildingFlatNumber());
-		master.setCity(customerMaster.getCity());
 		master.setEmail(customerMaster.getEmail());
+		master.setAddress(customerMaster.getAddress());
 		master.setLocality(customerMaster.getLocality());
-		master.setMobileNumber(customerMaster.getMobileNumber());
+		master.setCity(customerMaster.getCity());
 		master.setPincode(customerMaster.getPincode());
+		//master.setMobileNumber(customerMaster.getMobileNumber());
 		if (customerMaster.getPhoto() == null) {
 			master.setPhoto(master.getPhoto());
 		} else {
 			master.setPhoto(customerMaster.getPhoto());
 		}
-		return customerMasterRepository.save(master);
+		 customerMasterRepository.save(master);
+		 return ResponseEntity.ok("Customer has been updated");
 
 	}
 

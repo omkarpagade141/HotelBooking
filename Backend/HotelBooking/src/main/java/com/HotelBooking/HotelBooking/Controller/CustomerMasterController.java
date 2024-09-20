@@ -44,7 +44,7 @@ public class CustomerMasterController {
 		if (customerMaster2 != null) {
 			return new ResponseEntity<>(customerMaster2, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("These UserName Already Exist", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("These UserName Already Exist", HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -66,13 +66,13 @@ public class CustomerMasterController {
 	}
 
 	@DeleteMapping("/{customerId}")
-	public ResponseEntity<Boolean> deleteCustomer(@PathVariable long customerId) {
-		customerMasterService.DeleteCustomer(customerId);
-		return new ResponseEntity<>(true, HttpStatus.OK);
+	public ResponseEntity<?> deleteCustomer(@PathVariable long customerId) {
+		
+		return customerMasterService.DeleteCustomer(customerId);
 	}
 
 	@PutMapping("/{customerId}")
-	public CustomerMaster UpdateCustomer(@PathVariable("customerId") long customerId,
+	public ResponseEntity<?> UpdateCustomer(@PathVariable("customerId") long customerId,
 			@RequestPart("customer") CustomerMaster customerMaster,
 			@RequestParam(value = "image", required = false) MultipartFile file) throws IOException {
 		return customerMasterService.UpdateCustomer(customerId, customerMaster, file);
