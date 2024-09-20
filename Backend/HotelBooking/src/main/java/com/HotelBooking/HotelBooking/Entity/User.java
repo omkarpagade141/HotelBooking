@@ -16,7 +16,7 @@ public class User {
 
     private  String password;
 
-    private String roles;
+    private String role;
 
     public User(){
         super();
@@ -27,7 +27,7 @@ public class User {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.role = roles;
     }
 
     public int getUser_id() {
@@ -47,7 +47,7 @@ public class User {
     }
 
     public String getRoles() {
-        return roles;
+        return role;
     }
 
     public void setUser_id(int user_id) {
@@ -67,7 +67,7 @@ public class User {
     }
 
     public void setRoles(String roles) {
-        this.roles = roles;
+        this.role = roles;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", roles='" + roles + '\'' +
+                ", roles='" + role + '\'' +
                 '}';
     }
 }
