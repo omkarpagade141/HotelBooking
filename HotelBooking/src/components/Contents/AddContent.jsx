@@ -15,6 +15,7 @@ function AddContent() {
   const [contentLocation, setContentLocation] = useState('');
   const [contentLink, setContentLink] = useState('');
   const [sectionId, setSectionId] = useState('');
+  const [contentImgAltTag, setContentImgAltTag] = useState('');
 
   const fetchSections = async () => {
     const response = await axios.get('http://localhost:8080/api/section');
@@ -33,6 +34,7 @@ function AddContent() {
       contentTitle,
       contentPrice,
       contentSequence,
+      contentImgAltTag,
       contentDescription,
       contentLocation,
       contentLink,
@@ -73,7 +75,7 @@ function AddContent() {
       <Col xs md={2}></Col>
       <Col xs md={8}>
         <Card>
-          <Card.Body style={{ padding: "50px", fontSize: "18px" }}>
+          <Card.Body style={{ padding: "50px", fontSize: "16px" }}>
             <h3 style={{ marginLeft: "12px" }}>Add Content</h3>
             <hr />
 
@@ -128,6 +130,20 @@ function AddContent() {
                   />
                 </Col>
               </Row>
+              <Row>
+                <Col xs md={4} style={{ textAlign: "start" }}>
+                  <strong>Content Sequence:</strong>
+                </Col>
+                <Col xs md={8}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Content sequence"
+                    value={contentSequence}
+                    onChange={(e) => setContentSequence(e.target.value)}
+                    style={{ marginBottom: "20px", padding: "4px" }}
+                  />
+                </Col>
+              </Row>
 
               <Row>
                 <Col xs md={4} style={{ textAlign: "start" }}>
@@ -137,8 +153,8 @@ function AddContent() {
                   <Form.Control
                     type="text"
                     placeholder="Content Img Alt Tag"
-                    value={contentSequence}
-                    onChange={(e) => setContentSequence(e.target.value)}
+                    value={contentImgAltTag}
+                    onChange={(e) => setContentImgAltTag(e.target.value)}
                     style={{ marginBottom: "20px", padding: "4px" }}
                   />
                 </Col>
