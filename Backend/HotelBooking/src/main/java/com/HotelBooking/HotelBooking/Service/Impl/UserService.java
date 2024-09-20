@@ -3,11 +3,14 @@ package com.HotelBooking.HotelBooking.Service.Impl;
 import com.HotelBooking.HotelBooking.Entity.User;
 import com.HotelBooking.HotelBooking.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -32,9 +35,21 @@ public class UserService {
     }
 
 
-    public User newUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public ResponseEntity<String> newUser(User user){
+
+        Optional<User> existingUser = userRepository.findByUserName(user.getUserName());
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        return userRepository.save(user);
+
+        if (existingUser.isPresent()) {
+            System.out.println("USER-NAME -2-> "+user.getUserName());
+            return new ResponseEntity<>("Username already exists. Please choose a different username", HttpStatus.BAD_REQUEST);
+        }else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+            return ResponseEntity.ok("User Added  Successfully");
+
+        }
     }
 
 

@@ -38,7 +38,7 @@ public class AuthController {
 
 
     @PostMapping("/new-user")
-    public User addUser(@RequestBody User user){
+    public ResponseEntity<String> addUser(@RequestBody User user){
         return userService.newUser(user);
     }
 

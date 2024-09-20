@@ -7,16 +7,16 @@ public class JwtResponse {
 
     private String userName;
 
-    private String roles;
+  //  private String roles;
 
     public  JwtResponse(){
         super();
     }
 
-    public JwtResponse(String jwtToken, String userName, String roles) {
+    public JwtResponse(String jwtToken, String userName) {
         this.jwtToken = jwtToken;
         this.userName = userName;
-        this.roles = roles;
+       // this.roles = roles;
     }
 
     public String getJwtToken() {
@@ -27,9 +27,9 @@ public class JwtResponse {
         return userName;
     }
 
-    public String getRoles() {
-        return roles;
-    }
+//    public String getRoles() {
+//        return roles;
+//    }
 
     public void setJwtToken(String jwtToken) {
         this.jwtToken = jwtToken;
@@ -39,16 +39,16 @@ public class JwtResponse {
         this.userName = userName;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
+//    public void setRoles(String roles) {
+//        this.roles = roles;
+//    }
 
     @Override
     public String toString() {
         return "JwtResponse{" +
                 "jwtToken='" + jwtToken + '\'' +
                 ", userName='" + userName + '\'' +
-                ", roles='" + roles + '\'' +
+               // ", roles='" + roles + '\'' +
                 '}';
     }
 }
