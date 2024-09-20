@@ -5,29 +5,42 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
+import com.HotelBooking.HotelBooking.Entity.CustomerMaster;
+import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.BookingMasterRepository;
+import com.HotelBooking.HotelBooking.Repository.CustomerMasterRepository;
 import com.HotelBooking.HotelBooking.Service.BookingMasterService;
 
 @Service
-public class BookingMasterServiceImpl implements BookingMasterService{
+public class BookingMasterServiceImpl implements BookingMasterService {
 
 	@Autowired
 	BookingMasterRepository bookingMasterRepository;
 	
+	@Autowired
+	CustomerMasterRepository customerMasterRepository;
+
 	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images";
 
 	@Override
-	public BookingMaster addBooking(BookingMaster bookingMaster,MultipartFile file) throws IOException {
-		if (bookingMaster!=null) {
+	public BookingMaster addBooking(long custId, BookingMaster bookingMaster, MultipartFile file) throws IOException {
+		
+		CustomerMaster custObj = customerMasterRepository.findById(custId).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Customer does not exist"));
+
+		bookingMaster.setCustomer(custObj);
+		
+		if (bookingMaster != null) {
 			if (file != null && !file.isEmpty()) {
 				// Get the current date and time
 				LocalDateTime now = LocalDateTime.now();
@@ -54,8 +67,6 @@ public class BookingMasterServiceImpl implements BookingMasterService{
 				bookingMaster.setImage(newFileName);
 			}
 
-		
-			
 		}
 		System.out.println(bookingMaster);
 		return bookingMasterRepository.save(bookingMaster);
@@ -69,17 +80,33 @@ public class BookingMasterServiceImpl implements BookingMasterService{
 	@Override
 	public Optional<BookingMaster> getBooking(long bookingId) {
 		return bookingMasterRepository.findById(bookingId);
-		
+
 	}
 
 	@Override
-	public void deleteBooking(long bookingId) {
-		bookingMasterRepository.deleteById(bookingId);
-		
+	public ResponseEntity<?> deleteBooking(long bookingId) {
+		BookingMaster bookObj = bookingMasterRepository.findById(bookingId)
+				.orElseThrow(() -> new ResourceNotFoundException("Error For Delete!!! Booking not found"));
+
+		bookingMasterRepository.delete(bookObj);
+
+		return ResponseEntity.ok("Booking details has been deleted for Id: " + bookingId);
+
 	}
 
 	@Override
-	public BookingMaster updateBooking(long bookingId, BookingMaster bookingMaster,MultipartFile file) throws IOException {
+	public BookingMaster updateBooking(long bookingId, BookingMaster bookingMaster, MultipartFile file)
+			throws IOException {
+		BookingMaster master2 = bookingMasterRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Error For Update!!! Booking not found"));
+		
+		if(master2.getImage() !=null)
+		{
+			Path fileNameAndPath = Paths.get(uploadDirectory, master2.getImage());
+			Files.delete(fileNameAndPath);
+			System.out.println("Old Booking image deleted");
+		
+		}
+
 		
 		if (file != null && !file.isEmpty()) {
 			// Get the current date and time
@@ -106,11 +133,9 @@ public class BookingMasterServiceImpl implements BookingMasterService{
 			// Set the new file name in customerMaster object
 			bookingMaster.setImage(newFileName);
 		}
-		Optional<BookingMaster>  Master=bookingMasterRepository.findById(bookingId);
 		
 		
-		if(Master.isPresent()) {
-			BookingMaster master2=Master.get();
+//			BookingMaster master2 = Master.get();
 			master2.setCheckInDate(bookingMaster.getCheckInDate());
 			master2.setCheckInTime(bookingMaster.getCheckInTime());
 			master2.setCheckOutDate(bookingMaster.getCheckOutDate());
@@ -119,10 +144,8 @@ public class BookingMasterServiceImpl implements BookingMasterService{
 			master2.setImage(bookingMaster.getImage());
 			bookingMasterRepository.save(master2);
 			return master2;
-		}
-		return null;
+		
 
 	}
-	
 
 }

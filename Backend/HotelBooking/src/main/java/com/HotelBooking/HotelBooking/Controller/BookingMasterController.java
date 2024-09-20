@@ -29,9 +29,9 @@ public class BookingMasterController {
 	@Autowired 
 	BookingMasterService bookingMasterService;
 	
-	@PostMapping
-	public BookingMaster addbooking(@RequestPart("bookimg") BookingMaster bookingMaster,@RequestParam(value = "image",required =  false) MultipartFile file) throws IOException {
-		return bookingMasterService.addBooking(bookingMaster,file);
+	@PostMapping("/reserve/{custId}")
+	public BookingMaster addbooking(@PathVariable long custId,@RequestPart("bookimg") BookingMaster bookingMaster,@RequestParam(value = "image",required =  false) MultipartFile file) throws IOException {
+		return bookingMasterService.addBooking(custId,bookingMaster,file);
 	}
 	
 	@GetMapping("/{bookingId}")
@@ -55,8 +55,8 @@ public class BookingMasterController {
 	@DeleteMapping("/{bookingId}")
 	public ResponseEntity<?> deleteBooking(@PathVariable long bookingId) {
 		
-		 bookingMasterService.deleteBooking(bookingId);
-			return new ResponseEntity<>(true, HttpStatus.OK);
+		return bookingMasterService.deleteBooking(bookingId);
+
 			}
 	@PutMapping("/{bookingId}")
 	public ResponseEntity<?> updateBooking(@RequestPart("booking") BookingMaster bookingMaster,@PathVariable("bookingId")long bookingId,@RequestParam( value = "image" ,required = false) MultipartFile file) throws IOException {
