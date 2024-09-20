@@ -66,7 +66,7 @@ public class CustomerMasterController {
 	}
 
 	@DeleteMapping("/{customerId}")
-	public ResponseEntity<?> deleteCustomer(@PathVariable long customerId) {
+	public ResponseEntity<?> deleteCustomer(@PathVariable long customerId) throws IOException {
 		
 		return customerMasterService.DeleteCustomer(customerId);
 	}
