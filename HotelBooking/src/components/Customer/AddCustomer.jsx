@@ -4,6 +4,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 import { toast } from 'react-toastify'
+import apiClient from '../APIClient'
 
 function AddCustomer() {
   const [fullName, setFullName] = useState('')
@@ -34,7 +35,7 @@ function AddCustomer() {
     formdata.append('image', image);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/customer', formdata, {
+      const response = await apiClient.post('/api/customer', formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
