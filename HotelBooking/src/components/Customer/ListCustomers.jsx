@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Row } from 'react-bootstrap'
 import { Navigate, useNavigate } from 'react-router-dom';
+import apiClient from '../APIClient';
 
 
 function ListCustomers() {
@@ -11,7 +12,7 @@ function ListCustomers() {
   const [customers, setCustomers] = useState([])
 
   const fetchCustomers = async () => {
-    const response = await axios.get('http://localhost:8080/api/customer')
+    const response = await apiClient.get('http://localhost:8080/api/customer')
     if (response.status === 200) {
       setCustomers(response.data)
       console.log(response.data);

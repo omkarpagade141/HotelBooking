@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Row, Col, Card, Table, Dropdown, Pagination } from "react-bootstrap";
+import apiClient from "../APIClient";
 
 const ContentList = () => {
   const [contents, setContents] = useState([]);
@@ -8,7 +9,7 @@ const ContentList = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(5);
 
   const fetchContents = async () => {
-    const response = await axios.get('http://localhost:8080/api/content');
+    const response = await apiClient.get('/api/content');
     if (response.status === 200) {
       setContents(response.data);
       console.log(response.data);
