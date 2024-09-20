@@ -54,8 +54,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()  // Public routes
-                        .requestMatchers("/home/**").authenticated()  // Secured routes
-                        .requestMatchers("/emp/**").authenticated()  // Secured routes
+                        .requestMatchers("/api/Booking/**").authenticated()  // Secured routes
+                        .requestMatchers("/api/customer/**").authenticated()  // Secured routes
+                        .requestMatchers("/api/content/**").authenticated()  // Secured routes
+                        .requestMatchers("/api/expense/**").authenticated()  // Secured routes
+                        .requestMatchers("/api/section/**").authenticated()  // Secured routes
                         .anyRequest().authenticated()  // Catch-all, any other request must be authenticated
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))

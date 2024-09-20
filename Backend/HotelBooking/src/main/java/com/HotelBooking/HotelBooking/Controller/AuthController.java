@@ -37,7 +37,7 @@ public class AuthController {
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 
-    @PostMapping("/new-user")
+    @PostMapping("/signup")
     public ResponseEntity<String> addUser(@RequestBody User user){
         return userService.newUser(user);
     }
