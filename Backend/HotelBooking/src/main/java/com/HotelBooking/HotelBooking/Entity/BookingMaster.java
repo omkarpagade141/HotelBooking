@@ -1,8 +1,7 @@
 package com.HotelBooking.HotelBooking.Entity;
 
-import java.util.List;
-
-import org.antlr.v4.runtime.misc.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,19 +20,19 @@ public class BookingMaster {
 	@JoinColumn(name = "customer_id", nullable = false)
 	private CustomerMaster customer;
 
-	String checkInDate;
-	String checkInTime;
+	LocalDate checkInDate;
+	LocalTime checkInTime;
 
-	String checkOutDate;
+	LocalDate checkOutDate;
 
-	String checkOutTime;
+	LocalTime checkOutTime;
 
-	String invoiceamount;
+	double invoiceamount;
 	String image;
 	
-	//List<itemMaster> list;
-	
-	
+//	@OneToMany(mappedBy = "bookId")
+//	private List<Item> itemList;
+
 
 	public long getBookingId() {
 		return bookingId;
@@ -59,43 +58,45 @@ public class BookingMaster {
 		this.customer = customer;
 	}
 
-	public String getCheckInDate() {
+	
+
+	public LocalDate getCheckInDate() {
 		return checkInDate;
 	}
 
-	public void setCheckInDate(String checkInDate) {
+	public void setCheckInDate(LocalDate checkInDate) {
 		this.checkInDate = checkInDate;
 	}
 
-	public String getCheckInTime() {
+	public LocalTime getCheckInTime() {
 		return checkInTime;
 	}
 
-	public void setCheckInTime(String checkInTime) {
+	public void setCheckInTime(LocalTime checkInTime) {
 		this.checkInTime = checkInTime;
 	}
 
-	public String getCheckOutDate() {
+	public LocalDate getCheckOutDate() {
 		return checkOutDate;
 	}
 
-	public void setCheckOutDate(String checkOutDate) {
+	public void setCheckOutDate(LocalDate checkOutDate) {
 		this.checkOutDate = checkOutDate;
 	}
 
-	public String getCheckOutTime() {
+	public LocalTime getCheckOutTime() {
 		return checkOutTime;
 	}
 
-	public void setCheckOutTime(String checkOutTime) {
+	public void setCheckOutTime(LocalTime checkOutTime) {
 		this.checkOutTime = checkOutTime;
 	}
 
-	public String getInvoiceamount() {
+	public double getInvoiceamount() {
 		return invoiceamount;
 	}
 
-	public void setInvoiceamount(String invoiceamount) {
+	public void setInvoiceamount(double invoiceamount) {
 		this.invoiceamount = invoiceamount;
 	}
 
