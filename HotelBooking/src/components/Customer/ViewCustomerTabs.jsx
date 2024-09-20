@@ -21,10 +21,10 @@ const ViewCustomerTabs = () => {
         // indicatorColor="transparent" 
         textColor="inherit"
       >
-        <Tab label="Tab 1" />
-        <Tab label="Tab 2" />
-        <Tab label="Tab 3" />
-        <Tab label="Tab 4" />
+        <Tab label="Customer Profile" />
+        <Tab label="Update Profile" />
+        <Tab label="Add Booking" />
+        <Tab label="List Bookings " />
       </Tabs> <hr />
       <div role="tabpanel" hidden={value !== 0}>
         {value === 0 && <div> <ViewCustomerProfile/></div>}
