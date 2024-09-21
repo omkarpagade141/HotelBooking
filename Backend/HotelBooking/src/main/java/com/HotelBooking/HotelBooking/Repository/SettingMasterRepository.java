@@ -11,4 +11,6 @@ public interface SettingMasterRepository extends JpaRepository<SettingMaster, Lo
     @Query("SELECT s FROM SettingMaster s ORDER BY s.companyName ASC")
     List<SettingMaster> findAllOrdered();
 
+
+
 }
