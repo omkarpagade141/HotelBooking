@@ -1,5 +1,120 @@
+//package com.HotelBooking.HotelBooking.security;
+//
+//import io.jsonwebtoken.ExpiredJwtException;
+//import io.jsonwebtoken.MalformedJwtException;
+//import jakarta.servlet.FilterChain;
+//import jakarta.servlet.ServletException;
+//import jakarta.servlet.http.HttpServletRequest;
+//import jakarta.servlet.http.HttpServletResponse;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+//import org.springframework.stereotype.Component;
+//import org.springframework.web.filter.OncePerRequestFilter;
+//
+//import java.io.IOException;
+//import java.util.HashMap;
+//import java.util.Map;
+//
+//@Component
+//public class JwtAuthenticationFilter extends OncePerRequestFilter {
+//
+//
+//     private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
+//    @Autowired
+//    private JwtHelper jwtHelper;
+//
+//
+//    @Autowired
+//    private UserDetailsService userDetailsService;
+//
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//
+////        try {
+////            Thread.sleep(500);
+////        } catch (InterruptedException e) {
+////            throw new RuntimeException(e);
+////        }
+//        //Authorization
+//
+//        String requestHeader = request.getHeader("Authorization");
+//        //Bearer 2352345235sdfrsfgsdfsdf
+//        logger.info(" Header :  {}", requestHeader);
+//        String username = null;
+//        String token = null;
+//        if (requestHeader != null && requestHeader.startsWith("Bearer")) {
+//            //looking good
+//            token = requestHeader.substring(7);
+//            try {
+//
+//                username = this.jwtHelper.getUsernameFromToken(token);
+//
+//            } catch (IllegalArgumentException e) {
+//                logger.info("Illegal Argument while fetching the username !!");
+//                e.printStackTrace();
+//            } catch (ExpiredJwtException e) {
+//                logger.info("Given jwt token is expired !!");
+//                Map<String, String> errorResponse = new HashMap<>();
+//                errorResponse.put("message", "JWT Token has expired!!");
+//                response.setContentType("application/json");
+//                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(errorResponse));
+//
+//
+//                return;
+//               // e.printStackTrace();
+//            } catch (MalformedJwtException e) {
+//                logger.info("Some changed has done in token !! Invalid Token");
+//                e.printStackTrace();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//
+//            }
+//
+//
+//        } else {
+//            logger.info("Invalid Header Value !! ");
+//        }
+//
+//
+//        //
+//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//
+//
+//            //fetch user detail from username
+//            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+//            Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
+//            if (validateToken) {
+//
+//                //set the authentication
+//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//
+//            } else {
+//                logger.info("Validation fails !!");
+//            }
+//
+//
+//        }
+//
+//        filterChain.doFilter(request, response);
+//
+//
+//    }
+//}
+//
+//
+//
+//
 package com.HotelBooking.HotelBooking.security;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -16,99 +131,86 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-
-     private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
+    private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
     @Autowired
     private JwtHelper jwtHelper;
-
-
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-//        try {
-//            Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-        //Authorization
-
         String requestHeader = request.getHeader("Authorization");
-        //Bearer 2352345235sdfrsfgsdfsdf
-        logger.info(" Header :  {}", requestHeader);
         String username = null;
         String token = null;
-        if (requestHeader != null && requestHeader.startsWith("Bearer")) {
-            //looking good
+
+        if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             token = requestHeader.substring(7);
             try {
-
                 username = this.jwtHelper.getUsernameFromToken(token);
+            } catch (ExpiredJwtException e) {
+                logger.info("Given JWT token is expired !!");
 
+                // Send response indicating token is expired
+                response.setContentType("application/json");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "JWT Token has expired!!");
+                response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(errorResponse));
+                return; // Stop further processing
             } catch (IllegalArgumentException e) {
                 logger.info("Illegal Argument while fetching the username !!");
                 e.printStackTrace();
-            } catch (ExpiredJwtException e) {
-                logger.info("Given jwt token is expired !!");
-                Map<String, String> errorResponse = new HashMap<>();
-                errorResponse.put("message", "JWT Token has expired!!");
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(errorResponse));
-                return;
-               // e.printStackTrace();
             } catch (MalformedJwtException e) {
-                logger.info("Some changed has done in token !! Invalid Token");
+                logger.info("Some change has been done in token !! Invalid Token");
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
-
-
         } else {
             logger.info("Invalid Header Value !! ");
         }
 
-
-        //
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-
-            //fetch user detail from username
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
-            if (validateToken) {
 
-                //set the authentication
+            if (validateToken) {
+                // Set the authentication in the context
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
+//                // Refresh the token and set it in the response header
+//                String newToken = jwtHelper.refreshToken(token);
+//                response.setHeader("Authorization", "Bearer " + newToken);
+//                logger.info("New token issued: {}", newToken);
+
+                // Refresh the token
+                String newToken = jwtHelper.refreshToken(token);
+                logger.info("New token issued: {}", newToken);
+
+                // Create a JSON response
+                Map<String, String> responseMap = new HashMap<>();
+                responseMap.put("newToken", newToken);
+                responseMap.put("message", "Token refreshed successfully");
+
+                // Set response content type to JSON
+                response.setContentType("application/json");
+                response.setStatus(HttpServletResponse.SC_OK); // 200 OK
+
+                // Write the JSON response
+                response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(responseMap));
+                return; // Stop processing further
 
             } else {
                 logger.info("Validation fails !!");
             }
-
-
         }
-
         filterChain.doFilter(request, response);
-
-
     }
 }
-
-
-
-
