@@ -22,7 +22,7 @@ public class SettingMasterServiceImpl implements SettingMasterService {
     @Autowired
     private SettingMasterRepository settingMasterRepository;
 
-    public static   String path = System.getProperty("user.dir") + "/src/main/webapp/images/settings";
+    public static  String path = System.getProperty("user.dir") + "/src/main/webapp/images/settings";
 
 
 
@@ -40,6 +40,7 @@ public class SettingMasterServiceImpl implements SettingMasterService {
                 existingSetting.setAddress(settingMaster.getAddress());
                 existingSetting.setEmail(settingMaster.getEmail());
                 existingSetting.setPhoneNumber(settingMaster.getPhoneNumber());
+                existingSetting.setCity(settingMaster.getCity());
 
                 if (businessLogo != null && !businessLogo.isEmpty()) {
                     String oldFilePath = path + File.separator + existingSetting.getBusinessLogo();

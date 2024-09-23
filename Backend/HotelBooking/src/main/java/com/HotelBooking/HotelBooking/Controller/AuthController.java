@@ -77,8 +77,8 @@ public class AuthController {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public String exceptionHandler() {
-        return "Credentials Invalid !!";
+    public ResponseEntity<String> exceptionHandler() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Credentials Invalid !!");
     }
 
 
