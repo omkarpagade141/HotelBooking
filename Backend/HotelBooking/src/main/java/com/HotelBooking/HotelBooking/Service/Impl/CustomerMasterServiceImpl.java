@@ -78,8 +78,16 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 	}
 
 	@Override
-	public ResponseEntity<?> DeleteCustomer(long customerId) {
+	public ResponseEntity<?> DeleteCustomer(long customerId) throws IOException {
 		CustomerMaster custObj = customerMasterRepository.findById(customerId).orElseThrow(()-> new ResourceNotFoundException("Error for Delete!!! Customer does not exist"));
+		
+		if(custObj.getPhoto()!=null)
+		{
+			Path fileNameAndPath = Paths.get(uploadDirectory, custObj.getPhoto());
+			Files.delete(fileNameAndPath);
+			System.out.println("Customer Profile pic deleted");
+		}
+		
 		customerMasterRepository.delete(custObj);
 		
 		return ResponseEntity.ok("Customer has been deleted");

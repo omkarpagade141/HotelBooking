@@ -1,9 +1,9 @@
 import React from 'react'
 
-function ViewCustomerProfile() {
+function ViewCustomerProfile({ customerData }) {
   return (
     <div>
-      <h1>view Customer profile</h1>
+      <h1>{customerData ? customerData.fullName : <></>}</h1>
     </div>
   )
 }

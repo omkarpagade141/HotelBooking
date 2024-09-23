@@ -18,8 +18,9 @@ public class ContentMaster {
 
 	    private String contentTitle;
 	    private Double contentPrice;  // or BigDecimal for more precise currency handling
-	    private Integer contentSequence;
+	    private String contentSequence;
 	    private String contentDescription;
+	    private String contentImgAltTag;
 	    private LocalDate contentDate;
 	    private String contentLocation;
 	    private String contentLink;
@@ -29,26 +30,44 @@ public class ContentMaster {
 	    @JoinColumn(name = "section_id", nullable = false)
 	    private SectionMaster section;
 
-		public ContentMaster(Long contentId, String contentTitle, Double contentPrice, Integer contentSequence,
-				String contentDescription, LocalDate contentDate, String contentLocation, String contentLink,
-				String contentImage, SectionMaster section) {
+		 
+		public ContentMaster(Long contentId, String contentTitle, Double contentPrice, String contentSequence,
+				String contentDescription, String contentImgAltTag, LocalDate contentDate, String contentLocation,
+				String contentLink, String contentImage, SectionMaster section) {
 			super();
 			this.contentId = contentId;
 			this.contentTitle = contentTitle;
 			this.contentPrice = contentPrice;
 			this.contentSequence = contentSequence;
 			this.contentDescription = contentDescription;
+			this.contentImgAltTag = contentImgAltTag;
 			this.contentDate = contentDate;
 			this.contentLocation = contentLocation;
 			this.contentLink = contentLink;
 			this.contentImage = contentImage;
 			this.section = section;
 		}
+		
+		
 
 		public ContentMaster() {
 			super();
 			// TODO Auto-generated constructor stub
 		}
+		
+		
+
+		public String getContentImgAltTag() {
+			return contentImgAltTag;
+		}
+
+
+
+		public void setContentImgAltTag(String contentImgAltTag) {
+			this.contentImgAltTag = contentImgAltTag;
+		}
+
+
 
 		public Long getContentId() {
 			return contentId;
@@ -74,11 +93,11 @@ public class ContentMaster {
 			this.contentPrice = contentPrice;
 		}
 
-		public Integer getContentSequence() {
+		public String getContentSequence() {
 			return contentSequence;
 		}
 
-		public void setContentSequence(Integer contentSequence) {
+		public void setContentSequence(String contentSequence) {
 			this.contentSequence = contentSequence;
 		}
 

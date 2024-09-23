@@ -4,6 +4,7 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import axios from "axios";
+import apiClient from "../APIClient";
 
 function AddContent() {
   const [sections, setSections] = useState([]);
@@ -15,9 +16,10 @@ function AddContent() {
   const [contentLocation, setContentLocation] = useState('');
   const [contentLink, setContentLink] = useState('');
   const [sectionId, setSectionId] = useState('');
+  const [contentImgAltTag, setContentImgAltTag] = useState('');
 
   const fetchSections = async () => {
-    const response = await axios.get('http://localhost:8080/api/section');
+    const response = await apiClient.get('/api/section');
     setSections(response.data);
   };
 
@@ -33,6 +35,7 @@ function AddContent() {
       contentTitle,
       contentPrice,
       contentSequence,
+      contentImgAltTag,
       contentDescription,
       contentLocation,
       contentLink,
@@ -44,7 +47,7 @@ function AddContent() {
     formdata.append('image', image);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/content', formdata, {
+      const response = await apiClient.post('/api/content', formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -73,7 +76,7 @@ function AddContent() {
       <Col xs md={2}></Col>
       <Col xs md={8}>
         <Card>
-          <Card.Body style={{ padding: "50px", fontSize: "18px" }}>
+          <Card.Body style={{ padding: "50px", fontSize: "16px" }}>
             <h3 style={{ marginLeft: "12px" }}>Add Content</h3>
             <hr />
 
@@ -128,6 +131,20 @@ function AddContent() {
                   />
                 </Col>
               </Row>
+              <Row>
+                <Col xs md={4} style={{ textAlign: "start" }}>
+                  <strong>Content Sequence:</strong>
+                </Col>
+                <Col xs md={8}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Content sequence"
+                    value={contentSequence}
+                    onChange={(e) => setContentSequence(e.target.value)}
+                    style={{ marginBottom: "20px", padding: "4px" }}
+                  />
+                </Col>
+              </Row>
 
               <Row>
                 <Col xs md={4} style={{ textAlign: "start" }}>
@@ -137,8 +154,8 @@ function AddContent() {
                   <Form.Control
                     type="text"
                     placeholder="Content Img Alt Tag"
-                    value={contentSequence}
-                    onChange={(e) => setContentSequence(e.target.value)}
+                    value={contentImgAltTag}
+                    onChange={(e) => setContentImgAltTag(e.target.value)}
                     style={{ marginBottom: "20px", padding: "4px" }}
                   />
                 </Col>

@@ -2,13 +2,16 @@ package com.HotelBooking.HotelBooking.Entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class BookingMaster {
@@ -30,8 +33,8 @@ public class BookingMaster {
 	double invoiceamount;
 	String image;
 	
-//	@OneToMany(mappedBy = "bookId")
-//	private List<Item> itemList;
+	@OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL)
+	private List<Item> itemList;
 
 
 	public long getBookingId() {
@@ -98,6 +101,16 @@ public class BookingMaster {
 
 	public void setInvoiceamount(double invoiceamount) {
 		this.invoiceamount = invoiceamount;
+	}
+	
+	
+
+	public List<Item> getItemList() {
+		return itemList;
+	}
+
+	public void setItemList(List<Item> itemList) {
+		this.itemList = itemList;
 	}
 
 	@Override

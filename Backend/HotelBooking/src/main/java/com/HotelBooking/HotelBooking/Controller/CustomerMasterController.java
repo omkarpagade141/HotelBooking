@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import com.HotelBooking.HotelBooking.Service.CustomerMasterService;
 
 @RestController
 @RequestMapping("api/customer")
+@CrossOrigin(origins = "*")
 public class CustomerMasterController {
 
 	@Autowired
@@ -66,8 +68,8 @@ public class CustomerMasterController {
 	}
 
 	@DeleteMapping("/{customerId}")
-	public ResponseEntity<?> deleteCustomer(@PathVariable long customerId) {
-
+	public ResponseEntity<?> deleteCustomer(@PathVariable long customerId) throws IOException {
+		
 		return customerMasterService.DeleteCustomer(customerId);
 	}
 

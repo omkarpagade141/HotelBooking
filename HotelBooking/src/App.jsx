@@ -13,6 +13,7 @@ import Home from './components/Home/Home';
 
 
 function App() {
+  const isAuthenticated = !!sessionStorage.getItem('jwtToken');
 
   return (
     <>
@@ -20,7 +21,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/home/*" element={<Home />} />
+          <Route path="/home/*" element={isAuthenticated ? <Home /> : <Navigate to="/" />} />
         </Routes>
       </Router>
 
