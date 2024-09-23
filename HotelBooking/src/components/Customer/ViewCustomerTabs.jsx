@@ -15,13 +15,15 @@ const ViewCustomerTabs = () => {
 
   const { custId } = useParams();
 
-  useEffect(() => {
-    const fetchCustById = async (custId) => {
-      const response = await apiClient.get(`/api/customer/${custId}`)
-      console.log(response.data);
 
-      setCustomerData(response.data)
-    }
+  const fetchCustById = async (custId) => {
+    const response = await apiClient.get(`/api/customer/${custId}`)
+    console.log(response.data);
+
+    setCustomerData(response.data)
+  }
+  useEffect(() => {
+    
     fetchCustById(custId)
 
   }, [custId])
@@ -50,7 +52,7 @@ const ViewCustomerTabs = () => {
           {value === 0 && <div> <ViewCustomerProfile customerData={customerData} /></div>}
         </div>
         <div role="tabpanel" hidden={value !== 1}>
-          {value === 1 && <div> <UpdateCustomerProfile customerData={customerData} /></div>}
+          {value === 1 && <div> <UpdateCustomerProfile customerData={customerData} fetchCustById={fetchCustById}/></div>}
         </div>
         <div role="tabpanel" hidden={value !== 2}>
           {value === 2 && <div><AddCustomerBooking customerData={customerData} /></div>}

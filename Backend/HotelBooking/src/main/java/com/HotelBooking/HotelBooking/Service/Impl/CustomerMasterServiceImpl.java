@@ -99,15 +99,17 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 			throws IOException {
 		CustomerMaster master = customerMasterRepository.findById(customerId).orElseThrow(()-> new ResourceNotFoundException("Error for Update!!! Customer does not exist"));
 		
-		if(master.getPhoto()!=null)
-		{
-			Path fileNameAndPath = Paths.get(uploadDirectory, master.getPhoto());
-			Files.delete(fileNameAndPath);
-			System.out.println("Customer Profile pic deleted");
-		}
+		
 		
 		
 		if (file != null && !file.isEmpty()) {
+			
+			if(master.getPhoto()!=null)
+			{
+				Path fileNameAndPath = Paths.get(uploadDirectory, master.getPhoto());
+				Files.delete(fileNameAndPath);
+				System.out.println("Customer Profile pic deleted");
+			}
 			// Get the current date and time
 			LocalDateTime now = LocalDateTime.now();
 
