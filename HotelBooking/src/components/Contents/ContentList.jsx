@@ -2,8 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Row, Col, Card, Table, Dropdown, Pagination } from "react-bootstrap";
 import apiClient from "../APIClient";
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const ContentList = () => {
+  const navigate = useNavigate();
+
   const [contents, setContents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesPerPage, setEntriesPerPage] = useState(5);
@@ -15,6 +19,30 @@ const ContentList = () => {
       console.log(response.data);
     }
   };
+
+const ViewContent=(ccid)=>{
+  navigate(`/home/viewContent/${ccid}`)
+}
+
+  const deleteContent = async (contentId) => {
+    try {
+      const confirmed = confirm('confirm delete content')
+      if (confirmed) {
+        const response = await apiClient.delete(`/api/content/${contentId}`);
+        if (response.status === 200) {
+          toast.success('Content deleted successfully');
+          fetchContents();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      console.error("Failed to delete content", error);
+    }
+  };
+
+  const editContent=(cid)=>{
+    navigate(`/home/editContent/${cid}`)
+  }
 
   useEffect(() => {
     fetchContents();
@@ -89,11 +117,9 @@ const ContentList = () => {
                           Action
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item>View</Dropdown.Item>
-                          <Dropdown.Item>Edit</Dropdown.Item>
-                          <Dropdown.Item>Add Photo</Dropdown.Item>
-                          <Dropdown.Item>Add Video</Dropdown.Item>
-                          <Dropdown.Item>Delete</Dropdown.Item>
+                          <Dropdown.Item onClick={()=>ViewContent(content.contentId)}>View</Dropdown.Item>
+                          <Dropdown.Item onClick={()=>editContent(content.contentId)}>Edit</Dropdown.Item> 
+                          <Dropdown.Item onClick={() => deleteContent(content.contentId)}>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                     </td>
