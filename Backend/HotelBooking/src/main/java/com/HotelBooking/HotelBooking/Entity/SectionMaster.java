@@ -1,11 +1,9 @@
 package com.HotelBooking.HotelBooking.Entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class SectionMaster {
@@ -14,6 +12,9 @@ public class SectionMaster {
     Long sectionId;
     String name;
     LocalDate createdOn;
+
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContentMaster> contentMasterList;
 
     public long getSectionId() {
         return sectionId;
