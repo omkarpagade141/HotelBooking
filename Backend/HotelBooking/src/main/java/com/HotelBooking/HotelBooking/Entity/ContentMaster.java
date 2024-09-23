@@ -2,12 +2,7 @@ package com.HotelBooking.HotelBooking.Entity;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class ContentMaster {
@@ -26,7 +21,7 @@ public class ContentMaster {
 	    private String contentLink;
 	    private String contentImage;
 
-	    @ManyToOne
+	    @ManyToOne(cascade = CascadeType.ALL )
 	    @JoinColumn(name = "section_id", nullable = false)
 	    private SectionMaster section;
 
