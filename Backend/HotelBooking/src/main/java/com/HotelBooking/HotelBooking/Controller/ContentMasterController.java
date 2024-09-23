@@ -38,44 +38,13 @@ public class ContentMasterController {
 	@Autowired
 	ContentMasterService contentMasterService;
 	
-    public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images/content";
-
-
+    
     @PostMapping
-    public ResponseEntity<ContentMaster> createContentMaster(
+    public ResponseEntity<?> createContentMaster(
             @RequestPart("content") ContentMaster contentmaster,
             @RequestParam(value = "image", required = false) MultipartFile file) throws IOException {
       
-        // Save file if provided
-    	if (file != null && !file.isEmpty()) {
-			// Get the current date and time
-			LocalDateTime now = LocalDateTime.now();
-
-			// Define the format you want for the file name (e.g., yyyyMMdd_HHmmss)
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-
-			// Generate a unique file name with the current date and time
-			String currentTime = now.format(formatter);
-
-			// Get the file extension
-			String originalFileName = file.getOriginalFilename();
-			String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-
-			// Construct the new file name with date-time as name and retain the file
-			// extension
-			String newFileName = currentTime + fileExtension;
-
-			// Save the file with the new name
-			Path fileNameAndPath = Paths.get(uploadDirectory, newFileName);
-			Files.write(fileNameAndPath, file.getBytes());
-
-			// Set the new file name in customerMaster object
-			contentmaster.setContentImage(newFileName); 	
-			}
-
-        // Save the ContentMaster entity
-        ContentMaster savedContentMaster1 = contentMasterService.save(contentmaster);
-        return new ResponseEntity<>(savedContentMaster1, HttpStatus.OK);
+        return contentMasterService.addContent(contentmaster,file);
     }
 
     
@@ -118,59 +87,12 @@ public class ContentMasterController {
 		}
 	   
 	   @PutMapping("/{contentId}")
-	   public ResponseEntity<ContentMaster> updateContentMaster(
+	   public ResponseEntity<?> updateContentMaster(
 	            @PathVariable Long contentId,
 	            @RequestPart("content") ContentMaster contentMaster,
 	            @RequestParam(value = "image", required = false) MultipartFile file) throws IOException {
 	        
-	        // Fetch the existing content
-	        Optional<ContentMaster> optionalContentMaster = contentMasterService.getContentById(contentId);
-	        if (!optionalContentMaster.isPresent()) {
-	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	        }
-
-	        ContentMaster existingContentMaster = optionalContentMaster.get();
-	        
-	     
-
-	        // Update the existing content with new values
-	        existingContentMaster.setContentTitle(contentMaster.getContentTitle());
-	        existingContentMaster.setContentPrice(contentMaster.getContentPrice());
-	        existingContentMaster.setContentSequence(contentMaster.getContentSequence());
-	        existingContentMaster.setContentDescription(contentMaster.getContentDescription());
-	        existingContentMaster.setContentDate(contentMaster.getContentDate());
-	        existingContentMaster.setContentLocation(contentMaster.getContentLocation());
-	        existingContentMaster.setContentLink(contentMaster.getContentLink());
-	        existingContentMaster.setSection(contentMaster.getSection());
-
-	        if (file != null && !file.isEmpty()) {
-	            // Get the current date and time
-	            LocalDateTime now = LocalDateTime.now();
-
-	            // Define the format for the file name (e.g., yyyyMMdd_HHmmss)
-	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-
-	            // Generate a unique file name with the current date and time
-	            String currentTime = now.format(formatter);
-
-	            // Get the file extension
-	            String originalFileName = file.getOriginalFilename();
-	            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-
-	            // Construct the new file name with date-time as name and retain the file extension
-	            String newFileName = currentTime + fileExtension;
-
-	            // Save the file with the new name
-	            Path fileNameAndPath = Paths.get(uploadDirectory, newFileName);
-	            Files.write(fileNameAndPath, file.getBytes());
-
-	            // Set the new file name in the existingContentMaster object
-	            existingContentMaster.setContentImage(newFileName);
-	        }
-
-	        // Save the updated content using the service layer
-	        ContentMaster savedContentMaster = contentMasterService.save(existingContentMaster);
-	        return new ResponseEntity<>(savedContentMaster, HttpStatus.OK);
+	       return contentMasterService.updateContent(contentId, contentMaster, file);
 	    }
 	   
 	   @GetMapping("/content-field")

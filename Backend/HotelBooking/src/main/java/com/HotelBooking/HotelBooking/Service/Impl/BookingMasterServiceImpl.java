@@ -107,16 +107,19 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 			throws IOException {
 		BookingMaster master2 = bookingMasterRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Error For Update!!! Booking not found"));
 		
-		if(master2.getImage() !=null)
-		{
-			Path fileNameAndPath = Paths.get(uploadDirectory, master2.getImage());
-			Files.delete(fileNameAndPath);
-			System.out.println("Old Booking image deleted");
 		
-		}
 
 		
 		if (file != null && !file.isEmpty()) {
+			
+			if(master2.getImage() !=null)
+			{
+				Path fileNameAndPath = Paths.get(uploadDirectory, master2.getImage());
+				Files.delete(fileNameAndPath);
+				System.out.println("Old Booking image deleted");
+			
+			}
+			
 			// Get the current date and time
 			LocalDateTime now = LocalDateTime.now();
 
