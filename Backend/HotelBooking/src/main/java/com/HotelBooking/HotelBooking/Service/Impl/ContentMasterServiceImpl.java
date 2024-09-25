@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.HotelBooking.HotelBooking.Entity.ContentMaster;
+import com.HotelBooking.HotelBooking.Entity.SectionMaster;
 import com.HotelBooking.HotelBooking.Repository.ContentMasterRepository;
 import com.HotelBooking.HotelBooking.Repository.SectionMasterRepositiry;
 import com.HotelBooking.HotelBooking.Service.ContentMasterService;
@@ -64,6 +65,8 @@ public class ContentMasterServiceImpl implements ContentMasterService{
 	@Override
 	public ResponseEntity<?> addContent(ContentMaster contentmaster, MultipartFile file) throws IOException {
 		// TODO Auto-generated method stub
+		SectionMaster section = sectionMasterRepositiry.findById(contentmaster.getSection().getSectionId())
+                .orElseThrow(() -> new RuntimeException("Section not found"));                                                                                      contentmaster.setSection(section);
 		
 		 Set<String> allContenetSet= contentMasterRepository.findAllContentBasedOnSection(contentmaster.getSection().getName());
 		if(allContenetSet.contains(contentmaster.getContentTitle()))
@@ -103,6 +106,7 @@ public class ContentMasterServiceImpl implements ContentMasterService{
             contentmaster.setContentDate(LocalDate.now()); // Set current date if not provided
         }
         // Save the ContentMaster entity
+    	contentmaster.setSection(section);
         ContentMaster savedContentMaster1 = contentMasterRepository.save(contentmaster);
         
         return new ResponseEntity<>(savedContentMaster1, HttpStatus.OK);

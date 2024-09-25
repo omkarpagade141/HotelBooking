@@ -1,5 +1,7 @@
 package com.HotelBooking.HotelBooking.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class Item {
 	
 	@ManyToOne
 	@JoinColumn(name = "book_id")
+	@JsonIgnore
 	private BookingMaster bookId;
 	
 	public Item() {
