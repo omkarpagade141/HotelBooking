@@ -19,6 +19,7 @@ import ViewCustomerTabs from "../Customer/ViewCustomerTabs";
 import Dashboard from "../Dashboard/Dashboaed";
 import EditContent from "../Contents/EditContent";
 import ViewContent from "../Contents/ViewContent";
+import EditBooking from "../Booking/EditBooking";
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -50,6 +51,8 @@ const Home = () => {
             <Route path="/viewCustomer/:custId" element={<ViewCustomerTabs />} />
             <Route path="/viewContent/:contentID" element={<ViewContent />} />
             <Route path="/editContent/:contId" element={<EditContent />} />
+            <Route path="/editBooking/:BookingId" element={<EditBooking />} />
+
           </Routes>
         </div>
       </div>
