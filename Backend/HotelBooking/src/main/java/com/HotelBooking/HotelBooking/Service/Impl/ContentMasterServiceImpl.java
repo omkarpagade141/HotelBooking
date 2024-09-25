@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.HotelBooking.HotelBooking.Entity.SectionMaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,14 +65,16 @@ public class ContentMasterServiceImpl implements ContentMasterService{
 	@Override
 	public ResponseEntity<?> addContent(ContentMaster contentmaster, MultipartFile file) throws IOException {
 		// TODO Auto-generated method stub
-		
+
+        SectionMaster section = sectionMasterRepositiry.findById(contentmaster.getSection().getSectionId())
+                .orElseThrow(() -> new RuntimeException("Section not found"));
+
 		 Set<String> allContenetSet= contentMasterRepository.findAllContentBasedOnSection(contentmaster.getSection().getName());
 		if(allContenetSet.contains(contentmaster.getContentTitle()))
 		{
 			return new ResponseEntity<>("This content already exists!!!", HttpStatus.BAD_REQUEST);
 		}
-		 
-		 
+
 		// Save file if provided
     	if (file != null && !file.isEmpty()) {
 			// Get the current date and time
@@ -96,17 +99,19 @@ public class ContentMasterServiceImpl implements ContentMasterService{
 			Files.write(fileNameAndPath, file.getBytes());
 
 			// Set the new file name in customerMaster object
-			contentmaster.setContentImage(newFileName); 	
+			contentmaster.setContentImage(newFileName);
 			}
 
     	if (contentmaster.getContentDate() == null) {
             contentmaster.setContentDate(LocalDate.now()); // Set current date if not provided
         }
+
+        contentmaster.setSection(section);
         // Save the ContentMaster entity
         ContentMaster savedContentMaster1 = contentMasterRepository.save(contentmaster);
-        
+
         return new ResponseEntity<>(savedContentMaster1, HttpStatus.OK);
-        
+
 	}
 
 

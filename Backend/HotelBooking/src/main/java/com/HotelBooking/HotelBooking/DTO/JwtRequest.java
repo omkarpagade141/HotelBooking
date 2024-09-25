@@ -2,7 +2,7 @@ package com.HotelBooking.HotelBooking.DTO;
 
 
 public class JwtRequest {
-    private String email;
+    private String userName;
 
     private String password;
 
@@ -11,20 +11,20 @@ public class JwtRequest {
     }
 
     public JwtRequest(String email, String password) {
-        this.email = email;
+        this.userName = email;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserName() {
+        return userName;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserName(String email) {
+        this.userName = email;
     }
 
     public void setPassword(String password) {
@@ -34,7 +34,7 @@ public class JwtRequest {
     @Override
     public String toString() {
         return "JwtRequest{" +
-                "email='" + email + '\'' +
+                "email='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
