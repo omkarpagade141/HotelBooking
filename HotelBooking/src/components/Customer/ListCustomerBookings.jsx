@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Row, Col, Card, Table, Dropdown, Pagination } from "react-bootstrap";
 import apiClient from "../APIClient";
+import { useNavigate } from "react-router-dom";
 
 const ContentList = () => {
+  const nevigate=useNavigate()
+
   const [bookingList, setBookingList] = useState([]);
   const fetchAllBookings = async () => {
     const response = await apiClient.get('http://localhost:8080/api/Booking');
@@ -16,6 +19,11 @@ const ContentList = () => {
   useEffect(() => {
     fetchAllBookings()
   }, [])
+
+  const handleEditBooking=(BookingId)=>{
+    nevigate(`/home/editBooking/${BookingId}`)
+  }
+
   return (
     <Row style={{ padding: "20px" }}>
       <Col xs md={12} style={{ padding: "8px" }}>
@@ -83,7 +91,7 @@ const ContentList = () => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
+                        <Dropdown.Item onClick={()=>handleEditBooking(booking.bookingId)}>Edit</Dropdown.Item>
                         <Dropdown.Item>Add Photo</Dropdown.Item>
                         <Dropdown.Item>Add Video</Dropdown.Item>
                         <Dropdown.Item>Delete</Dropdown.Item>
