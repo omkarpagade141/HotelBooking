@@ -16,28 +16,61 @@ public class SectionMaster {
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentMaster> contentMasterList;
 
+    
 
-    public long getSectionId() {
-        return sectionId;
-    }
 
-    public void setSectionId(long sectionId) {
-        this.sectionId = sectionId;
-    }
+    public Long getSectionId() {
+		return sectionId;
+	}
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public LocalDate getCreatedOn() {
-        return createdOn;
-    }
+ 
+    
 
+	public void setSectionId(Long sectionId) {
+		this.sectionId = sectionId;
+	}
+
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+
+	public List<ContentMaster> getContentMasterList() {
+		return contentMasterList;
+	}
+
+
+
+
+	public void setContentMasterList(List<ContentMaster> contentMasterList) {
+		this.contentMasterList = contentMasterList;
+	}
+
+
+
+
+	public LocalDate getCreatedOn() {
+		return createdOn;
+	}
+
+
+ 
     public void setCreatedOn(LocalDate localDate) {
+ 
         this.createdOn = localDate;
     }
 
