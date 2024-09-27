@@ -10,5 +10,4 @@ public class HotelBookingApplication {
 		SpringApplication.run(HotelBookingApplication.class, args);
 		System.out.println("billing Started");
 	}
-
 }
