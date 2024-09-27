@@ -21,7 +21,7 @@ public class ContentMaster {
 	    private String contentLink;
 	    private String contentImage;
 
-	    @ManyToOne(cascade = CascadeType.ALL )
+	    @ManyToOne
 	    @JoinColumn(name = "section_id", nullable = false)
 	    private SectionMaster section;
 
