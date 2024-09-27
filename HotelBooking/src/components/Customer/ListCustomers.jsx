@@ -100,8 +100,8 @@ function ListCustomers() {
                       <td>{customer.email}</td>
                       <td>
                         <Button style={{ height: '30px' }} onClick={() => handleViewCustomer(customer.customerId)}>View</Button>
-                        <Button style={{ height: '30px', backgroundColor: '#cb4a4a', marginLeft: '15px', border: 'none' }}
-                        onClick={() => handleDeleteCustomer(customer.customerId)}>Delete</Button>
+                        {/* <Button style={{ height: '30px', backgroundColor: '#cb4a4a', marginLeft: '15px', border: 'none' }}
+                        onClick={() => handleDeleteCustomer(customer.customerId)}>Delete</Button> */}
                       </td>
                     </tr>
                   ))}

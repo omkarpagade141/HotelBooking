@@ -172,7 +172,7 @@ function Section() {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                               <Dropdown.Item onClick={() => handleOpenEditModal(section)}>Edit</Dropdown.Item>
-                              <Dropdown.Item onClick={() => handleDeleteSection(section.sectionId)}>Delete</Dropdown.Item>
+                              {/* <Dropdown.Item onClick={() => handleDeleteSection(section.sectionId)}>Delete</Dropdown.Item> */}
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>
