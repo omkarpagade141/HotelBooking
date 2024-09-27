@@ -13,7 +13,6 @@ public class SectionMaster {
     String name;
     LocalDate createdOn;
 
-
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentMaster> contentMasterList;
 
@@ -26,6 +25,8 @@ public class SectionMaster {
 
 
 
+ 
+    
 
 	public void setSectionId(Long sectionId) {
 		this.sectionId = sectionId;
@@ -67,9 +68,9 @@ public class SectionMaster {
 	}
 
 
-
-
-	public void setCreatedOn(LocalDate localDate) {
+ 
+    public void setCreatedOn(LocalDate localDate) {
+ 
         this.createdOn = localDate;
     }
 

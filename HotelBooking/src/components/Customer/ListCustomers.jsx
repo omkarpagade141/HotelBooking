@@ -2,7 +2,9 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Row, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '../APIClient';
+import { toast } from 'react-toastify';
+import apiClient from "../APIClient";
+
 
 function ListCustomers() {
   const navigate = useNavigate();
@@ -18,6 +20,19 @@ function ListCustomers() {
     }
   };
 
+  const handleDeleteCustomer= async(custID)=>{
+    try {
+      const response= await apiClient.delete(`http://localhost:8080/api/customer/${custID}`)
+      if(response.status===200){
+        toast.success("Customer deleted successfully");
+      }
+    } catch (error) {
+      toast.error("Error deleting customer");
+      console.log(error);
+      
+      
+    }
+  }
   useEffect(() => {
     fetchCustomers();
   }, []);
@@ -85,7 +100,8 @@ function ListCustomers() {
                       <td>{customer.email}</td>
                       <td>
                         <Button style={{ height: '30px' }} onClick={() => handleViewCustomer(customer.customerId)}>View</Button>
-                        <Button style={{ height: '30px', backgroundColor: '#cb4a4a', marginLeft: '15px', border: 'none' }}>Delete</Button>
+                        {/* <Button style={{ height: '30px', backgroundColor: '#cb4a4a', marginLeft: '15px', border: 'none' }}
+                        onClick={() => handleDeleteCustomer(customer.customerId)}>Delete</Button> */}
                       </td>
                     </tr>
                   ))}

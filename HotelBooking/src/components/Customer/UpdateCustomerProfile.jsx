@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
 import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 import apiClient from '../APIClient'
+import { toast } from 'react-toastify'
 
 function UpdateCustomerProfile({ customerData, fetchCustById }) {
 
@@ -22,9 +23,16 @@ function UpdateCustomerProfile({ customerData, fetchCustById }) {
         },
       });
       fetchCustById(customerData.customerId)
-      console.log(response.data);
+      if (response.status===200) {
+        toast.success('Customer details updated successfully')
+        
+      }else{
+        toast.error('Failed to update customer details')
+      }
+       
       
     } catch (error) {
+      toast.error('Failed to update customer details')
       console.log(error);
       
     }
