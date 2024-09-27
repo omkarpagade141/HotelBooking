@@ -20,14 +20,19 @@ public class Item {
 	@Column(name = "item_id")
 	private long itemId;
 	
+	@Column(name = "name")
 	private String itemName;
 	
+	@Column(name = "price")
 	private double itemPrice;
 	
+	@Column(name = "quantity")
 	private int itemQuantity;
 	
+	@Column(name = "sub_total")
 	private double subTotal;
 	
+	@Column(name = "description")
 	private String itemDescription;
 	
 	@ManyToOne

@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +24,6 @@ import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.ExpenseRepository;
 import com.HotelBooking.HotelBooking.Service.IExpenseService;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -33,33 +32,39 @@ public class ExpenseServiceImpl implements IExpenseService {
 
 	@Autowired
 	private ExpenseRepository expenseRepo;
+	
+	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images";
 
-	// For Image set
-	@Value("${upload.expenses}")
-	private String folderName;
-
-	@PostConstruct
-	public void myInit() {
-		System.out.println("in Expense Service" + folderName);
-		// chk of folder exists --o.w create one!
-		File path = new File(folderName);
-		if (!path.exists()) {
-			path.mkdirs();
-		} else
-			System.out.println("Expense image folder alrdy exists....");
-	}
+	
 
 	@Override
 	public ResponseEntity<?> insertExpenseData(Expense expObj, MultipartFile imageName) throws IOException {
 		// TODO Auto-generated method stub
 		if(!imageName.isEmpty() && imageName != null)
 		{
-			long currentTimeMills = System.currentTimeMillis();
-			String targetPath = folderName + File.separator+currentTimeMills+".jpg";
-			Files.copy(imageName.getInputStream(), Paths.get(targetPath),StandardCopyOption.REPLACE_EXISTING);
-			expObj.setExpImagePath(currentTimeMills+".jpg");
-			System.out.println("Expense Bill Inserted !!!");
-		}
+			// Get the current date and time
+			LocalDateTime now = LocalDateTime.now();
+
+			// Define the format you want for the file name (e.g., yyyyMMdd_HHmmss)
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+
+			// Generate a unique file name with the current date and time
+			String currentTime = now.format(formatter);
+
+			// Get the file extension
+			String originalFileName = imageName.getOriginalFilename();
+			String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+
+			// Construct the new file name with date-time as name and retain the file
+			// extension
+			String newFileName = currentTime + fileExtension;
+
+			// Save the file with the new name
+			Path fileNameAndPath = Paths.get(uploadDirectory, newFileName);
+			Files.write(fileNameAndPath, imageName.getBytes());
+
+			// Set the new file name in customerMaster object
+			expObj.setExpImagePath(newFileName);		}
 		expenseRepo.save(expObj);
 		return new ResponseEntity<>("Expense Inserted Successfully",HttpStatus.CREATED);
 	}
@@ -77,8 +82,8 @@ public class ExpenseServiceImpl implements IExpenseService {
 		Expense expObj = expenseRepo.findById(expensId).orElseThrow(()-> new ResourceNotFoundException("Expense Not found"));
 		if(!expObj.getExpImagePath().isEmpty() && expObj.getExpImagePath() !=null)
 		{
-			Path expeTargetPath = Paths.get(folderName + File.separator+expObj.getExpImagePath()) ;
-			Files.delete(expeTargetPath);
+			Path fileNameAndPath = Paths.get(uploadDirectory, expObj.getExpImagePath());
+			Files.delete(fileNameAndPath);
 			System.out.println("Expense image deleted");
 		}
 		
