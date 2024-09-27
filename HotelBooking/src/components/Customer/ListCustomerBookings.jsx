@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import { Row, Col, Card, Table, Dropdown, Pagination } from "react-bootstrap";
 import apiClient from "../APIClient";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const ContentList = () => {
-  const nevigate=useNavigate()
+const ContentList = ({ customerData }) => {
+  const nevigate = useNavigate()
 
   const [bookingList, setBookingList] = useState([]);
+  const [customerBookings, setCustomerBookings] = useState([]);
+
   const fetchAllBookings = async () => {
     const response = await apiClient.get('http://localhost:8080/api/Booking');
     if (response.status === 200) {
+
       setBookingList(response.data)
       console.log(response.data);
 
@@ -17,10 +21,31 @@ const ContentList = () => {
 
   }
   useEffect(() => {
+    setCustomerBookings(bookingList.filter(booking => (
+      booking.customer.customerId == customerData.customerId
+    )))
+  }, [bookingList, customerData])
+
+  useEffect(() => {
     fetchAllBookings()
+    console.log(customerData);
+
   }, [])
 
-  const handleEditBooking=(BookingId)=>{
+  const handleDeleteBooking = async (bookingid) => {
+    const isConfirmed = confirm("confirm delete this booking")
+    if (isConfirmed) {
+      const response = await apiClient.delete(`http://localhost:8080/api/Booking/${bookingid}`)
+      if (response.status === 200) {
+        toast.success("Booking deleted Successfully")
+        fetchAllBookings()
+
+      }
+    }
+
+  }
+
+  const handleEditBooking = (BookingId) => {
     nevigate(`/home/editBooking/${BookingId}`)
   }
 
@@ -73,7 +98,7 @@ const ContentList = () => {
                 </tr>
               </thead>
               <tbody>
-                {bookingList.map(booking => (
+                {customerBookings.map(booking => (
                   <tr key={booking.bookingId}>
                     <td>{booking.bookingId}</td>
                     <td>{booking.checkInDate}</td>
@@ -82,27 +107,25 @@ const ContentList = () => {
                     <td>{booking.checkOutTime}</td>
                     <td>{booking.invoiceamount}</td>
                     <td>
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        variant="primary"
-                        style={{ height: "30px" }}
-                      >
-                        Action
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>View</Dropdown.Item>
-                        <Dropdown.Item onClick={()=>handleEditBooking(booking.bookingId)}>Edit</Dropdown.Item>
-                        <Dropdown.Item>Add Photo</Dropdown.Item>
-                        <Dropdown.Item>Add Video</Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          variant="primary"
+                          style={{ height: "30px" }}
+                        >
+                          Action
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                          <Dropdown.Item onClick={()=>nevigate(`/home/viewBooking/${booking.bookingId}`)}>View</Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleEditBooking(booking.bookingId)}>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleDeleteBooking(booking.bookingId)}>Delete</Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
 
                   </tr>
                 ))}
 
-                 
+
               </tbody>
             </Table>
 

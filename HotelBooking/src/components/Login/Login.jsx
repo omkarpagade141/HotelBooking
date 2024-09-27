@@ -22,6 +22,8 @@ const Login = ({ onLoginSuccess }) => {
 
       if (response.status === 200) {
         const { jwtToken, userName: name } = response.data;
+        console.log(jwtToken);
+        
         sessionStorage.setItem('jwtToken', jwtToken);
         sessionStorage.setItem('userName', name);
         toast.success('Login success');
