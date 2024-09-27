@@ -89,6 +89,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:5173/");  // Your frontend URL
+ 
         configuration.addAllowedMethod("*");  // Allow all methods (GET, POST, etc.)
         configuration.addAllowedHeader("*");  // Allow all headers
         configuration.setAllowCredentials(true);  // Allow credentials (cookies, auth headers)
