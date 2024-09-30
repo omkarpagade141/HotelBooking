@@ -18,4 +18,8 @@ public interface IExpenseService {
 
 	ResponseEntity<Resource> fetchExpenseImageById(long expeId);
 
+	ResponseEntity<?> getExpenseById(long expeId);
+
+	ResponseEntity<?> updateExpenseById(long expeId, Expense expObj, MultipartFile imageName) throws IOException;
+
 }

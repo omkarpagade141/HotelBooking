@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class ExpenseListDTO {
 
 	private long expensId;
-	private String expAmount;
+	private double expAmount;
 	private String expType;
 	private LocalDate expDate;
 	private String expNote;
@@ -14,7 +14,7 @@ public class ExpenseListDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ExpenseListDTO(long expensId, String expAmount, String expType, LocalDate expDate, String expNote) {
+	public ExpenseListDTO(long expensId, double expAmount, String expType, LocalDate expDate, String expNote) {
 		super();
 		this.expensId = expensId;
 		this.expAmount = expAmount;
@@ -31,11 +31,11 @@ public class ExpenseListDTO {
 		this.expensId = expensId;
 	}
 
-	public String getExpAmount() {
+	public double getExpAmount() {
 		return expAmount;
 	}
 
-	public void setExpAmount(String expAmount) {
+	public void setExpAmount(double expAmount) {
 		this.expAmount = expAmount;
 	}
 
