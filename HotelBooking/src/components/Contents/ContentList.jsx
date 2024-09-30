@@ -1,7 +1,7 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Row, Col, Card, Table, Dropdown, Pagination } from "react-bootstrap";
-import apiClient from "../APIClient";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Row, Col, Card, Table, Dropdown, Pagination } from 'react-bootstrap';
+import apiClient from '../APIClient';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,13 +20,13 @@ const ContentList = () => {
     }
   };
 
-const ViewContent=(ccid)=>{
-  navigate(`/home/viewContent/${ccid}`)
-}
+  const ViewContent = (ccid) => {
+    navigate(`/home/viewContent/${ccid}`);
+  };
 
   const deleteContent = async (contentId) => {
     try {
-      const confirmed = confirm('confirm delete content')
+      const confirmed = confirm('confirm delete content');
       if (confirmed) {
         const response = await apiClient.delete(`/api/content/${contentId}`);
         if (response.status === 200) {
@@ -36,13 +36,13 @@ const ViewContent=(ccid)=>{
       }
     } catch (error) {
       console.log(error);
-      console.error("Failed to delete content", error);
+      console.error('Failed to delete content', error);
     }
   };
 
-  const editContent=(cid)=>{
-    navigate(`/home/editContent/${cid}`)
-  }
+  const editContent = (cid) => {
+    navigate(`/home/editContent/${cid}`);
+  };
 
   useEffect(() => {
     fetchContents();
@@ -52,7 +52,10 @@ const ViewContent=(ccid)=>{
   const totalEntries = contents.length;
   const totalPages = Math.ceil(totalEntries / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
-  const currentEntries = contents.slice(startIndex, startIndex + entriesPerPage);
+  const currentEntries = contents.slice(
+    startIndex,
+    startIndex + entriesPerPage
+  );
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -64,19 +67,23 @@ const ViewContent=(ccid)=>{
   };
 
   return (
-    <Row style={{ padding: "20px" }}>
-      <Col xs md={12} style={{ padding: "8px" }}>
+    <Row style={{ padding: '20px' }}>
+      <Col xs md={12} style={{ padding: '8px' }}>
         <Card>
-          <h3 style={{ marginLeft: "15px", marginTop: "5px" }}>
+          <h3 style={{ marginLeft: '15px', marginTop: '5px' }}>
             List of Contents
           </h3>
           <hr />
           <Card.Body>
-            <Row style={{ fontSize: "18px" }}>
+            <Row style={{ fontSize: '18px' }}>
               <Col xs md={9}>
                 <div>
                   <span>Show </span>
-                  <select onChange={handleEntriesChange} value={entriesPerPage} style={{ width: "50px" }}>
+                  <select
+                    onChange={handleEntriesChange}
+                    value={entriesPerPage}
+                    style={{ width: '50px' }}
+                  >
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -85,17 +92,22 @@ const ViewContent=(ccid)=>{
                   <span> Entries</span>
                 </div>
               </Col>
-              <Col xs md={3} style={{ fontSize: "18px", marginBottom: "15px" }}>
+              <Col xs md={3} style={{ fontSize: '18px', marginBottom: '15px' }}>
                 <input
                   type="text"
                   placeholder="Search"
-                  style={{ width: "100%", padding: "4px" }}
+                  style={{ width: '100%', padding: '4px' }}
                 />
               </Col>
             </Row>
 
-            <Table striped bordered hover style={{ textAlign: "center", fontSize: "16px" }}>
-              <thead style={{ fontSize: "16px" }}>
+            <Table
+              striped
+              bordered
+              hover
+              style={{ textAlign: 'center', fontSize: '16px' }}
+            >
+              <thead style={{ fontSize: '16px' }}>
                 <tr>
                   <th>Section Id</th>
                   <th>Content Id</th>
@@ -113,12 +125,25 @@ const ViewContent=(ccid)=>{
                     <td>{content.contentTitle}</td>
                     <td>
                       <Dropdown>
-                        <Dropdown.Toggle variant="primary" style={{ height: '30px' }}>
+                        <Dropdown.Toggle
+                          name="contentActionBtn"
+                          id="contentActionBtnId"
+                          variant="primary"
+                          style={{ height: '30px' }}
+                        >
                           Action
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={()=>ViewContent(content.contentId)}>View</Dropdown.Item>
-                          <Dropdown.Item onClick={()=>editContent(content.contentId)}>Edit</Dropdown.Item> 
+                          <Dropdown.Item
+                            onClick={() => ViewContent(content.contentId)}
+                          >
+                            View
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => editContent(content.contentId)}
+                          >
+                            Edit
+                          </Dropdown.Item>
                           {/* <Dropdown.Item onClick={() => deleteContent(content.contentId)}>Delete</Dropdown.Item> */}
                         </Dropdown.Menu>
                       </Dropdown>
@@ -130,27 +155,48 @@ const ViewContent=(ccid)=>{
 
             <div>
               <Row>
-                <Col xs md={9} style={{ fontSize: "17px" }}>
-                  <p>Showing {startIndex + 1} to {Math.min(startIndex + entriesPerPage, totalEntries)} of {totalEntries} entries</p>
+                <Col xs md={9} style={{ fontSize: '17px' }}>
+                  <p>
+                    Showing {startIndex + 1} to{' '}
+                    {Math.min(startIndex + entriesPerPage, totalEntries)} of{' '}
+                    {totalEntries} entries
+                  </p>
                 </Col>
-                <Col xs md={3} style={{ fontSize: "17px", textAlign: "end" }}>
+                <Col xs md={3} style={{ fontSize: '17px', textAlign: 'end' }}>
                   <Pagination>
-                    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                    <Pagination.Prev
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    />
                     {Array.from({ length: totalPages }, (_, i) => {
                       const page = i + 1;
-                      if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
                         return (
-                          <Pagination.Item key={page} active={page === currentPage} onClick={() => handlePageChange(page)}>
+                          <Pagination.Item
+                            key={page}
+                            active={page === currentPage}
+                            onClick={() => handlePageChange(page)}
+                          >
                             {page}
                           </Pagination.Item>
                         );
                       }
-                      if (page === currentPage - 2 || page === currentPage + 2) {
+                      if (
+                        page === currentPage - 2 ||
+                        page === currentPage + 2
+                      ) {
                         return <Pagination.Ellipsis key={page} />;
                       }
                       return null;
                     })}
-                    <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                    <Pagination.Next
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    />
                   </Pagination>
                 </Col>
               </Row>

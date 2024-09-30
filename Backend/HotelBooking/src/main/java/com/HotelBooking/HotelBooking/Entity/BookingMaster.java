@@ -32,6 +32,7 @@ public class BookingMaster {
 
 	LocalTime checkOutTime;
 	
+	String bookingDescription; // New added
 	
 
 	double invoiceamount;
@@ -130,12 +131,27 @@ public class BookingMaster {
 		this.bookCreatedOn = bookCreatedOn;
 	}
 
+	
+	
+	public String getBookingDescription() {
+		return bookingDescription;
+	}
+
+	public void setBookingDescription(String bookingDescription) {
+		this.bookingDescription = bookingDescription;
+	}
+
 	@Override
 	public String toString() {
-		return "BookingMaster [bookingId=" + bookingId + ", customer=" + customer + ", checkInDate=" + checkInDate
-				+ ", checkInTime=" + checkInTime + ", checkOutDate=" + checkOutDate + ", checkOutTime=" + checkOutTime
-				+ ", invoiceamount=" + invoiceamount + ", image=" + image + "]";
+		return "BookingMaster [bookingId=" + bookingId + ", checkInDate=" + checkInDate + ", checkInTime=" + checkInTime
+				+ ", checkOutDate=" + checkOutDate + ", checkOutTime=" + checkOutTime + ", bookingDescription="
+				+ bookingDescription + ", invoiceamount=" + invoiceamount + ", image=" + image + ", bookCreatedOn="
+				+ bookCreatedOn + "]";
 	}
+	
+	
+
+	
 
 	
 }
