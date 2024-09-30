@@ -120,7 +120,16 @@ const ListExpense = () => {
           <hr />
           <Card.Body>
             <Row style={{ backgroundColor: '#d3d3d3' }}>
-              <Col xs md={5} style={{ marginBottom: '15px', marginTop: '25px', fontSize: '18px', textAlign: 'end' }}>
+              <Col
+                xs
+                md={5}
+                style={{
+                  marginBottom: '15px',
+                  marginTop: '25px',
+                  fontSize: '18px',
+                  textAlign: 'end',
+                }}
+              >
                 <input
                   type="date"
                   value={startDate}
@@ -129,7 +138,16 @@ const ListExpense = () => {
                 />
               </Col>
 
-              <Col xs md={7} style={{ marginBottom: '25px', marginTop: '25px', fontSize: '18px', textAlign: 'start' }}>
+              <Col
+                xs
+                md={7}
+                style={{
+                  marginBottom: '25px',
+                  marginTop: '25px',
+                  fontSize: '18px',
+                  textAlign: 'start',
+                }}
+              >
                 <input
                   type="date"
                   value={endDate}
@@ -138,9 +156,16 @@ const ListExpense = () => {
                 />
                 <Button
                   type="submit"
-                  style={{ backgroundColor: '#1861bf', borderColor: '#1861bf', marginLeft: '2%' }}
+                  style={{
+                    backgroundColor: '#1861bf',
+                    borderColor: '#1861bf',
+                    marginLeft: '2%',
+                  }}
                 >
-                  <FontAwesomeIcon icon={faSearch} style={{ marginRight: '12px' }} />
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    style={{ marginRight: '12px' }}
+                  />
                   <strong>Search</strong>
                 </Button>
               </Col>
@@ -151,7 +176,11 @@ const ListExpense = () => {
               <Col xs md={9}>
                 <div>
                   <span>Show </span>
-                  <select onChange={handleEntriesChange} value={entriesPerPage} style={{ width: '50px' }}>
+                  <select
+                    onChange={handleEntriesChange}
+                    value={entriesPerPage}
+                    style={{ width: '50px' }}
+                  >
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -169,7 +198,12 @@ const ListExpense = () => {
                 />
               </Col>
             </Row>
-            <Table striped bordered hover style={{ textAlign: 'center', fontSize: '16px' }}>
+            <Table
+              striped
+              bordered
+              hover
+              style={{ textAlign: 'center', fontSize: '16px' }}
+            >
               <thead>
                 <tr>
                   <th>Expense Date</th>
@@ -188,16 +222,29 @@ const ListExpense = () => {
                     <td>{exp.expNote}</td>
                     <td>
                       <Dropdown>
-                        <Dropdown.Toggle variant="primary" style={{ height: '30px' }}>
+                        <Dropdown.Toggle
+                          variant="primary"
+                          name="liExpActionBtn"
+                          id="liExpActionBtnId"
+                          style={{ height: '30px' }}
+                        >
                           Action
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => updateExpense(exp.expensId)}>View/Edit</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => updateExpense(exp.expensId)}
+                          >
+                            View/Edit
+                          </Dropdown.Item>
                           <Dropdown.Item>View</Dropdown.Item>
                           <Dropdown.Item>Edit</Dropdown.Item>
                           <Dropdown.Item>Add Photo</Dropdown.Item>
                           <Dropdown.Item>Add Video</Dropdown.Item>
-                          <Dropdown.Item onClick={() => deleteExpense(exp.expensId)}>Delete</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => deleteExpense(exp.expensId)}
+                          >
+                            Delete
+                          </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                     </td>
@@ -209,15 +256,24 @@ const ListExpense = () => {
               <Row>
                 <Col xs md={9} style={{ fontSize: '17px' }}>
                   <p>
-                    Showing {startIndex + 1} to {Math.min(startIndex + entriesPerPage, totalEntries)} of {totalEntries} entries
+                    Showing {startIndex + 1} to{' '}
+                    {Math.min(startIndex + entriesPerPage, totalEntries)} of{' '}
+                    {totalEntries} entries
                   </p>
                 </Col>
                 <Col xs md={3} style={{ fontSize: '17px', textAlign: 'end' }}>
                   <Pagination>
-                    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                    <Pagination.Prev
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    />
                     {Array.from({ length: totalPages }, (_, i) => {
                       const page = i + 1;
-                      if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
                         return (
                           <Pagination.Item
                             key={page}
@@ -228,12 +284,18 @@ const ListExpense = () => {
                           </Pagination.Item>
                         );
                       }
-                      if (page === currentPage - 2 || page === currentPage + 2) {
+                      if (
+                        page === currentPage - 2 ||
+                        page === currentPage + 2
+                      ) {
                         return <Pagination.Ellipsis key={page} />;
                       }
                       return null;
                     })}
-                    <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                    <Pagination.Next
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    />
                   </Pagination>
                 </Col>
               </Row>

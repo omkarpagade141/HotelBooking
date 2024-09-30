@@ -158,6 +158,7 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 			master2.setCheckOutDate(bookingMaster.getCheckOutDate());
 			master2.setCheckOutTime(bookingMaster.getCheckOutTime());
 			master2.setInvoiceamount(bookingMaster.getInvoiceamount());
+			master2.setBookingDescription(bookingMaster.getBookingDescription());
 			master2.setImage(bookingMaster.getImage());
 			bookingMasterRepository.save(master2);
 			return master2;
