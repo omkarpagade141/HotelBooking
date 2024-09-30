@@ -1,6 +1,8 @@
 package com.HotelBooking.HotelBooking.Service.Impl;
 
+import com.HotelBooking.HotelBooking.DTO.ChangeUserPasswordDTO;
 import com.HotelBooking.HotelBooking.Entity.User;
+import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,6 +53,20 @@ public class UserService {
 
         }
     }
+
+
+	public ResponseEntity<?> changeUserPassword(int userId, ChangeUserPasswordDTO updtPassObj) {
+		//Check user exist or not
+	User existUser= userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User does not exist"));
+	
+	if(passwordEncoder.matches(updtPassObj.getOldPassword(), existUser.getPassword()))
+	{
+		existUser.setPassword(passwordEncoder.encode(updtPassObj.getNewPassword()));
+		userRepository.save(existUser);
+		return new ResponseEntity<>("Password has been updated",HttpStatus.OK);
+	}
+		return new ResponseEntity<>("Password does not match",HttpStatus.BAD_REQUEST);
+	}
 
 
 

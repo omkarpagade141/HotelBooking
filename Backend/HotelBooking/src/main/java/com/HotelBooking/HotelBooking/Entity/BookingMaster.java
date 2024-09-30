@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +31,8 @@ public class BookingMaster {
 	LocalDate checkOutDate;
 
 	LocalTime checkOutTime;
+	
+	
 
 	double invoiceamount;
 	String image;
@@ -36,6 +40,9 @@ public class BookingMaster {
 	@OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL)
 	private List<Item> itemList;
 
+	//Book created Date
+//	@CreatedDate
+	LocalDate bookCreatedOn;
 
 	public long getBookingId() {
 		return bookingId;
@@ -111,6 +118,16 @@ public class BookingMaster {
 
 	public void setItemList(List<Item> itemList) {
 		this.itemList = itemList;
+	}
+	
+	
+
+	public LocalDate getBookCreatedOn() {
+		return bookCreatedOn;
+	}
+
+	public void setBookCreatedOn(LocalDate bookCreatedOn) {
+		this.bookCreatedOn = bookCreatedOn;
 	}
 
 	@Override

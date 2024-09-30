@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.HotelBooking.HotelBooking.DTO.ExpenseDTO;
 import com.HotelBooking.HotelBooking.DTO.ExpenseListDTO;
 import com.HotelBooking.HotelBooking.Entity.Expense;
 
@@ -14,5 +15,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>{
 
 	@Query("SELECT new com.HotelBooking.HotelBooking.DTO.ExpenseListDTO( e.expensId, e.expAmount, e.expType, e.expDate, e.expNote) FROM Expense e ")
 	List<ExpenseListDTO> listOfExpenses();
+
+	@Query("SELECT new com.HotelBooking.HotelBooking.DTO.ExpenseDTO(e.expAmount, e.expDate) FROM Expense e")
+	List<ExpenseDTO> expenseDashBoardList();
 
 }

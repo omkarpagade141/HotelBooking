@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,11 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.HotelBooking.HotelBooking.DTO.DashboardDTO;
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
 import com.HotelBooking.HotelBooking.Entity.CustomerMaster;
 import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.BookingMasterRepository;
 import com.HotelBooking.HotelBooking.Repository.CustomerMasterRepository;
+import com.HotelBooking.HotelBooking.Repository.ExpenseRepository;
 import com.HotelBooking.HotelBooking.Service.BookingMasterService;
 
 @Service
@@ -30,6 +33,9 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 	
 	@Autowired
 	CustomerMasterRepository customerMasterRepository;
+	
+	@Autowired
+	ExpenseRepository expenseRepo;
 
 	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images";
 
@@ -66,7 +72,7 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 				// Set the new file name in customerMaster object
 				bookingMaster.setImage(newFileName);
 			}
-
+			bookingMaster.setBookCreatedOn(LocalDate.now());
 		}
 		System.out.println(bookingMaster);
 		return bookingMasterRepository.save(bookingMaster);
@@ -157,6 +163,15 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 			return master2;
 		
 
+	}
+
+	@Override
+	public DashboardDTO showDashBoardInfo() {
+		// TODO Auto-generated method stub
+		DashboardDTO db = new DashboardDTO();
+		db.setIncomeList(bookingMasterRepository.incomeDashBoardList());
+		db.setExpenseList(expenseRepo.expenseDashBoardList());		
+		return db;
 	}
 
 }

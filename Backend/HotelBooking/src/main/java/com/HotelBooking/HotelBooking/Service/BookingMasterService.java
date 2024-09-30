@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.HotelBooking.HotelBooking.DTO.DashboardDTO;
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
 
 public interface BookingMasterService {
@@ -21,5 +22,7 @@ public interface BookingMasterService {
 	public ResponseEntity<?> deleteBooking(long bookingId) throws IOException;
 	
 	public BookingMaster updateBooking(long bookingId ,BookingMaster bookingMaster,MultipartFile file) throws IOException;
+
+	public DashboardDTO showDashBoardInfo();
 
 }

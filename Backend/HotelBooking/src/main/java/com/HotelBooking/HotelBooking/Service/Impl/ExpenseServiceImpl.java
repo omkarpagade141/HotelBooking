@@ -40,7 +40,7 @@ public class ExpenseServiceImpl implements IExpenseService {
 	@Override
 	public ResponseEntity<?> insertExpenseData(Expense expObj, MultipartFile imageName) throws IOException {
 		// TODO Auto-generated method stub
-		if(!imageName.isEmpty() && imageName != null)
+		if( imageName != null)
 		{
 			// Get the current date and time
 			LocalDateTime now = LocalDateTime.now();
@@ -80,7 +80,7 @@ public class ExpenseServiceImpl implements IExpenseService {
 	public ResponseEntity<?> deleteExpenseById(long expensId) throws IOException {
 		// TODO Auto-generated method stub
 		Expense expObj = expenseRepo.findById(expensId).orElseThrow(()-> new ResourceNotFoundException("Expense Not found"));
-		if(!expObj.getExpImagePath().isEmpty() && expObj.getExpImagePath() !=null)
+		if(expObj.getExpImagePath() !=null)
 		{
 			Path fileNameAndPath = Paths.get(uploadDirectory, expObj.getExpImagePath());
 			Files.delete(fileNameAndPath);
@@ -123,6 +123,61 @@ public class ExpenseServiceImpl implements IExpenseService {
 		
 
 	}
+
+	@Override
+	public ResponseEntity<?> getExpenseById(long expeId) {
+		
+		Expense expObj = expenseRepo.findById(expeId).orElseThrow(()-> new ResourceNotFoundException("Expense Not found"));
+		
+		return ResponseEntity.ok(expObj);
+	}
+
+	@Override
+	public ResponseEntity<?> updateExpenseById(long expeId, Expense expObj, MultipartFile imageName) throws IOException {
+		// TODO Auto-generated method stub
+		Expense expExist = expenseRepo.findById(expeId).orElseThrow(()-> new ResourceNotFoundException("Expense Not found"));
+		
+			if (imageName != null) {
+				
+				if(expExist.getExpImagePath()!=null)
+				{
+					Path fileNameAndPath = Paths.get(uploadDirectory, expExist.getExpImagePath());
+					Files.delete(fileNameAndPath);
+					System.out.println("Expense image deleted");
+				}
+				// Get the current date and time
+				LocalDateTime now = LocalDateTime.now();
+
+				// Define the format you want for the file name (e.g., yyyyMMdd_HHmmss)
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+
+				// Generate a unique file name with the current date and time
+				String currentTime = now.format(formatter);
+
+				// Get the file extension
+				String originalFileName = imageName.getOriginalFilename();
+				String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+
+				// Construct the new file name with date-time as name and retain the file
+				// extension
+				String newFileName = currentTime + fileExtension;
+
+				// Save the file with the new name
+				Path fileNameAndPath = Paths.get(uploadDirectory, newFileName);
+				Files.write(fileNameAndPath, imageName.getBytes());
+				expExist.setExpImagePath(newFileName);
+			}
+			
+			expExist.setExpAmount(expObj.getExpAmount());
+			expExist.setExpType(expObj.getExpType());
+			expExist.setExpDate(expObj.getExpDate());
+			expExist.setExpNote(expObj.getExpNote());
+		
+			expenseRepo.save(expExist);
+			return new ResponseEntity<>("Expense Updated Successfully",HttpStatus.OK);
+	}
+
+	
 	
 	
 }
