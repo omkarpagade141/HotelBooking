@@ -72,7 +72,7 @@ function EditBooking() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            alert("Booking updated successfully!");
+            toast.success("Booking updated successfully!");
         } catch (error) {
             console.error("Error updating booking:", error);
         }
@@ -202,6 +202,26 @@ function EditBooking() {
                             </Form.Group>
                         </Col>
                     </Row>
+
+                    <Row style={{ marginTop: '15px' }}>
+                        <Col xs={10}>
+                            <Button
+                                type="button"
+                                style={{
+                                    backgroundColor: "#1861bf",
+                                    borderColor: "#1861bf",
+                                    marginLeft: "2%",
+                                }}
+                                onClick={handleSubmit}
+                            >
+                                <FontAwesomeIcon icon={faCheckCircle} style={{ marginRight: "12px" }} />
+                                <strong>Submit</strong>
+                            </Button>
+                            {/* <Button variant="danger" style={{ marginLeft: "10px" }}>
+                                Delete Selected
+                            </Button> */}
+                        </Col>
+                    </Row>
                     <hr />
                     {/* Items Section */}
                     <h4>Add New Items</h4>
@@ -293,25 +313,7 @@ function EditBooking() {
                     </Row>
 
                     <hr />
-                    <Row style={{ marginTop: '15px' }}>
-                        <Col xs={10}>
-                            <Button
-                                type="button"
-                                style={{
-                                    backgroundColor: "#1861bf",
-                                    borderColor: "#1861bf",
-                                    marginLeft: "2%",
-                                }}
-                                onClick={handleSubmit}
-                            >
-                                <FontAwesomeIcon icon={faCheckCircle} style={{ marginRight: "12px" }} />
-                                <strong>Submit</strong>
-                            </Button>
-                            {/* <Button variant="danger" style={{ marginLeft: "10px" }}>
-                                Delete Selected
-                            </Button> */}
-                        </Col>
-                    </Row>
+                   
                 </Card.Body>
             </Card>
         </div>

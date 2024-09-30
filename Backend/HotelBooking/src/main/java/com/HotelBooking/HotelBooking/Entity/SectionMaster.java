@@ -14,7 +14,7 @@ public class SectionMaster {
     Long sectionId;
     String name;
     LocalDate createdOn;
-
+    
     @JsonIgnore
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentMaster> contentMasterList;
