@@ -13,7 +13,6 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 import apiClient from '../APIClient';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 const ListExpense = () => {
   const [expenses, setExpenses] = useState([]);
@@ -24,10 +23,7 @@ const ListExpense = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const navigate = useNavigate();
-
   const fetchExpenses = async () => {
-    const response = await apiClient.get('/api/expense/list');
-    if (response.status === 200) {
       console.log(response.data);
       setExpenses(response.data);
     }
@@ -240,6 +236,8 @@ const ListExpense = () => {
                           >
                             View/Edit
                           </Dropdown.Item>
+                          <Dropdown.Item>View</Dropdown.Item>
+                          <Dropdown.Item>Edit</Dropdown.Item>
                           <Dropdown.Item>Add Photo</Dropdown.Item>
                           <Dropdown.Item>Add Video</Dropdown.Item>
                           <Dropdown.Item

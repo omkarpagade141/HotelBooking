@@ -6,12 +6,13 @@ import apiClient from '../APIClient';
 function ViewBooking() {
   const { BookingId } = useParams();
   const [booking, setBooking] = React.useState(null);
-  const [bookingItems, setBookingItems] = React.useState(null);
+  const [bookingItems, setBookingItems] = React.useState( []);
   useEffect(() => {
     const fetchbook = async (BookingId) => {
       const response = await apiClient.get(`http://localhost:8080/api/Booking/${BookingId}`)
       if (response.status === 200) {
         setBooking(response.data)
+        setBookingItems(response.data.itemList)
         console.log(response.data);
 
       }
@@ -29,7 +30,7 @@ function ViewBooking() {
                 <tbody>
                   <tr>
                     <td><strong>Customer Name:</strong></td>
-                    <td> {booking ? booking.customer.fullName : ''}</td>
+                    <td> { booking ? booking.customer.fullName : ''}</td>
                   </tr>
                   <tr>
                     <td><strong>Mobile Number:</strong></td>
@@ -101,7 +102,18 @@ function ViewBooking() {
                 </tr>
               </thead>
               <tbody>
-                {/* {booking} */}
+                 {bookingItems ? 
+                 bookingItems.map( item=>(
+                  <tr key={item.itemId}>
+                    <td>{item.itemName}</td>
+                    <td>{item.itemPrice}</td>
+                    <td>{item.itemQuantity}</td>
+                    <td>{item.itemDescription}</td>
+
+                  </tr>
+                 ) )
+                 :
+                 ''}
               </tbody>
             </Table>
           </Row>
