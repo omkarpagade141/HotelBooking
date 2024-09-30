@@ -19,7 +19,7 @@ public class Expense {
 	private long expensId;
 	
 	@Column(name = "amount")
-	private String expAmount;
+	private double expAmount;
 	
 	@Column(name = "expense_type")
 	private String expType;
@@ -38,7 +38,7 @@ public class Expense {
 		
 	}
 
-	public Expense(long expensId, String expAmount, String expType, LocalDate expDate, String expNote,
+	public Expense(long expensId, double expAmount, String expType, LocalDate expDate, String expNote,
 			String expImagePath) {
 		super();
 		this.expensId = expensId;
@@ -57,11 +57,11 @@ public class Expense {
 		this.expensId = expensId;
 	}
 
-	public String getExpAmount() {
+	public double getExpAmount() {
 		return expAmount;
 	}
 
-	public void setExpAmount(String expAmount) {
+	public void setExpAmount(double expAmount) {
 		this.expAmount = expAmount;
 	}
 

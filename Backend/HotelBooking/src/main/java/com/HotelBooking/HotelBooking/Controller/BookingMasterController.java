@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.HotelBooking.HotelBooking.DTO.DashboardDTO;
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
 import com.HotelBooking.HotelBooking.Service.BookingMasterService;
 
@@ -68,5 +69,12 @@ public class BookingMasterController {
 				}else{
 					return new ResponseEntity<>("Booking Id Is Not Found!!!", HttpStatus.NOT_FOUND);
 				}
+	}
+	
+	//For Dash board list api required date, income, expense
+	@GetMapping("/dashboard")
+	DashboardDTO showDashBoardData()
+	{
+		return bookingMasterService.showDashBoardInfo();
 	}
 }

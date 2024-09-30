@@ -11,23 +11,19 @@ import apiClient from '../APIClient';
 
 const ViewCustomerTabs = () => {
   const [value, setValue] = useState(0);
-  const [customerData, setCustomerData] = useState(null)
+  const [customerData, setCustomerData] = useState(null);
 
   const { custId } = useParams();
 
-
   const fetchCustById = async (custId) => {
-    const response = await apiClient.get(`/api/customer/${custId}`)
+    const response = await apiClient.get(`/api/customer/${custId}`);
     console.log(response.data);
 
-    setCustomerData(response.data)
-  }
+    setCustomerData(response.data);
+  };
   useEffect(() => {
-    
-    fetchCustById(custId)
-
-  }, [custId])
-
+    fetchCustById(custId);
+  }, [custId]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -35,30 +31,54 @@ const ViewCustomerTabs = () => {
 
   return (
     <Card>
-      <h2 style={{padding:'10px'}}>{customerData ? customerData.fullName : <></>}</h2>
+      <h2 style={{ padding: '10px' }}>
+        {customerData ? customerData.fullName : <></>}
+      </h2>
       <Box sx={{ width: '100%' }}>
         <Tabs
           value={value}
           onChange={handleChange}
-          // indicatorColor="transparent" 
+          // indicatorColor="transparent"
           textColor="inherit"
         >
           <Tab label="Customer Profile" />
           <Tab label="Update Profile" />
           <Tab label="Add Booking" />
           <Tab label="List Bookings " />
-        </Tabs> <hr />
+        </Tabs>{' '}
+        <hr />
         <div role="tabpanel" hidden={value !== 0}>
-          {value === 0 && <div> <ViewCustomerProfile customerData={customerData} /></div>}
+          {value === 0 && (
+            <div>
+              {' '}
+              <ViewCustomerProfile customerData={customerData} />
+            </div>
+          )}
         </div>
         <div role="tabpanel" hidden={value !== 1}>
-          {value === 1 && <div> <UpdateCustomerProfile customerData={customerData} fetchCustById={fetchCustById}/></div>}
+          {value === 1 && (
+            <div>
+              {' '}
+              <UpdateCustomerProfile
+                customerData={customerData}
+                fetchCustById={fetchCustById}
+              />
+            </div>
+          )}
         </div>
         <div role="tabpanel" hidden={value !== 2}>
-          {value === 2 && <div><AddCustomerBooking customerData={customerData} /></div>}
+          {value === 2 && (
+            <div>
+              <AddCustomerBooking customerData={customerData} />
+            </div>
+          )}
         </div>
         <div role="tabpanel" hidden={value !== 3}>
-          {value === 3 && <div><ListCustomerBookings customerData={customerData} /></div>}
+          {value === 3 && (
+            <div>
+              <ListCustomerBookings customerData={customerData} />
+            </div>
+          )}
         </div>
       </Box>
     </Card>

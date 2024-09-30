@@ -1,5 +1,6 @@
 package com.HotelBooking.HotelBooking.Controller;
 
+import com.HotelBooking.HotelBooking.DTO.ChangeUserPasswordDTO;
 import com.HotelBooking.HotelBooking.DTO.JwtRequest;
 import com.HotelBooking.HotelBooking.DTO.JwtResponse;
 import com.HotelBooking.HotelBooking.Entity.User;
@@ -81,5 +82,11 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Credentials Invalid !!");
     }
 
+    //Change Password 
+    @PostMapping("/change-password/{userId}")
+    ResponseEntity<?> changeUserPassword(@PathVariable int userId,@RequestBody ChangeUserPasswordDTO updtPassObj)
+    {
+    	return userService.changeUserPassword(userId, updtPassObj);
+    }
 
 }

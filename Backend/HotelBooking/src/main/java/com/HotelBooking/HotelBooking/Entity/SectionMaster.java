@@ -3,6 +3,8 @@ package com.HotelBooking.HotelBooking.Entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +15,7 @@ public class SectionMaster {
     String name;
     LocalDate createdOn;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentMaster> contentMasterList;
 
