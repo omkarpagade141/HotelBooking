@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { Row, Col, Card, Table, Dropdown, Pagination } from "react-bootstrap";
-import apiClient from "../APIClient";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useEffect, useState } from 'react';
+import { Row, Col, Card, Table, Dropdown, Pagination } from 'react-bootstrap';
+import apiClient from '../APIClient';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ContentList = ({ customerData }) => {
-  const nevigate = useNavigate()
+  const nevigate = useNavigate();
 
   const [bookingList, setBookingList] = useState([]);
   const [customerBookings, setCustomerBookings] = useState([]);
@@ -13,56 +13,54 @@ const ContentList = ({ customerData }) => {
   const fetchAllBookings = async () => {
     const response = await apiClient.get('http://localhost:8080/api/Booking');
     if (response.status === 200) {
-
-      setBookingList(response.data)
+      setBookingList(response.data);
       console.log(response.data);
-
     }
-
-  }
+  };
   useEffect(() => {
-    setCustomerBookings(bookingList.filter(booking => (
-      booking.customer.customerId == customerData.customerId
-    )))
-  }, [bookingList, customerData])
+    setCustomerBookings(
+      bookingList.filter(
+        (booking) => booking.customer.customerId == customerData.customerId
+      )
+    );
+  }, [bookingList, customerData]);
 
   useEffect(() => {
-    fetchAllBookings()
+    fetchAllBookings();
     console.log(customerData);
-
-  }, [])
+  }, []);
 
   const handleDeleteBooking = async (bookingid) => {
-    const isConfirmed = confirm("confirm delete this booking")
+    const isConfirmed = confirm('confirm delete this booking');
     if (isConfirmed) {
-      const response = await apiClient.delete(`http://localhost:8080/api/Booking/${bookingid}`)
+      const response = await apiClient.delete(
+        `http://localhost:8080/api/Booking/${bookingid}`
+      );
       if (response.status === 200) {
-        toast.success("Booking deleted Successfully")
-        fetchAllBookings()
-
+        toast.success('Booking deleted Successfully');
+        fetchAllBookings();
       }
     }
-
-  }
+  };
 
   const handleEditBooking = (BookingId) => {
-    nevigate(`/home/editBooking/${BookingId}`)
-  }
+    nevigate(`/home/editBooking/${BookingId}`);
+  };
 
   return (
-    <Row style={{ padding: "20px" }}>
-      <Col xs md={12} style={{ padding: "8px" }}>
+    <Row style={{ padding: '20px' }}>
+      <Col xs md={12} style={{ padding: '8px' }}>
         <Card>
-          <h3 style={{ marginLeft: "15px", marginTop: "5px" }}>
+          <h3 style={{ marginLeft: '15px', marginTop: '5px' }}>
             List of Bookings
           </h3>
           <hr />
           <Card.Body>
-            <Row style={{ fontSize: "18px" }}>
+            <Row style={{ fontSize: '18px' }}>
               <Col xs md={9}>
                 <div>
                   <span>Show </span>
-                  <select style={{ width: "50px" }}>
+                  <select style={{ width: '50px' }}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -71,11 +69,11 @@ const ContentList = ({ customerData }) => {
                   <span> Entries</span>
                 </div>
               </Col>
-              <Col xs md={3} style={{ fontSize: "18px", marginBottom: "15px" }}>
+              <Col xs md={3} style={{ fontSize: '18px', marginBottom: '15px' }}>
                 <input
                   type="text"
                   placeholder="Search"
-                  style={{ width: "100%", padding: "4px" }}
+                  style={{ width: '100%', padding: '4px' }}
                 />
               </Col>
             </Row>
@@ -84,9 +82,9 @@ const ContentList = ({ customerData }) => {
               striped
               bordered
               hover
-              style={{ textAlign: "center", fontSize: "16px" }}
+              style={{ textAlign: 'center', fontSize: '16px' }}
             >
-              <thead style={{ fontSize: "16px" }}>
+              <thead style={{ fontSize: '16px' }}>
                 <tr>
                   <th>Booking Id</th>
                   <th>Check-In Date </th>
@@ -98,7 +96,7 @@ const ContentList = ({ customerData }) => {
                 </tr>
               </thead>
               <tbody>
-                {customerBookings.map(booking => (
+                {customerBookings.map((booking) => (
                   <tr key={booking.bookingId}>
                     <td>{booking.bookingId}</td>
                     <td>{booking.checkInDate}</td>
@@ -109,32 +107,47 @@ const ContentList = ({ customerData }) => {
                     <td>
                       <Dropdown>
                         <Dropdown.Toggle
+                          name="liCustBookActionBtn"
+                          id="liCustBookActionBtnId"
                           variant="primary"
-                          style={{ height: "30px" }}
+                          style={{ height: '30px' }}
                         >
                           Action
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={()=>nevigate(`/home/viewBooking/${booking.bookingId}`)}>View</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleEditBooking(booking.bookingId)}>Edit</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleDeleteBooking(booking.bookingId)}>Delete</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() =>
+                              nevigate(`/home/viewBooking/${booking.bookingId}`)
+                            }
+                          >
+                            View
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => handleEditBooking(booking.bookingId)}
+                          >
+                            Edit
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() =>
+                              handleDeleteBooking(booking.bookingId)
+                            }
+                          >
+                            Delete
+                          </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                     </td>
-
                   </tr>
                 ))}
-
-
               </tbody>
             </Table>
 
             <div>
               <Row>
-                <Col xs md={9} style={{ fontSize: "17px" }}>
+                <Col xs md={9} style={{ fontSize: '17px' }}>
                   <p>Showing to of entries</p>
                 </Col>
-                <Col xs md={3} style={{ fontSize: "17px", textAlign: "end" }}>
+                <Col xs md={3} style={{ fontSize: '17px', textAlign: 'end' }}>
                   <Pagination>
                     <Pagination.Prev />
 
