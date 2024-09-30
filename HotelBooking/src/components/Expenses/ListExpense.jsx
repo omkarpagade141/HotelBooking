@@ -13,6 +13,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 import apiClient from '../APIClient';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const ListExpense = () => {
   const [expenses, setExpenses] = useState([]);
@@ -22,22 +23,26 @@ const ListExpense = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
   const navigate = useNavigate();
+
   const fetchExpenses = async () => {
+    try {
+      const response = await apiClient.get('/api/expense/list'); // Assuming this is the correct endpoint
       console.log(response.data);
       setExpenses(response.data);
+    } catch (error) {
+      console.error('Failed to fetch expenses', error);
     }
   };
 
   const updateExpense = (expenseId) => {
-    console.log(expenseId);
-    // navigate(`/home/viewCustomer/${id}`);
     navigate(`/home/viewAndUpdateExpense/${expenseId}`);
   };
 
   const deleteExpense = async (expId) => {
     try {
-      const confirmed = confirm('confirm delete expense');
+      const confirmed = confirm('Confirm delete expense');
       if (confirmed) {
         const response = await apiClient.delete(`/api/expense/delete/${expId}`);
         if (response.status === 200) {
@@ -46,7 +51,6 @@ const ListExpense = () => {
         }
       }
     } catch (error) {
-      console.log(error);
       console.error('Failed to delete expense', error);
     }
   };
@@ -97,7 +101,7 @@ const ListExpense = () => {
     startIndex + entriesPerPage
   );
 
-  const handlPageChange = (pg) => {
+  const handlePageChange = (pg) => {
     setCurrentPage(pg);
   };
 
@@ -115,21 +119,8 @@ const ListExpense = () => {
           </h3>
           <hr />
           <Card.Body>
-            <Row
-              style={{
-                backgroundColor: '#d3d3d3',
-              }}
-            >
-              <Col
-                xs
-                md={5}
-                style={{
-                  marginBottom: '15px',
-                  marginTop: '25px',
-                  fontSize: '18px',
-                  textAlign: 'end',
-                }}
-              >
+            <Row style={{ backgroundColor: '#d3d3d3' }}>
+              <Col xs md={5} style={{ marginBottom: '15px', marginTop: '25px', fontSize: '18px', textAlign: 'end' }}>
                 <input
                   type="date"
                   value={startDate}
@@ -138,16 +129,7 @@ const ListExpense = () => {
                 />
               </Col>
 
-              <Col
-                xs
-                md={7}
-                style={{
-                  marginBottom: '25px',
-                  marginTop: '25px',
-                  fontSize: '18px',
-                  textAlign: 'start',
-                }}
-              >
+              <Col xs md={7} style={{ marginBottom: '25px', marginTop: '25px', fontSize: '18px', textAlign: 'start' }}>
                 <input
                   type="date"
                   value={endDate}
@@ -156,16 +138,9 @@ const ListExpense = () => {
                 />
                 <Button
                   type="submit"
-                  style={{
-                    backgroundColor: '#1861bf',
-                    borderColor: '#1861bf',
-                    marginLeft: '2%',
-                  }}
+                  style={{ backgroundColor: '#1861bf', borderColor: '#1861bf', marginLeft: '2%' }}
                 >
-                  <FontAwesomeIcon
-                    icon={faSearch}
-                    style={{ marginRight: '12px' }}
-                  />
+                  <FontAwesomeIcon icon={faSearch} style={{ marginRight: '12px' }} />
                   <strong>Search</strong>
                 </Button>
               </Col>
@@ -175,15 +150,8 @@ const ListExpense = () => {
             <Row style={{ fontSize: '18px', marginTop: '10px' }}>
               <Col xs md={9}>
                 <div>
-                  {' '}
                   <span>Show </span>
-                  <select
-                    onChange={handleEntriesChange}
-                    value={entriesPerPage}
-                    name=""
-                    id=""
-                    style={{ width: '50px' }}
-                  >
+                  <select onChange={handleEntriesChange} value={entriesPerPage} style={{ width: '50px' }}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -197,16 +165,12 @@ const ListExpense = () => {
                   type="text"
                   placeholder="Search"
                   style={{ width: '100%', padding: '4px' }}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </Col>
             </Row>
-            <Table
-              striped
-              bordered
-              hover
-              style={{ textAlign: 'center', fontSize: '16px' }}
-            >
-              <thead style={{ fontSize: '16 px' }}>
+            <Table striped bordered hover style={{ textAlign: 'center', fontSize: '16px' }}>
+              <thead>
                 <tr>
                   <th>Expense Date</th>
                   <th>Expense Amount</th>
@@ -224,27 +188,16 @@ const ListExpense = () => {
                     <td>{exp.expNote}</td>
                     <td>
                       <Dropdown>
-                        <Dropdown.Toggle
-                          variant="primary"
-                          style={{ height: '30px' }}
-                        >
+                        <Dropdown.Toggle variant="primary" style={{ height: '30px' }}>
                           Action
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item
-                            onClick={() => updateExpense(exp.expensId)}
-                          >
-                            View/Edit
-                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => updateExpense(exp.expensId)}>View/Edit</Dropdown.Item>
                           <Dropdown.Item>View</Dropdown.Item>
                           <Dropdown.Item>Edit</Dropdown.Item>
                           <Dropdown.Item>Add Photo</Dropdown.Item>
                           <Dropdown.Item>Add Video</Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => deleteExpense(exp.expensId)}
-                          >
-                            Delete
-                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => deleteExpense(exp.expensId)}>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                     </td>
@@ -253,68 +206,34 @@ const ListExpense = () => {
               </tbody>
             </Table>
             <div>
-              <Row style={{}}>
-                <Col
-                  xs
-                  md={9}
-                  style={{
-                    fontSize: '17px',
-                  }}
-                >
+              <Row>
+                <Col xs md={9} style={{ fontSize: '17px' }}>
                   <p>
-                    Showing {startIndex + 1} to{' '}
-                    {Math.min(startIndex + entriesPerPage, totalEntries)} of{' '}
-                    {totalEntries} entries
+                    Showing {startIndex + 1} to {Math.min(startIndex + entriesPerPage, totalEntries)} of {totalEntries} entries
                   </p>
                 </Col>
-                <Col
-                  xs
-                  md={3}
-                  style={{
-                    fontSize: '17px',
-                    textAlign: 'end',
-                  }}
-                >
+                <Col xs md={3} style={{ fontSize: '17px', textAlign: 'end' }}>
                   <Pagination>
-                    <Pagination.Prev
-                      onClick={() => handlPageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    />
-                    {/* <Pagination.Ellipsis />
-                    <Pagination.Item>{3}</Pagination.Item>
-                    <Pagination.Item>{4}</Pagination.Item>
-                    <Pagination.Item>{5}</Pagination.Item>
-                    <Pagination.Ellipsis />
-                    <Pagination.Next /> */}
+                    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
                     {Array.from({ length: totalPages }, (_, i) => {
                       const page = i + 1;
-                      if (
-                        page === 1 ||
-                        page === totalPages ||
-                        (page >= currentPage - 1 && page <= currentPage + 1)
-                      ) {
+                      if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
                         return (
                           <Pagination.Item
                             key={page}
                             active={page === currentPage}
-                            onClick={() => handlPageChange(page)}
+                            onClick={() => handlePageChange(page)}
                           >
                             {page}
                           </Pagination.Item>
                         );
                       }
-                      if (
-                        page === currentPage - 2 ||
-                        page === currentPage + 2
-                      ) {
+                      if (page === currentPage - 2 || page === currentPage + 2) {
                         return <Pagination.Ellipsis key={page} />;
                       }
                       return null;
                     })}
-                    <Pagination.Next
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                    />
+                    <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
                   </Pagination>
                 </Col>
               </Row>
