@@ -119,7 +119,7 @@ const ViewContent=(ccid)=>{
                         <Dropdown.Menu>
                           <Dropdown.Item onClick={()=>ViewContent(content.contentId)}>View</Dropdown.Item>
                           <Dropdown.Item onClick={()=>editContent(content.contentId)}>Edit</Dropdown.Item> 
-                          <Dropdown.Item onClick={() => deleteContent(content.contentId)}>Delete</Dropdown.Item>
+                          {/* <Dropdown.Item onClick={() => deleteContent(content.contentId)}>Delete</Dropdown.Item> */}
                         </Dropdown.Menu>
                       </Dropdown>
                     </td>

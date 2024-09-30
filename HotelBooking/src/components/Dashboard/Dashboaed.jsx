@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CardContent, Grid, Typography } from '@mui/material';
 import { Card } from 'react-bootstrap';
 import { Line, Bar } from 'react-chartjs-2';
@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import apiClient from '../APIClient';
 
 // Register chart.js components
 ChartJS.register(
@@ -71,17 +72,29 @@ const barCardStyle = {
   whiteSpace: 'nowrap', // Prevent wrapping of content
 };
 
+
+
 function Dashboard() {
+  const [allCcustomer,setAllCustomer]=useState([])
+  const fetchAllCustomer=async()=>{
+    const response = await apiClient.get('/api/customer');
+    setAllCustomer(response.data)
+  
+  }
+  useEffect(()=>{
+    fetchAllCustomer()
+  },[])
+  
   return (
     <Grid container spacing={2} sx={{ padding: '20px' }}>
       {/* Income/Expenses Cards */}
       <Grid item xs={12} sm={6} md={2.4}>
         <Card style={cardStyle}>
           <CardContent>
-            <Typography variant="h5" component="h2">
-              Today's Income
-            </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h5" component="h2" style={{fontSize:'17px',height:'40px'}}>
+              <strong>Today's Income</strong>
+            </Typography> <hr />
+            <Typography variant="h4" component="h2" style={{fontSize:'22px'}}>
               ₹9/-
             </Typography>
           </CardContent>
@@ -91,10 +104,10 @@ function Dashboard() {
       <Grid item xs={12} sm={6} md={2.4}>
         <Card style={cardStyle}>
           <CardContent>
-            <Typography variant="h5" component="h2">
-              Total Income
-            </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h5" component="h2" style={{fontSize:'17px',height:'40px'}}>
+              <strong>Total Income</strong>
+            </Typography><hr />
+            <Typography variant="h4" component="h2" style={{fontSize:'22px'}}>
               ₹49/-
             </Typography>
           </CardContent>
@@ -104,10 +117,10 @@ function Dashboard() {
       <Grid item xs={12} sm={6} md={2.4}>
         <Card style={cardStyle}>
           <CardContent>
-            <Typography variant="h6" component="h2">
-              Today's Expenses
-            </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h6" component="h2" style={{fontSize:'17px',height:'40px'}}>
+              <strong>Today's Expense</strong>
+            </Typography><hr />
+            <Typography variant="h4" component="h2" style={{fontSize:'22px'}}>
               ₹799/-
             </Typography>
           </CardContent>
@@ -117,10 +130,10 @@ function Dashboard() {
       <Grid item xs={12} sm={6} md={2.4}>
         <Card style={cardStyle}>
           <CardContent>
-            <Typography variant="h5" component="h2">
-              Total Expenses
-            </Typography>
-            <Typography variant="h4" component="h2">
+            <Typography variant="h5" component="h2" style={{fontSize:'17px',height:'40px'}}>
+              <strong>Total Expenses</strong>
+            </Typography> <hr />
+            <Typography variant="h4" component="h2" style={{fontSize:'22px'}}>
               ₹499/-
             </Typography>
           </CardContent>
@@ -130,11 +143,11 @@ function Dashboard() {
       <Grid item xs={12} sm={6} md={2.4}>
         <Card style={cardStyle}>
           <CardContent>
-            <Typography variant="h5" component="h2">
-              Total Customers
-            </Typography>
-            <Typography variant="h4" component="h2">
-              ₹1049/-
+            <Typography variant="h5" component="h2" style={{fontSize:'17px',height:'40px'}}>
+              <strong>Total Customers</strong>
+            </Typography> <hr />
+            <Typography variant="h4" component="h2" style={{fontSize:'22px'}}>
+              {allCcustomer.length}
             </Typography>
           </CardContent>
         </Card>
@@ -145,7 +158,7 @@ function Dashboard() {
       <Grid item xs={12} sm={6}>
         <Card style={cardStyle}>
           <CardContent>
-            <Typography variant="h5" component="h2">
+            <Typography variant="h5" component="h2" style={{fontSize:'17px',height:'40px'}}> 
               Line Chart - Weekly Income
             </Typography>
             <Line data={lineChartData} />
