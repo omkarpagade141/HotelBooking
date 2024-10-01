@@ -87,11 +87,11 @@ const ContentList = ({ customerData }) => {
               <thead style={{ fontSize: '16px' }}>
                 <tr>
                   <th>Booking Id</th>
-                  <th>Check-In Date </th>
+                  <th>Check-In Date</th>
                   <th>Check-In Time</th>
-                  <th>Check-Out Date </th>
-                  <th> Check-Out Time</th>
-                  <th>Invoice</th>
+                  <th>Check-Out Date</th>
+                  <th>Check-Out Time</th>
+                  <th>Invoice Amount</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -150,7 +150,6 @@ const ContentList = ({ customerData }) => {
                 <Col xs md={3} style={{ fontSize: '17px', textAlign: 'end' }}>
                   <Pagination>
                     <Pagination.Prev />
-
                     <Pagination.Next />
                   </Pagination>
                 </Col>
