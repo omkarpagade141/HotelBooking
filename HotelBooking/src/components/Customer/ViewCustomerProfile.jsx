@@ -5,9 +5,17 @@ import './CustTabAllCss.css'
 function ViewCustomerProfile({ customerData }) {
   return (
     <div>
-       <Row>
-        <Col md={3} style={{height:'200px'}}>
-        <img src="" alt="customer image" />
+       <Row  >
+        <Col md={3} style={{height:'100%' }}>
+        {
+          (customerData && customerData.photo!==null)  ? 
+        <img src={`http://localhost:8080/api/images/${customerData.photo}`}
+        style={{width:'100%'}}
+        alt="customer image" />
+        : 
+          <p>no profile photo added</p>
+        }
+       
         </Col>
         <Col md={9} style={{fontSize:'18px'}}>
         <Table bordered className='customerViewProfileTable'>
