@@ -46,6 +46,9 @@ const ContentList = ({ customerData }) => {
   const handleEditBooking = (BookingId) => {
     nevigate(`/home/editBooking/${BookingId}`);
   };
+  const handlePrintInvoice=(BookingId)=>{
+    nevigate(`/home/customerInvoice/${BookingId}`)
+  }
 
   return (
     <Row style={{ padding: '20px' }}>
@@ -133,6 +136,13 @@ const ContentList = ({ customerData }) => {
                             }
                           >
                             Delete
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() =>
+                              handlePrintInvoice(booking.bookingId)
+                            }
+                          >
+                            Invoice
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>

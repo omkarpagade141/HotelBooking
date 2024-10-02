@@ -37,9 +37,7 @@ const cardStyle = {
 
 const barCardStyle = {
   ...cardStyle,
-  overflowX: 'auto',
   maxHeight: '400px',
-  whiteSpace: 'nowrap',
 };
 
 // Line chart data
@@ -55,53 +53,60 @@ const lineChartData = {
   ],
 };
 
-// Bar chart data
-const barChartData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'Sep', 'Oct', 'Nov'],
-  datasets: [
-    {
-      label: 'Income',
-      data: [1000, 1200, 900, 1500, 1300, 1400, 1600, 900, 1200, 100],
-      backgroundColor: 'rgba(75, 192, 192, 0.6)',
-    },
-    {
-      label: 'Expenses',
-      data: [500, 800, 300, 600, 700, 650, 900, 800, 300, 200],
-      backgroundColor: 'rgba(255, 99, 132, 0.6)',
-    },
-  ],
-};
-
 function Dashboard() {
-  const [allCustomers, setAllCustomers] = useState([]);
-  const [data, setData] = useState([]);
-  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [monthlyIncomeData, setMonthlyIncomeData] = useState(new Array(12).fill(0)); // Initialize with 12 months
+  const [monthlyExpenseData, setMonthlyExpenseData] = useState(new Array(12).fill(0));
   const [todaysIncome, setTodaysIncome] = useState(0);
   const [todaysExpense, setTodaysExpense] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [allCustomers, setAllCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const getData = async () => {
     setLoading(true);
     try {
       const result = await apiClient.get("http://localhost:8080/api/Booking/dashboard");
-      setData(result.data);
 
-      const expenses = result.data.expenseList.reduce((sum, expense) => sum + expense.expAmount, 0);
-      setTotalExpenses(expenses);
+      // Initialize arrays to hold monthly sums
+      const incomeByMonth = new Array(12).fill(0);
+      const expenseByMonth = new Array(12).fill(0);
 
+      // Process incomeList by month
+      const totalIncomeValue = result.data.incomeList.reduce((sum, income) => {
+        const incomeDate = new Date(income.bookCreatedOn);
+        const month = incomeDate.getMonth();
+        incomeByMonth[month] += income.invoiceamount;
+        return sum + income.invoiceamount;
+      }, 0);
+
+      // Process expenseList by month
+      const totalExpenseValue = result.data.expenseList.reduce((sum, expense) => {
+        const expenseDate = new Date(expense.expDate);
+        const month = expenseDate.getMonth();
+        expenseByMonth[month] += expense.expAmount;
+        return sum + expense.expAmount;
+      }, 0);
+
+      // Update state with monthly data
+      setMonthlyIncomeData(incomeByMonth);
+      setMonthlyExpenseData(expenseByMonth);
+
+      setTotalIncome(totalIncomeValue);
+      setTotalExpenses(totalExpenseValue);
+
+      // Calculate today's income and expenses
       const today = new Date().toISOString().split('T')[0];
-
-      // Calculate today's income from incomeList
       const incomeToday = result.data.incomeList
         .filter(income => income.bookCreatedOn === today)
         .reduce((sum, income) => sum + income.invoiceamount, 0);
       setTodaysIncome(incomeToday);
 
-      // Calculate today's expenses
       const todaysExpenses = result.data.expenseList
         .filter(expense => expense.expDate === today)
         .reduce((sum, expense) => sum + expense.expAmount, 0);
       setTodaysExpense(todaysExpenses);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -113,6 +118,7 @@ function Dashboard() {
     getData();
   }, []);
 
+  // Fetch customer data
   const fetchAllCustomers = async () => {
     try {
       const response = await apiClient.get('/api/customer');
@@ -126,13 +132,51 @@ function Dashboard() {
     fetchAllCustomers();
   }, []);
 
+  const barChartData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    datasets: [
+      {
+        label: 'Income',
+        data: monthlyIncomeData,
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+      },
+      {
+        label: 'Expenses',
+        data: monthlyExpenseData,
+        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+      },
+    ],
+  };
+
+  const barChartOptions = {
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: 12,
+          },
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 12,
+          },
+        },
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
     <Grid container spacing={2} sx={{ padding: '20px' }}>
       {loading ? (
         <Typography>Loading...</Typography>
       ) : (
         <>
-          {/* Income/Expenses Cards */}
+          {/* Today's Income Card */}
           <Grid item xs={12} sm={6} md={2.4}>
             <Card style={cardStyle}>
               <CardContent>
@@ -147,6 +191,7 @@ function Dashboard() {
             </Card>
           </Grid>
 
+          {/* Total Income Card */}
           <Grid item xs={12} sm={6} md={2.4}>
             <Card style={cardStyle}>
               <CardContent>
@@ -155,12 +200,13 @@ function Dashboard() {
                 </Typography>
                 <hr />
                 <Typography variant="h4" component="h2" style={{ fontSize: '22px' }}>
-                  ₹49/- {/* Replace with actual total income */}
+                  ₹{totalIncome}/-
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
 
+          {/* Today's Expense Card */}
           <Grid item xs={12} sm={6} md={2.4}>
             <Card style={cardStyle}>
               <CardContent>
@@ -175,6 +221,7 @@ function Dashboard() {
             </Card>
           </Grid>
 
+          {/* Total Expenses Card */}
           <Grid item xs={12} sm={6} md={2.4}>
             <Card style={cardStyle}>
               <CardContent>
@@ -189,6 +236,7 @@ function Dashboard() {
             </Card>
           </Grid>
 
+          {/* Total Customers Card */}
           <Grid item xs={12} sm={6} md={2.4}>
             <Card style={cardStyle}>
               <CardContent>
@@ -203,28 +251,29 @@ function Dashboard() {
             </Card>
           </Grid>
 
-          {/* Line and Bar Charts */}
+          {/* Line Chart for Weekly Income */}
           <Grid item xs={12} sm={6}>
             <Card style={cardStyle}>
               <CardContent>
                 <Typography variant="h5" component="h2" style={{ fontSize: '17px', height: '40px' }}>
                   Line Chart - Weekly Income
                 </Typography>
-                <div style={{ width: '100%', height: '300px' }}> {/* Adjusted height */}
+                <div style={{ width: '100%', height: '300px' }}>
                   <Line data={lineChartData} options={{ maintainAspectRatio: false }} />
                 </div>
               </CardContent>
             </Card>
           </Grid>
 
+          {/* Bar Chart for Monthly Income vs Expenses */}
           <Grid item xs={12} sm={6}>
             <Card style={barCardStyle}>
               <CardContent>
                 <Typography variant="h5" component="h2">
-                  Bar Graph - Monthly Expenses
+                  Bar Graph - Monthly Income vs. Expenses
                 </Typography>
-                <div style={{ width: '600px', height: '210px' }}>
-                  <Bar data={barChartData} options={{ maintainAspectRatio: false }} />
+                <div style={{ width: '100%', height: '300px' }}>
+                  <Bar data={barChartData} options={barChartOptions} />
                 </div>
               </CardContent>
             </Card>
