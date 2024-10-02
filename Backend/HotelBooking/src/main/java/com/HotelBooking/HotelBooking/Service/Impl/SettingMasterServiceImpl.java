@@ -22,7 +22,7 @@ public class SettingMasterServiceImpl implements SettingMasterService {
     @Autowired
     private SettingMasterRepository settingMasterRepository;
 
-    public static  String path = System.getProperty("user.dir") + "/src/main/webapp/images/settings";
+    public static  String path = System.getProperty("user.dir") + "/src/main/webapp/images";
 
 
 

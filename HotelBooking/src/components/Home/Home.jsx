@@ -59,15 +59,9 @@ const Home = () => {
             <Route path="/editContent/:contId" element={<EditContent />} />
             <Route path="/editBooking/:BookingId" element={<EditBooking />} />
             <Route path="/viewBooking/:BookingId" element={<ViewBooking />} />
-            <Route
-              path="/viewAndUpdateExpense/:expenseId"
-              element={<ExpenseDetails />}
-            />
+            <Route path="/viewAndUpdateExpense/:expenseId" element={<ExpenseDetails />} />
 
-            <Route
-              path="/customerInvoice/:BookingId"
-              element={<ListCustomerInvoice />}
-            />
+            <Route path="/customerInvoice/:BookingId" element={<ListCustomerInvoice />} />
           </Routes>
         </div>
       </div>
