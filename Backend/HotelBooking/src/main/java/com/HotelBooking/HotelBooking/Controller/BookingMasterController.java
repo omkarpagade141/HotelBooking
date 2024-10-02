@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.HotelBooking.HotelBooking.DTO.BookingDTO;
 import com.HotelBooking.HotelBooking.DTO.DashboardDTO;
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
 import com.HotelBooking.HotelBooking.Service.BookingMasterService;
@@ -31,7 +32,7 @@ public class BookingMasterController {
 	BookingMasterService bookingMasterService;
 	
 	@PostMapping("/reserve/{custId}")
-	public BookingMaster addbooking(@PathVariable long custId,@RequestPart("booking") BookingMaster bookingMaster,@RequestParam(value = "image",required =  false) MultipartFile file) throws IOException {
+	public BookingMaster addbooking(@PathVariable long custId,@RequestPart("booking") BookingDTO bookingMaster,@RequestParam(value = "image",required =  false) MultipartFile file) throws IOException {
 		System.out.println(bookingMaster.getCheckInDate());
 		System.out.println(bookingMaster.getCheckInTime());
 		return bookingMasterService.addBooking(custId,bookingMaster,file);
@@ -62,7 +63,7 @@ public class BookingMasterController {
 
 			}
 	@PutMapping("/{bookingId}")
-	public ResponseEntity<?> updateBooking(@RequestPart("booking") BookingMaster bookingMaster,@PathVariable("bookingId")long bookingId,@RequestParam( value = "image" ,required = false) MultipartFile file) throws IOException {
+	public ResponseEntity<?> updateBooking(@RequestPart("booking") BookingDTO bookingMaster,@PathVariable("bookingId")long bookingId,@RequestParam( value = "image" ,required = false) MultipartFile file) throws IOException {
 		BookingMaster bookingMaster2=bookingMasterService.updateBooking(bookingId, bookingMaster,file);
 				if(bookingMaster2!=null) {
 					return new ResponseEntity<>(bookingMaster2, HttpStatus.OK);

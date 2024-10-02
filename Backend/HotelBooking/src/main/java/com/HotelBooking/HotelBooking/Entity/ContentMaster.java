@@ -20,15 +20,17 @@ public class ContentMaster {
 	    private String contentLocation;
 	    private String contentLink;
 	    private String contentImage;
+	    private boolean isRoomAvailable;
 
 	    @ManyToOne(cascade = CascadeType.ALL )
 	    @JoinColumn(name = "section_id", nullable = false)
-	    private SectionMaster section;
+	    private SectionMaster section;	
+				
+	    
 
-		 
 		public ContentMaster(Long contentId, String contentTitle, Double contentPrice, String contentSequence,
 				String contentDescription, String contentImgAltTag, LocalDate contentDate, String contentLocation,
-				String contentLink, String contentImage, SectionMaster section) {
+				String contentLink, String contentImage, boolean isRoomAvailable, SectionMaster section) {
 			super();
 			this.contentId = contentId;
 			this.contentTitle = contentTitle;
@@ -40,13 +42,15 @@ public class ContentMaster {
 			this.contentLocation = contentLocation;
 			this.contentLink = contentLink;
 			this.contentImage = contentImage;
+			this.isRoomAvailable = true;
 			this.section = section;
 		}
-		
-		
+
+
 
 		public ContentMaster() {
 			super();
+			this.isRoomAvailable = true;
 			// TODO Auto-generated constructor stub
 		}
 		
@@ -143,14 +147,33 @@ public class ContentMaster {
 		public void setSection(SectionMaster section) {
 			this.section = section;
 		}
+		
+		
+
+		public boolean isRoomAvailable() {
+			return isRoomAvailable;
+		}
+
+
+
+		public void setRoomAvailable(boolean isRoomAvailable) {
+			this.isRoomAvailable = isRoomAvailable;
+		}
+
+
 
 		@Override
 		public String toString() {
 			return "ContentMaster [contentId=" + contentId + ", contentTitle=" + contentTitle + ", contentPrice="
 					+ contentPrice + ", contentSequence=" + contentSequence + ", contentDescription="
-					+ contentDescription + ", contentDate=" + contentDate + ", contentLocation=" + contentLocation
-					+ ", contentLink=" + contentLink + ", contentImage=" + contentImage + ", section=" + section + "]";
+					+ contentDescription + ", contentImgAltTag=" + contentImgAltTag + ", contentDate=" + contentDate
+					+ ", contentLocation=" + contentLocation + ", contentLink=" + contentLink + ", contentImage="
+					+ contentImage + ", isRoomAvailable=" + isRoomAvailable + ", section=" + section + "]";
 		}
+
+
+
+		
 	    
 	    
 	    

@@ -33,7 +33,7 @@ public class ContentMasterServiceImpl implements ContentMasterService{
 	@Autowired
 	SectionMasterRepositiry sectionMasterRepositiry;
 	
-	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images/content";
+	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images";
 
 
     @Override
