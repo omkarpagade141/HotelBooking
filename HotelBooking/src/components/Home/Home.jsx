@@ -1,27 +1,28 @@
 // src/pages/Home.js
-import React, { useState } from "react";
-import Sidebar from "../Sidebar/Sidebar";
-import Navbar from "../Sidebar/Navbar";
-import "./Home.css";
-import Section from "../Sections/Section";
-import { Route, Routes } from "react-router-dom";
-import AddContent from "../Contents/AddContent";
-import ContentList from "../Contents/ContentList";
-import AddCustomer from "../Customer/AddCustomer";
-import ListCustomers from "../Customer/ListCustomers";
-import SettingMaster from "../Settings/SettingMaster";
-import Enquiry from "../Enquiry/Enquiry";
-import AddExpense from "../Expenses/AddExpense";
-import AddIncome from "../Income/AddIncome";
-import ListExpense from "../Expenses/ListExpense";
-import ViewIncome from "../Income/ViewIncome";
-import ViewCustomerTabs from "../Customer/ViewCustomerTabs";
-import Dashboard from "../Dashboard/Dashboaed";
-import EditContent from "../Contents/EditContent";
-import ViewContent from "../Contents/ViewContent";
-import EditBooking from "../Booking/EditBooking";
-import ViewBooking from "../Booking/ViewBooking";
-import ExpenseDetails from "../Expenses/ExpenseDetails";
+import React, { useState } from 'react';
+import Sidebar from '../Sidebar/Sidebar';
+import Navbar from '../Sidebar/Navbar';
+import './Home.css';
+import Section from '../Sections/Section';
+import { Route, Routes } from 'react-router-dom';
+import AddContent from '../Contents/AddContent';
+import ContentList from '../Contents/ContentList';
+import AddCustomer from '../Customer/AddCustomer';
+import ListCustomers from '../Customer/ListCustomers';
+import SettingMaster from '../Settings/SettingMaster';
+import Enquiry from '../Enquiry/Enquiry';
+import AddExpense from '../Expenses/AddExpense';
+import AddIncome from '../Income/AddIncome';
+import ListExpense from '../Expenses/ListExpense';
+import ViewIncome from '../Income/ViewIncome';
+import ViewCustomerTabs from '../Customer/ViewCustomerTabs';
+import Dashboard from '../Dashboard/Dashboaed';
+import EditContent from '../Contents/EditContent';
+import ViewContent from '../Contents/ViewContent';
+import EditBooking from '../Booking/EditBooking';
+import ViewBooking from '../Booking/ViewBooking';
+import ExpenseDetails from '../Expenses/ExpenseDetails';
+import ListCustomerInvoice from '../Customer/ListCustomerInvoice';
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -34,7 +35,7 @@ const Home = () => {
         <Sidebar collapsed={collapsed} />
         <div
           className={` homeContentDiv content ${
-            collapsed ? "collapsed" : "expanded"
+            collapsed ? 'collapsed' : 'expanded'
           }`}
         >
           <Routes>

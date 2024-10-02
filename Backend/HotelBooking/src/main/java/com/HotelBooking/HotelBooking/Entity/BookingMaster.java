@@ -32,7 +32,7 @@ public class BookingMaster {
 
 	LocalTime checkOutTime;
 	
-	String bookingDescription; // New added
+	String bookingDescription; 
 	
 
 	double invoiceamount;
@@ -42,8 +42,12 @@ public class BookingMaster {
 	private List<Item> itemList;
 
 	//Book created Date
-//	@CreatedDate
 	LocalDate bookCreatedOn;
+	
+	// New added
+	@ManyToOne
+	@JoinColumn(name = "room_id")
+	private ContentMaster roomTypeObj;
 
 	public long getBookingId() {
 		return bookingId;
@@ -139,6 +143,16 @@ public class BookingMaster {
 
 	public void setBookingDescription(String bookingDescription) {
 		this.bookingDescription = bookingDescription;
+	}
+	
+	
+
+	public ContentMaster getRoomTypeObj() {
+		return roomTypeObj;
+	}
+
+	public void setRoomTypeObj(ContentMaster roomTypeObj) {
+		this.roomTypeObj = roomTypeObj;
 	}
 
 	@Override

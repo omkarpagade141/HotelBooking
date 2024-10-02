@@ -11,16 +11,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.HotelBooking.HotelBooking.DTO.BookingDTO;
 import com.HotelBooking.HotelBooking.DTO.DashboardDTO;
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
+import com.HotelBooking.HotelBooking.Entity.ContentMaster;
 import com.HotelBooking.HotelBooking.Entity.CustomerMaster;
 import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.BookingMasterRepository;
+import com.HotelBooking.HotelBooking.Repository.ContentMasterRepository;
 import com.HotelBooking.HotelBooking.Repository.CustomerMasterRepository;
 import com.HotelBooking.HotelBooking.Repository.ExpenseRepository;
 import com.HotelBooking.HotelBooking.Service.BookingMasterService;
@@ -36,15 +40,33 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 	
 	@Autowired
 	ExpenseRepository expenseRepo;
+	
+	@Autowired
+	ContentMasterRepository contentRepo;
+	
+	@Autowired
+	ModelMapper mapper;
 
 	public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images";
 
 	@Override
-	public BookingMaster addBooking(long custId, BookingMaster bookingMaster, MultipartFile file) throws IOException {
-		
+	public BookingMaster addBooking(long custId, BookingDTO book, MultipartFile file) throws IOException {
+		//New Change
 		CustomerMaster custObj = customerMasterRepository.findById(custId).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Customer does not exist"));
 
+		ContentMaster cont= contentRepo.findById(book.getRoomContentId()).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Room does not exist"));;
+		
+		BookingMaster bookingMaster = mapper.map(book, BookingMaster.class);
+		
 		bookingMaster.setCustomer(custObj);
+		bookingMaster.setRoomTypeObj(cont);
+		
+		//If book done status will be change
+		if(bookingMaster.getCheckInDate()!=null && bookingMaster.getCheckInTime()!=null)
+		{
+			bookingMaster.getRoomTypeObj().setRoomAvailable(false);
+		}
+			
 		
 		if (bookingMaster != null) {
 			if (file != null && !file.isEmpty()) {
@@ -93,7 +115,7 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 	public ResponseEntity<?> deleteBooking(long bookingId) throws IOException {
 		BookingMaster bookObj = bookingMasterRepository.findById(bookingId)
 				.orElseThrow(() -> new ResourceNotFoundException("Error For Delete!!! Booking not found"));
-
+		
 		if(bookObj.getImage() !=null)
 		{
 			Path fileNameAndPath = Paths.get(uploadDirectory, bookObj.getImage());
@@ -101,7 +123,7 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 			System.out.println("Old Booking image deleted");
 		
 		}
-		
+		bookObj.getRoomTypeObj().setRoomAvailable(true);
 		bookingMasterRepository.delete(bookObj);
 
 		return ResponseEntity.ok("Booking details has been deleted for Id: " + bookingId);
@@ -109,11 +131,11 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 	}
 
 	@Override
-	public BookingMaster updateBooking(long bookingId, BookingMaster bookingMaster, MultipartFile file)
+	public BookingMaster updateBooking(long bookingId, BookingDTO bookObj, MultipartFile file)
 			throws IOException {
 		BookingMaster master2 = bookingMasterRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Error For Update!!! Booking not found"));
 		
-		
+		BookingMaster bookingMaster = mapper.map(bookObj, BookingMaster.class);
 
 		
 		if (file != null && !file.isEmpty()) {
@@ -160,6 +182,13 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 			master2.setInvoiceamount(bookingMaster.getInvoiceamount());
 			master2.setBookingDescription(bookingMaster.getBookingDescription());
 			master2.setImage(bookingMaster.getImage());
+			
+			if(bookingMaster.getCheckInDate()!=null && bookingMaster.getCheckInTime()!=null &&
+					bookingMaster.getCheckOutDate()!=null && bookingMaster.getCheckOutTime()!=null	)
+			{
+				master2.getRoomTypeObj().setRoomAvailable(true);
+			}
+			
 			bookingMasterRepository.save(master2);
 			return master2;
 		
