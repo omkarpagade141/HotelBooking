@@ -68,6 +68,11 @@ function BasicExample({ customerData }) {
       return;
     }
 
+    if(bookingImage===null){
+        toast.error("Attach Id proof")
+        return;
+    }
+
     const formData = new FormData();
     const sendBookingData = {
       checkInDate,
