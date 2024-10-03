@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Form, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -16,8 +16,6 @@ function BasicExample({ customerData }) {
     },
   ]);
   const [selectedItems, setSelectedItems] = useState([]);
-
-  // State for booking details
   const [checkInDate, setCheckInDate] = useState('');
   const [checkInTime, setCheckInTime] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
@@ -25,6 +23,41 @@ function BasicExample({ customerData }) {
   const [invoiceAmount, setInvoiceAmount] = useState(0);
   const [bookingImage, setBookingImage] = useState(null);
   const [bookingDescription, setBookingDescription] = useState('');
+  const [roomContentId, setRoomContentId] = useState(null);
+  const [filteredRooms, setFilteredRooms] = useState([]);
+  const [allContents, setAllContents] = useState([]);
+
+  // Fetch all room contents
+  const fetchAllContents = async () => {
+    console.log('content fetched');
+    try {
+      const response = await apiClient.get('http://localhost:8080/api/content');
+      if (response.status === 200) {
+        setAllContents(response.data);
+        console.log(response.data, response.status);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Filter rooms based on available contents
+  const filterRoomsFromAllContents = () => {
+    setFilteredRooms(
+      allContents.filter(
+        (content) =>
+          content.section.sectionId === 1 && content.roomAvailable === true
+      )
+    );
+  };
+
+  useEffect(() => {
+    fetchAllContents();
+  }, []); // Only run on component mount
+
+  useEffect(() => {
+    filterRoomsFromAllContents();
+  }, [allContents]); // Run when allContents is updated
 
   const handleAddItem = () => {
     setItems([
@@ -67,12 +100,12 @@ function BasicExample({ customerData }) {
       toast.error('Please fill in all booking details.');
       return;
     }
-
-    if(bookingImage===null){
-        toast.error("Attach Id proof")
-        return;
+  
+    if (bookingImage === null) {
+      toast.error('Attach Id proof');
+      return;
     }
-
+  
     const formData = new FormData();
     const sendBookingData = {
       checkInDate,
@@ -81,14 +114,15 @@ function BasicExample({ customerData }) {
       checkOutTime,
       invoiceAmount,
       bookingDescription,
+      roomContentId,
     };
-
+  
     formData.append(
       'booking',
       new Blob([JSON.stringify(sendBookingData)], { type: 'application/json' })
     );
     formData.append('image', bookingImage);
-
+  
     try {
       const response = await apiClient.post(
         `http://localhost:8080/api/Booking/reserve/${customerData.customerId}`,
@@ -96,8 +130,8 @@ function BasicExample({ customerData }) {
       );
       if (response.status === 200) {
         const bookId = response.data.bookingId;
-
-        // Prepare itemList from items only if they are filled
+  
+        
         const itemList = items
           .filter(
             (item) => item.itemName && item.itemPrice && item.itemQuantity
@@ -109,8 +143,7 @@ function BasicExample({ customerData }) {
             subTotal: Number(item.subTotal),
             itemDescription: item.itemDescription,
           }));
-
-        // Only make the second API call if there are valid items
+  
         if (itemList.length > 0) {
           const responseSaveItem = await apiClient.post(
             `http://localhost:8080/api/items/booking/${bookId}`,
@@ -122,8 +155,8 @@ function BasicExample({ customerData }) {
         } else {
           toast.success('Booking created successfully');
         }
-
-        // Clear all states after successful submission
+  
+        // Reset form state
         setCheckInDate('');
         setCheckInTime('');
         setCheckOutDate('');
@@ -146,6 +179,7 @@ function BasicExample({ customerData }) {
       toast.error('An error occurred while submitting the booking.');
     }
   };
+  
 
   return (
     <Card>
@@ -201,7 +235,29 @@ function BasicExample({ customerData }) {
               />
             </Form.Group>
           </Col>
-          <Col xs={12} md={4}>
+          <Col xs md={2}>
+          <Form.Group controlId="checkOutTime">
+          <Form.Label>
+                <strong>Select Room type</strong>
+              </Form.Label>
+          <Form.Select
+              id="section"
+              style={{ marginBottom: '20px', padding: '5px' }} 
+              onChange={(e) => setRoomContentId(e.target.value)}
+            >
+              <option value="">Select a section</option>
+              {filteredRooms.map((room) => (
+                <option key={room.contentId} value={room.contentId}>
+                  {room.contentTitle}
+                </option>
+              ))}
+            </Form.Select>
+
+          </Form.Group>
+
+           
+          </Col>
+          <Col xs={12} md={2}>
             <Form.Group controlId="uploadImage">
               <Form.Label>
                 <strong>Upload Image</strong>
@@ -254,39 +310,32 @@ function BasicExample({ customerData }) {
           <Row
             key={index}
             className="align-items-center"
-            style={{ marginBottom: '10px' }}
+            style={{ marginTop: '10px' }}
           >
             <Col xs={1}>
               <Form.Check
                 type="checkbox"
-                checked={selectedItems.includes(index)}
                 onChange={() => handleSelectItem(index)}
+                checked={selectedItems.includes(index)}
               />
             </Col>
             <Col xs={2}>
               <Form.Control
                 type="text"
-                placeholder="Enter Item Name"
                 value={item.itemName}
-                onChange={(e) =>
-                  handleChange(index, 'itemName', e.target.value)
-                }
+                onChange={(e) => handleChange(index, 'itemName', e.target.value)}
               />
             </Col>
             <Col xs={2}>
               <Form.Control
                 type="number"
-                placeholder="Enter Cost"
                 value={item.itemPrice}
-                onChange={(e) =>
-                  handleChange(index, 'itemPrice', e.target.value)
-                }
+                onChange={(e) => handleChange(index, 'itemPrice', e.target.value)}
               />
             </Col>
             <Col xs={2}>
               <Form.Control
                 type="number"
-                placeholder="Enter Quantity"
                 value={item.itemQuantity}
                 onChange={(e) =>
                   handleChange(index, 'itemQuantity', e.target.value)
@@ -296,17 +345,13 @@ function BasicExample({ customerData }) {
             <Col xs={2}>
               <Form.Control
                 type="number"
-                placeholder="SubTotal"
                 value={item.subTotal}
-                onChange={(e) =>
-                  handleChange(index, 'subTotal', e.target.value)
-                }
+                onChange={(e) => handleChange(index, 'subTotal', e.target.value)}
               />
             </Col>
             <Col xs={2}>
               <Form.Control
                 type="text"
-                placeholder="Add Item Desc."
                 value={item.itemDescription}
                 onChange={(e) =>
                   handleChange(index, 'itemDescription', e.target.value)
@@ -316,34 +361,23 @@ function BasicExample({ customerData }) {
           </Row>
         ))}
 
-        <Row style={{ marginTop: '15px' }}>
-          <Col xs={10}>
-            <Button
-              type="button"
-              onClick={handleSubmit}
-              style={{
-                backgroundColor: '#1861bf',
-                borderColor: '#1861bf',
-                marginLeft: '2%',
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faCheckCircle}
-                style={{ marginRight: '12px' }}
-              />
-              <strong>Submit</strong>
-            </Button>
-            <Button
-              onClick={handleDeleteItems}
-              variant="danger"
-              style={{ marginLeft: '10px' }}
-            >
-              Delete Selected
-            </Button>
-          </Col>
-          <Col md={2}>
-            <Button onClick={handleAddItem}>
-              <FontAwesomeIcon icon={faPlus} />
+        <hr />
+        <Button variant="secondary" onClick={handleAddItem}>
+          <FontAwesomeIcon icon={faPlus} /> Add Item
+        </Button>
+        <Button
+          variant="danger"
+          onClick={handleDeleteItems}
+          disabled={selectedItems.length === 0}
+          style={{ marginLeft: '10px' }}
+        >
+          Delete Selected Items
+        </Button>
+        <hr />
+        <Row>
+          <Col xs={12}>
+            <Button variant="primary" onClick={handleSubmit}>
+              <FontAwesomeIcon icon={faCheckCircle} /> Submit Booking
             </Button>
           </Col>
         </Row>

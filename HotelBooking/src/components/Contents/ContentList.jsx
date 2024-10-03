@@ -13,7 +13,7 @@ const ContentList = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(5);
 
   const fetchContents = async () => {
-    const response = await apiClient.get('/api/content');
+    const response = await apiClient.get('http://localhost:8080/api/content');
     if (response.status === 200) {
       setContents(response.data);
       console.log(response.data);
