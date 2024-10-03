@@ -39,7 +39,7 @@ public class UserService {
 
     public ResponseEntity<String> newUser(User user){
 
-        Optional<User> existingUser = userRepository.findByUserName(user.getUserName());
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
 //        return userRepository.save(user);
 

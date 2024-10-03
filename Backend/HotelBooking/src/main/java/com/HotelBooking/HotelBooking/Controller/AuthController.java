@@ -4,6 +4,7 @@ import com.HotelBooking.HotelBooking.DTO.ChangeUserPasswordDTO;
 import com.HotelBooking.HotelBooking.DTO.JwtRequest;
 import com.HotelBooking.HotelBooking.DTO.JwtResponse;
 import com.HotelBooking.HotelBooking.Entity.User;
+import com.HotelBooking.HotelBooking.Repository.UserRepository;
 import com.HotelBooking.HotelBooking.Service.Impl.UserService;
 import com.HotelBooking.HotelBooking.security.JwtHelper;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +33,12 @@ public class AuthController {
 
     @Autowired
     private JwtHelper helper;
+    
+    @Autowired
+    UserRepository userRepository;
+    
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     UserService userService;
@@ -45,7 +53,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
-
+    	
+    	int size= userRepository.findAll().size();
+    	System.out.println(size);
+    	if(size ==0)
+    	{
+    		User user = new User();
+    		user.setEmail(request.getEmail());
+    		user.setPassword(passwordEncoder.encode(request.getPassword()));
+    		user.setRoles("Admin");
+    		user.setUserName("user");
+    		 userRepository.save(user);
+    	}
+    	
         this.doAuthenticate(request.getEmail(), request.getPassword());
 
 
