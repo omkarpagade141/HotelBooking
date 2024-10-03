@@ -26,4 +26,6 @@ public interface BookingMasterService {
 
 	public DashboardDTO showDashBoardInfo();
 
+	public ResponseEntity<?> getAvilableRoomsList(BookingDTO bookingMaster);
+
 }
