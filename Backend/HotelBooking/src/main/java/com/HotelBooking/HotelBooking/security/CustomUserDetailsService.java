@@ -15,12 +15,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + email));
 
         return  org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUserName())
+                .username(user.getEmail())
                 .password(user.getPassword())
                 .roles(user.getRoles())// Assuming you store roles in your user table
                 .build();
