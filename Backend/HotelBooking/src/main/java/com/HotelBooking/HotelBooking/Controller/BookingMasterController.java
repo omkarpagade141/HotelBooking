@@ -33,8 +33,7 @@ public class BookingMasterController {
 	
 	@PostMapping("/reserve/{custId}")
 	public BookingMaster addbooking(@PathVariable long custId,@RequestPart("booking") BookingDTO bookingMaster,@RequestParam(value = "image",required =  false) MultipartFile file) throws IOException {
-		System.out.println(bookingMaster.getCheckInDate());
-		System.out.println(bookingMaster.getCheckInTime());
+		
 		return bookingMasterService.addBooking(custId,bookingMaster,file);
 	}
 	
@@ -77,5 +76,11 @@ public class BookingMasterController {
 	DashboardDTO showDashBoardData()
 	{
 		return bookingMasterService.showDashBoardInfo();
+	}
+	
+	@GetMapping("/available-rooms")
+	ResponseEntity<?> showAvilableRooms(@RequestBody BookingDTO bookingMaster)
+	{
+		return bookingMasterService.getAvilableRoomsList(bookingMaster);
 	}
 }

@@ -20,7 +20,7 @@ public class ContentMaster {
 	    private String contentLocation;
 	    private String contentLink;
 	    private String contentImage;
-	    private boolean isRoomAvailable;
+
 
 	    @ManyToOne(cascade = CascadeType.ALL )
 	    @JoinColumn(name = "section_id", nullable = false)
@@ -30,7 +30,7 @@ public class ContentMaster {
 
 		public ContentMaster(Long contentId, String contentTitle, Double contentPrice, String contentSequence,
 				String contentDescription, String contentImgAltTag, LocalDate contentDate, String contentLocation,
-				String contentLink, String contentImage, boolean isRoomAvailable, SectionMaster section) {
+				String contentLink, String contentImage,  SectionMaster section) {
 			super();
 			this.contentId = contentId;
 			this.contentTitle = contentTitle;
@@ -42,7 +42,6 @@ public class ContentMaster {
 			this.contentLocation = contentLocation;
 			this.contentLink = contentLink;
 			this.contentImage = contentImage;
-			this.isRoomAvailable = true;
 			this.section = section;
 		}
 
@@ -50,7 +49,7 @@ public class ContentMaster {
 
 		public ContentMaster() {
 			super();
-			this.isRoomAvailable = true;
+			
 			// TODO Auto-generated constructor stub
 		}
 		
@@ -150,15 +149,7 @@ public class ContentMaster {
 		
 		
 
-		public boolean isRoomAvailable() {
-			return isRoomAvailable;
-		}
-
-
-
-		public void setRoomAvailable(boolean isRoomAvailable) {
-			this.isRoomAvailable = isRoomAvailable;
-		}
+		
 
 
 
@@ -168,7 +159,7 @@ public class ContentMaster {
 					+ contentPrice + ", contentSequence=" + contentSequence + ", contentDescription="
 					+ contentDescription + ", contentImgAltTag=" + contentImgAltTag + ", contentDate=" + contentDate
 					+ ", contentLocation=" + contentLocation + ", contentLink=" + contentLink + ", contentImage="
-					+ contentImage + ", isRoomAvailable=" + isRoomAvailable + ", section=" + section + "]";
+					+ contentImage + ", section=" + section + "]";
 		}
 
 
