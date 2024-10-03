@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.HotelBooking.HotelBooking.DTO.ActiveRoomIdDTO;
 import com.HotelBooking.HotelBooking.DTO.BookingDTO;
 import com.HotelBooking.HotelBooking.DTO.DashboardDTO;
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
-import com.HotelBooking.HotelBooking.Entity.ContentMaster;
 import com.HotelBooking.HotelBooking.Entity.CustomerMaster;
 import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.BookingMasterRepository;
@@ -54,18 +53,14 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 		//New Change
 		CustomerMaster custObj = customerMasterRepository.findById(custId).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Customer does not exist"));
 
-		ContentMaster cont= contentRepo.findById(book.getRoomContentId()).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Room does not exist"));;
+		//ContentMaster cont= contentRepo.findById(book.getRoomContentId()).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Room does not exist"));;
 		
 		BookingMaster bookingMaster = mapper.map(book, BookingMaster.class);
 		
 		bookingMaster.setCustomer(custObj);
-		bookingMaster.setRoomTypeObj(cont);
+		//bookingMaster.setRoomTypeObj(cont);
 		
-		//If book done status will be change
-		if(bookingMaster.getCheckInDate()!=null && bookingMaster.getCheckInTime()!=null)
-		{
-			bookingMaster.getRoomTypeObj().setRoomAvailable(false);
-		}
+		
 			
 		
 		if (bookingMaster != null) {
@@ -123,7 +118,7 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 			System.out.println("Old Booking image deleted");
 		
 		}
-		bookObj.getRoomTypeObj().setRoomAvailable(true);
+	
 		bookingMasterRepository.delete(bookObj);
 
 		return ResponseEntity.ok("Booking details has been deleted for Id: " + bookingId);
@@ -183,11 +178,7 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 			master2.setBookingDescription(bookingMaster.getBookingDescription());
 			master2.setImage(bookingMaster.getImage());
 			
-			if(bookingMaster.getCheckInDate()!=null && bookingMaster.getCheckInTime()!=null &&
-					bookingMaster.getCheckOutDate()!=null && bookingMaster.getCheckOutTime()!=null	)
-			{
-				master2.getRoomTypeObj().setRoomAvailable(true);
-			}
+			
 			
 			bookingMasterRepository.save(master2);
 			return master2;
@@ -202,6 +193,15 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 		db.setIncomeList(bookingMasterRepository.incomeDashBoardList());
 		db.setExpenseList(expenseRepo.expenseDashBoardList());		
 		return db;
+	}
+
+	@Override
+	public ResponseEntity<?> getAvilableRoomsList(BookingDTO bookingMaster) {
+		// TODO Auto-generated method stub
+		
+		List<ActiveRoomIdDTO> rooms = bookingMasterRepository.findAllAvilableRooms(bookingMaster.getCheckInDate(), bookingMaster.getCheckOutDate());
+		
+		return ResponseEntity.ok(rooms);
 	}
 
 }
