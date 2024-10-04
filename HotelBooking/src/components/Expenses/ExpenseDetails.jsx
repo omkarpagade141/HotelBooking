@@ -40,7 +40,6 @@ function ExpenseDetails() {
 
   const handleUpdateExpense = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append(
       'expenseObj',
@@ -96,7 +95,7 @@ function ExpenseDetails() {
             <h3 style={{ marginLeft: '12px' }}>Expense Details</h3>
             <hr />
 
-            <Form onSubmit={handleUpdateExpense}>
+            <Form>
               <Row>
                 <Col xs md={4} style={{ textAlign: 'start' }}>
                   <strong>Expense Amount (in Rs):</strong>
@@ -180,48 +179,49 @@ function ExpenseDetails() {
                 </Col>
               </Row>
               <hr />
-              <Row>
-                <Col xs md={6}>
-                  {isEditing ? (
-                    <Button
-                      type="submit"
-                      style={{ backgroundColor: '#1861bf', marginLeft: '50%' }}
-                    >
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        style={{ marginRight: '15px' }}
-                      />
-                      <strong>Update</strong>
-                    </Button>
-                  ) : (
-                    <Button
-                      type="button" // Prevent form submission
-                      onClick={() => setIsEditing(true)}
-                      style={{ backgroundColor: 'gray', marginLeft: '50%' }}
-                    >
-                      <FontAwesomeIcon
-                        icon={faEdit}
-                        style={{ marginRight: '15px' }}
-                      />
-                      <strong>Edit</strong>
-                    </Button>
-                  )}
-                </Col>
-                <Col xs md={6}>
+            </Form>
+            <Row>
+              <Col xs md={6}>
+                {isEditing ? (
                   <Button
-                    type="button" // Prevent form submission
-                    onClick={() => setIsEditing(false)}
-                    style={{ backgroundColor: 'gray', borderColor: 'gray' }}
+                    type="button"
+                    onClick={(e) => handleUpdateExpense(e)}
+                    style={{ backgroundColor: '#1861bf', marginLeft: '50%' }}
                   >
                     <FontAwesomeIcon
-                      icon={faTimesCircle}
+                      icon={faCheckCircle}
                       style={{ marginRight: '15px' }}
                     />
-                    <strong>Cancel</strong>
+                    <strong>Update</strong>
                   </Button>
-                </Col>
-              </Row>
-            </Form>
+                ) : (
+                  <Button
+                    type="button" // Prevent form submission
+                    onClick={() => setIsEditing(true)}
+                    style={{ backgroundColor: 'gray', marginLeft: '50%' }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      style={{ marginRight: '15px' }}
+                    />
+                    <strong>Edit</strong>
+                  </Button>
+                )}
+              </Col>
+              <Col xs md={6}>
+                <Button
+                  type="button" // Prevent form submission
+                  onClick={() => setIsEditing(false)}
+                  style={{ backgroundColor: 'gray', borderColor: 'gray' }}
+                >
+                  <FontAwesomeIcon
+                    icon={faTimesCircle}
+                    style={{ marginRight: '15px' }}
+                  />
+                  <strong>Cancel</strong>
+                </Button>
+              </Col>
+            </Row>
           </Card.Body>
         </Card>
       </Col>

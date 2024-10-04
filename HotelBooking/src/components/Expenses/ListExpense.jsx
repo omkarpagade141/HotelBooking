@@ -40,6 +40,13 @@ const ListExpense = () => {
     navigate(`/home/viewAndUpdateExpense/${expenseId}`);
   };
 
+  //Show Image
+  const showExpenseImage = async (expId) => {
+    console.log(expId);
+    // const response = await apiClient.get(`/api/expense/image/${expId}`);
+    // console.log(response.data);
+  };
+
   const deleteExpense = async (expId) => {
     try {
       const confirmed = confirm('Confirm delete expense');
@@ -236,10 +243,11 @@ const ListExpense = () => {
                           >
                             View/Edit
                           </Dropdown.Item>
-                          <Dropdown.Item>View</Dropdown.Item>
-                          <Dropdown.Item>Edit</Dropdown.Item>
-                          <Dropdown.Item>Add Photo</Dropdown.Item>
-                          <Dropdown.Item>Add Video</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => showExpenseImage(exp.expensId)}
+                          >
+                            View Expense Photo
+                          </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => deleteExpense(exp.expensId)}
                           >

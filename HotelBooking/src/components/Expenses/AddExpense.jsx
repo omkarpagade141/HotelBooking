@@ -16,6 +16,17 @@ function AddExpense() {
   const [expenseNote, setExpenseNote] = useState('');
   const [expenseImage, setExpenseImage] = useState(null);
 
+  const handleChange = (e) => {
+    const value = e.target.value;
+
+    // Regex to allow only numbers and a single decimal point with Up to two digits after the decimal point
+    const regex = /^\d*\.?\d{0,2}$/;
+
+    if (value === '' || regex.test(value)) {
+      setExpenseAmount(value);
+    }
+  };
+
   const handleAddExpense = async (e) => {
     e.preventDefault();
 
@@ -87,7 +98,8 @@ function AddExpense() {
                     required
                     placeholder="Add Expense in Amount in(Rs)"
                     value={expenseAmount}
-                    onChange={(e) => setExpenseAmount(e.target.value)}
+                    onChange={handleChange}
+                    // onChange={(e) => setExpenseAmount(e.target.value)}
                     style={{ marginBottom: '20px', padding: '5px' }}
                   />
                 </Col>
