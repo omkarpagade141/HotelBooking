@@ -1,130 +1,98 @@
-import React, { useRef } from 'react';
-import { Grid, Card, CardContent, Button } from '@mui/material';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from '@mui/material';
-// import { useReactToPrint } from 'react-to-print';
+import React from 'react';
+import './ListCustomerInvoice.css';
 
-function ListCustomerInvoice() {
-  const invoiceRef = useRef(null); // Initialize the ref with null
+function ListCustomerInvoice({ setting,booking }) {
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const products = [
-    { id: 1, name: 'Product A', cost: 50, quantity: 2 },
-    { id: 2, name: 'Product B', cost: 30, quantity: 1 },
-    { id: 3, name: 'Product C', cost: 100, quantity: 3 },
-  ];
 
   const calculateSubtotal = (cost, quantity) => cost * quantity;
-  const total = products.reduce(
-    (sum, product) => sum + calculateSubtotal(product.cost, product.quantity),
-    0
-  );
 
   return (
-    <Card>
-      <CardContent>
-        <div ref={invoiceRef}>
-          {' '}
-          {/* Wrap the printable area */}
-          <Grid container spacing={2}>
-            <Grid item xs={4}></Grid>
-            <Grid item xs={4}>
-              <h2>The Invoice Company</h2>
-            </Grid>
-            <Grid item xs={4}></Grid>
-
-            <Grid item xs={4} style={{ marginTop: '50px' }}>
-              <p>
-                From <br />
-                <b>The Invoice Company</b>
-                <br />
-                Best Hotel Stay <br />
-                Pune
-                <br />
-                Email: info@theinvoicecompany.com
-              </p>
-            </Grid>
-            <Grid item xs={4} style={{ marginTop: '50px' }}>
-              <p>
-                To <br />
-                <b>abc</b>
-                <br />
-                04
-                <br />
-                Maharashtra
-                <br />
-                PuneNagarNagarNagar 411047
-                <br />
-                Phone: 9874545242
-                <br />
-                Email: abc12@gmail.com
-              </p>
-            </Grid>
-            <Grid item xs={4} style={{ marginTop: '50px' }}>
-              <p>
-                <b>Invoice #71</b>
-                <br />
-                <b>Invoice Date:</b> 30-09-2024
-                <br />
-                <b>Check-In Date:</b> 18-09-2024 4:13 pm
-                <br />
-                <b>Check-Out Date:</b> 20-09-2024 2:17 pm
-              </p>
-            </Grid>
-
-            <Grid item xs={12}>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Sr. No.</TableCell>
-                      <TableCell>Product Name</TableCell>
-                      <TableCell>Cost</TableCell>
-                      <TableCell>Quantity</TableCell>
-                      <TableCell>Subtotal</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {products.map((product, index) => (
-                      <TableRow key={product.id}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{product.name}</TableCell>
-                        <TableCell>{product.cost}</TableCell>
-                        <TableCell>{product.quantity}</TableCell>
-                        <TableCell>
-                          {calculateSubtotal(product.cost, product.quantity)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-
-            <Grid item xs={12}>
-              <h3 style={{ textAlign: 'right', marginRight: '16px' }}>
-                Total: ${total}
-              </h3>
-            </Grid>
-          </Grid>
+    <div className="invoice-card">
+      <div className="invoice-content">
+        {/* Invoice Header */}
+        <div className="invoice-header">
+          <h2>{setting ? setting.companyName : 'Company Name'}</h2>
         </div>
-        <Grid item xs={2}>
-          <Button variant="contained" fullWidth onClick={handlePrint}>
-            Print
-          </Button>
-        </Grid>
-      </CardContent>
-    </Card>
+
+        {/* Invoice Details */}
+        <div className="invoice-details-top">
+          <p>
+            <b>Invoice # {booking ? booking.bookingId : ''}</b>
+            <br />
+            <b>Invoice Date:</b>  {new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })}
+
+            <br />
+            <b>Check-In Date:</b> {booking ? booking.checkInDate +' '+ booking.checkInTime :''}
+            <br />
+            <b>Check-Out Date:</b> {booking ? booking.checkOutDate +' '+ booking.checkOutTime :''}
+            <br />
+            <b>Room :</b>{booking ? booking.roomTypeObj.contentTitle :''} ({booking ? booking.roomTypeObj.contentPrice + ' per day' :''})
+          </p>
+        </div>
+
+        {/* From and To Section */}
+        <div className="invoice-info">
+          <div className="invoice-from">
+            <p>
+              <strong>From</strong> <br />
+              <b>{setting ? setting.companyName : 'Company Name'}</b>
+              <br />
+              {setting ? setting.city : 'City Name'}
+              <br />
+              Email: {setting ? setting.email : 'Company Email'}
+              <br />
+              Contact: {setting ? setting.phoneNumber : 'Company Contact No'}
+            </p>
+          </div>
+
+          <div className="invoice-to">
+            <p>
+              <strong>To</strong> <br />
+              <b>{booking ? booking.customer.fullName : ''}</b>
+              <br />
+              {booking ? booking.customer.locality : ''}
+              <br />
+              {booking ? booking.customer.city : ''}
+              <br />
+              Phone: {booking ? booking.customer.mobileNumber : ''}  
+              <br />
+              Email:{booking ? booking.customer.email : ''}   
+            </p>
+          </div>
+        </div>
+
+        {/* Invoice Table */}
+        <div className="invoice-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Sr. No.</th>
+                <th>Product Name</th>
+                <th>Cost</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {booking.itemList.map((product, index) => (
+                <tr key={product.itemId}>
+                  <td>{index + 1}</td>
+                  <td>{product.itemName}</td>
+                  <td>{product.itemPrice}</td>
+                  <td>{product.itemQuantity}</td>
+                  <td>{calculateSubtotal(product.itemPrice, product.itemQuantity)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Total */}
+        <div className="invoice-total">
+          <h3>Total: {booking ? booking.invoiceamount : ''}</h3>
+        </div>
+      </div>
+    </div>
   );
 }
 
