@@ -1,19 +1,5 @@
-import ReactDOMServer from 'react-dom/server';
-import ListCustomerInvoice from '../Customer/ListCustomerInvoice';
-
-const printHelp=(setting,booking)=>{
-    const printWindow = window.open('', '_blank');
-    const printContent = ReactDOMServer.renderToString(
-      <ListCustomerInvoice setting={setting} booking={booking}/>
-    );
-
-    printWindow.document.write(`
-        <html>
-          <head>
-            <title>Bill Details</title>
-            <style>
-            .invoice-card {
-    width: 95%;
+.invoice-card {
+    width: 80%;
     margin: 0 auto;
     border: 1px solid #ccc;
     padding: 20px;
@@ -29,17 +15,28 @@ const printHelp=(setting,booking)=>{
   
   .invoice-header h2 {
     text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .invoice-details-top {
+    text-align: center;
+    margin-bottom: 20px;
   }
   
   .invoice-info {
     display: flex;
     justify-content: space-between;
-    margin-top: 30px;
+    margin-top: 20px;
   }
   
   .invoice-info p {
     margin: 0;
     line-height: 1.6;
+  }
+  
+  .invoice-from,
+  .invoice-to {
+    width: 45%;
   }
   
   .invoice-table {
@@ -86,25 +83,3 @@ const printHelp=(setting,booking)=>{
     background-color: #45a049;
   }
   
-            </style>
-          </head>
-          <body>${printContent}</body>
-          <script>
-            window.print();
-            window.onafterprint = function() { window.close(); };
-          </script>
-        </html>
-      `);
-    printWindow.document.close();
-
-    return(
-      <></>
-      );
-      
-
-}
-
-
-
-
-export default printHelp

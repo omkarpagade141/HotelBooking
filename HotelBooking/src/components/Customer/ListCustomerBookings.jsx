@@ -3,6 +3,7 @@ import { Row, Col, Card, Table, Dropdown, Pagination } from 'react-bootstrap';
 import apiClient from '../APIClient';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import printHelp from '../printHelper/print';
 
 const ContentList = ({ customerData }) => {
   const nevigate = useNavigate();
@@ -52,8 +53,29 @@ const ContentList = ({ customerData }) => {
   const handleEditBooking = (BookingId) => {
     nevigate(`/home/editBooking/${BookingId}`);
   };
-  const handlePrintInvoice=(BookingId)=>{
-    nevigate(`/home/customerInvoice/${BookingId}`)
+  const handlePrintInvoice= async(BookingId)=>{
+    try {
+      let setting=null;
+      let booking=null;
+      const response= await apiClient.get(`http://localhost:8080/api/Booking/${BookingId}`)
+      if(response.status===200){
+        booking=response.data;
+        console.log(booking);
+        
+      }
+      const response2= await apiClient.get(`http://localhost:8080/api/settings/get-setting/1`)
+      if(response2.status===200){
+        setting=response2.data;
+        console.log(setting);
+        
+      }
+
+      printHelp(setting,booking);
+    } catch (error) {
+      console.log(error);
+      
+    }
+    // nevigate(`/home/customerInvoice/${BookingId}`)
   }
 
   return (
