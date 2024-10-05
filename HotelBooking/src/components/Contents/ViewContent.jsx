@@ -9,7 +9,7 @@ function ViewContent() {
 
 
   const fetchContentById = async (contentID) => {
-    const response = await apiClient.get(`/api/content/${contentID}`);
+    const response = await apiClient.get(`http://localhost:8080/api/content/${contentID}`);
     setContent(response.data);
   };
 

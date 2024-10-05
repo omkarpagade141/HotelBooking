@@ -20,7 +20,7 @@ function ExpenseDetails() {
     expNote: '',
     expImage: null,
   });
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
 
   useEffect(() => {
     const fetchExpense = async () => {

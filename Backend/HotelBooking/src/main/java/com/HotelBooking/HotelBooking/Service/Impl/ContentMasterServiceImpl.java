@@ -119,16 +119,20 @@ public class ContentMasterServiceImpl implements ContentMasterService{
 			MultipartFile file) throws IOException {
 		 // Fetch the existing content
         Optional<ContentMaster> optionalContentMaster = getContentById(contentId);
+        
         if (!optionalContentMaster.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         ContentMaster existingContentMaster = optionalContentMaster.get();
-        Set<String> allContenetSet= contentMasterRepository.findAllContentBasedOnSection(contentMaster.getSection().getName());
-		if(allContenetSet.contains(contentMaster.getContentTitle()))
-		{
-			return new ResponseEntity<>("This content already exists!!!", HttpStatus.BAD_REQUEST);
-		}
+        if(!existingContentMaster.getContentTitle().equals(contentMaster.getContentTitle())) {
+        	Set<String> allContenetSet= contentMasterRepository.findAllContentBasedOnSection(contentMaster.getSection().getName());
+    		if(allContenetSet.contains(contentMaster.getContentTitle()))
+    		{
+    			return new ResponseEntity<>("This content already exists!!!", HttpStatus.BAD_REQUEST);
+    		}
+        }
+        
      
 
         // Update the existing content with new values

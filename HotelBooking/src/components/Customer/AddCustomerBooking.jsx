@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faPlus } from '@fortawesome/free-solid-svg-icons';
 import apiClient from '../APIClient';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 
 function BasicExample({ customerData }) {
   const [items, setItems] = useState([
@@ -24,17 +25,20 @@ function BasicExample({ customerData }) {
   const [bookingImage, setBookingImage] = useState(null);
   const [bookingDescription, setBookingDescription] = useState('');
   const [roomContentId, setRoomContentId] = useState(null);
+  const [rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState([]);
+  const [bookedRooms, setBookedRooms] = useState([]);
   const [allContents, setAllContents] = useState([]);
+  const [selectedRoomPrice, setSelectedRoomPrice] = useState(0);
+  const [totalItemPrice, setTotalItemPrice] = useState(0);
+
 
   // Fetch all room contents
   const fetchAllContents = async () => {
-    console.log('content fetched');
     try {
       const response = await apiClient.get('http://localhost:8080/api/content');
       if (response.status === 200) {
         setAllContents(response.data);
-        console.log(response.data, response.status);
       }
     } catch (error) {
       console.log(error);
@@ -43,22 +47,54 @@ function BasicExample({ customerData }) {
 
   // Filter rooms based on available contents
   const filterRoomsFromAllContents = () => {
-    setFilteredRooms(
-      allContents.filter(
-        (content) =>
-          content.section.sectionId === 1 && content.roomAvailable === true
-      )
-    );
+    setRooms(allContents.filter((content) => content.section.sectionId === 1));
+  };
+
+  const fetchBookedRooms = async () => {
+    try {
+      const response = await apiClient.post('http://localhost:8080/api/Booking/available-rooms', {
+        checkInDate,
+        checkInTime,
+        checkOutDate,
+        checkOutTime,
+      });
+
+      if (response.status === 200) {
+        setBookedRooms(response.data);
+
+        // Filter rooms after fetching booked rooms
+        const availableRooms = rooms.filter(
+          (room) => !response.data.some((bookedRoom) => bookedRoom.contentId === room.contentId)
+        );
+        setFilteredRooms(availableRooms);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
+    if (checkInDate && checkInTime && checkOutDate && checkOutTime) {
+      fetchBookedRooms();
+    }
+  }, [checkInDate, checkInTime, checkOutTime, checkOutDate]);
+
+  useEffect(() => {
     fetchAllContents();
-  }, []); // Only run on component mount
+  }, []);
 
   useEffect(() => {
     filterRoomsFromAllContents();
-  }, [allContents]); // Run when allContents is updated
+  }, [allContents]);
 
+  // Handle room selection
+  const handleRoomSelection = (roomId) => {
+    setRoomContentId(roomId);
+    const selectedRoom = filteredRooms.find((room) => room.contentId === Number(roomId));
+    setSelectedRoomPrice(selectedRoom ? selectedRoom.contentPrice : 0);
+  };
+
+  // Add new item
   const handleAddItem = () => {
     setItems([
       ...items,
@@ -72,12 +108,19 @@ function BasicExample({ customerData }) {
     ]);
   };
 
+  // Handle item changes
   const handleChange = (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
+
+    if (field === 'itemPrice' || field === 'itemQuantity') {
+      newItems[index].subTotal = newItems[index].itemPrice * newItems[index].itemQuantity || 0;
+    }
+
     setItems(newItems);
   };
 
+  // Handle item selection for deletion (checkbox)
   const handleSelectItem = (index) => {
     const newSelectedItems = selectedItems.includes(index)
       ? selectedItems.filter((i) => i !== index)
@@ -85,14 +128,26 @@ function BasicExample({ customerData }) {
     setSelectedItems(newSelectedItems);
   };
 
+  // Delete selected items
   const handleDeleteItems = () => {
     const newItems = items.filter((_, index) => !selectedItems.includes(index));
     setItems(newItems);
     setSelectedItems([]); // Clear selected items after deletion
   };
 
+  // Calculate the total invoice amount
+  useEffect(() => {
+    const totalItemCost = items.reduce((acc, item) => acc + Number(item.subTotal), 0);
+    setTotalItemPrice(totalItemCost)
+    // Calculate the number of days for the room
+    const daysDifference = dayjs(checkOutDate).diff(dayjs(checkInDate), 'day') || 1;
+    const roomCost = daysDifference * selectedRoomPrice;
+
+    setInvoiceAmount(totalItemCost + roomCost);
+  }, [items, selectedRoomPrice, checkInDate, checkOutDate]);
+
   const validateBookingDetails = () => {
-    return checkInDate && checkInTime && checkOutDate && checkOutTime;
+    return checkInDate && checkInTime && checkOutDate && checkOutTime && roomContentId;
   };
 
   const handleSubmit = async () => {
@@ -100,29 +155,29 @@ function BasicExample({ customerData }) {
       toast.error('Please fill in all booking details.');
       return;
     }
-  
+
     if (bookingImage === null) {
       toast.error('Attach Id proof');
       return;
     }
-  
+
     const formData = new FormData();
     const sendBookingData = {
       checkInDate,
       checkInTime,
       checkOutDate,
       checkOutTime,
-      invoiceAmount,
+      invoiceamount:invoiceAmount,
       bookingDescription,
       roomContentId,
     };
-  
+
     formData.append(
       'booking',
       new Blob([JSON.stringify(sendBookingData)], { type: 'application/json' })
     );
     formData.append('image', bookingImage);
-  
+
     try {
       const response = await apiClient.post(
         `http://localhost:8080/api/Booking/reserve/${customerData.customerId}`,
@@ -130,8 +185,7 @@ function BasicExample({ customerData }) {
       );
       if (response.status === 200) {
         const bookId = response.data.bookingId;
-  
-        
+
         const itemList = items
           .filter(
             (item) => item.itemName && item.itemPrice && item.itemQuantity
@@ -143,7 +197,7 @@ function BasicExample({ customerData }) {
             subTotal: Number(item.subTotal),
             itemDescription: item.itemDescription,
           }));
-  
+
         if (itemList.length > 0) {
           const responseSaveItem = await apiClient.post(
             `http://localhost:8080/api/items/booking/${bookId}`,
@@ -155,7 +209,7 @@ function BasicExample({ customerData }) {
         } else {
           toast.success('Booking created successfully');
         }
-  
+
         // Reset form state
         setCheckInDate('');
         setCheckInTime('');
@@ -179,7 +233,6 @@ function BasicExample({ customerData }) {
       toast.error('An error occurred while submitting the booking.');
     }
   };
-  
 
   return (
     <Card>
@@ -194,6 +247,7 @@ function BasicExample({ customerData }) {
               </Form.Label>
               <Form.Control
                 type="date"
+                required
                 value={checkInDate}
                 onChange={(e) => setCheckInDate(e.target.value)}
               />
@@ -218,6 +272,7 @@ function BasicExample({ customerData }) {
               </Form.Label>
               <Form.Control
                 type="date"
+                required
                 value={checkOutDate}
                 onChange={(e) => setCheckOutDate(e.target.value)}
               />
@@ -235,32 +290,29 @@ function BasicExample({ customerData }) {
               />
             </Form.Group>
           </Col>
-          <Col xs md={2}>
-          <Form.Group controlId="checkOutTime">
-          <Form.Label>
-                <strong>Select Room type</strong>
-              </Form.Label>
-          <Form.Select
-              id="section"
-              style={{ marginBottom: '20px', padding: '5px' }} 
-              onChange={(e) => setRoomContentId(e.target.value)}
-            >
-              <option value="">Select a section</option>
-              {filteredRooms.map((room) => (
-                <option key={room.contentId} value={room.contentId}>
-                  {room.contentTitle}
-                </option>
-              ))}
-            </Form.Select>
-
-          </Form.Group>
-
-           
-          </Col>
-          <Col xs={12} md={2}>
-            <Form.Group controlId="uploadImage">
+          <Col xs={6} md={2}>
+            <Form.Group controlId="roomSelect">
               <Form.Label>
-                <strong>Upload Image</strong>
+                <strong>Select Room</strong>
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={roomContentId || ''}
+                onChange={(e) => handleRoomSelection(e.target.value)}
+              >
+                <option value="">-- Select a Room --</option>
+                {filteredRooms.map((room) => (
+                  <option key={room.contentId} value={room.contentId}>
+                    {room.contentTitle}  
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </Col>
+          <Col xs={2}>
+            <Form.Group controlId="bookingImage">
+              <Form.Label>
+                <strong>Attach ID Proof</strong>
               </Form.Label>
               <Form.Control
                 type="file"
@@ -269,118 +321,156 @@ function BasicExample({ customerData }) {
             </Form.Group>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Form.Group controlId="description">
-              <Form.Label>
-                <strong>Description</strong>
-              </Form.Label>
-              <Form.Control
-                as="textarea"
-                onChange={(e) => setBookingDescription(e.target.value)}
-                style={{ height: '100px' }}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
         <hr />
-        <Row>
-          <Col xs={1}>
-            <strong>Check</strong>
-          </Col>
-          <Col xs={2}>
-            <strong>Item Name</strong>
-          </Col>
-          <Col xs={2}>
-            <strong>Cost</strong>
-          </Col>
-          <Col xs={2}>
-            <strong>Quantity</strong>
-          </Col>
-          <Col xs={2}>
-            <strong>SubTotal</strong>
-          </Col>
-          <Col xs={2}>
-            <strong>Item Description</strong>
-          </Col>
-          <Col xs={1}></Col>
-        </Row>
+        <h4>Items</h4>
+        <Row >
+          {items.map((item, index) => (
+            <Row key={index} style={{ marginBottom: '10px' }}>
+              <Col xs={12} md={1}>
+                <Form.Check
+                  type="checkbox"
+                  // label={selectedItems.includes(index) ? 'Selected' : 'Select'}
+                  checked={selectedItems.includes(index)}
+                  onChange={() => handleSelectItem(index)}
+                />
+              </Col>
+              <Col xs={12} md={3}>
+                <Form.Group controlId={`itemName-${index}`}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Item Name"
+                    value={item.itemName}
+                    onChange={(e) =>
+                      handleChange(index, 'itemName', e.target.value)
+                    }
+                  />
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={2}>
+                <Form.Group controlId={`itemPrice-${index}`}>
+                  <Form.Control
+                    type="number"
+                    placeholder="Price"
+                    value={item.itemPrice}
+                    onChange={(e) =>
+                      handleChange(index, 'itemPrice', e.target.value)
+                    }
+                  />
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={2}>
+                <Form.Group controlId={`itemQuantity-${index}`}>
+                  <Form.Control
+                    type="number"
+                    placeholder="Quantity"
+                    value={item.itemQuantity}
+                    onChange={(e) =>
+                      handleChange(index, 'itemQuantity', e.target.value)
+                    }
+                  />
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={4}>
+                <Form.Group controlId={`itemDescription-${index}`}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    value={item.itemDescription}
+                    onChange={(e) =>
+                      handleChange(index, 'itemDescription', e.target.value)
+                    }
+                  />
+                </Form.Group>
+              </Col>
 
-        {items.map((item, index) => (
-          <Row
-            key={index}
-            className="align-items-center"
-            style={{ marginTop: '10px' }}
-          >
-            <Col xs={1}>
-              <Form.Check
-                type="checkbox"
-                onChange={() => handleSelectItem(index)}
-                checked={selectedItems.includes(index)}
-              />
-            </Col>
-            <Col xs={2}>
-              <Form.Control
-                type="text"
-                value={item.itemName}
-                onChange={(e) => handleChange(index, 'itemName', e.target.value)}
-              />
-            </Col>
-            <Col xs={2}>
-              <Form.Control
-                type="number"
-                value={item.itemPrice}
-                onChange={(e) => handleChange(index, 'itemPrice', e.target.value)}
-              />
-            </Col>
-            <Col xs={2}>
-              <Form.Control
-                type="number"
-                value={item.itemQuantity}
-                onChange={(e) =>
-                  handleChange(index, 'itemQuantity', e.target.value)
-                }
-              />
-            </Col>
-            <Col xs={2}>
-              <Form.Control
-                type="number"
-                value={item.subTotal}
-                onChange={(e) => handleChange(index, 'subTotal', e.target.value)}
-              />
-            </Col>
-            <Col xs={2}>
-              <Form.Control
-                type="text"
-                value={item.itemDescription}
-                onChange={(e) =>
-                  handleChange(index, 'itemDescription', e.target.value)
-                }
-              />
-            </Col>
-          </Row>
-        ))}
-
-        <hr />
-        <Button variant="secondary" onClick={handleAddItem}>
-          <FontAwesomeIcon icon={faPlus} /> Add Item
-        </Button>
-        <Button
-          variant="danger"
-          onClick={handleDeleteItems}
-          disabled={selectedItems.length === 0}
-          style={{ marginLeft: '10px' }}
-        >
-          Delete Selected Items
-        </Button>
-        <hr />
-        <Row>
-          <Col xs={12}>
-            <Button variant="primary" onClick={handleSubmit}>
-              <FontAwesomeIcon icon={faCheckCircle} /> Submit Booking
+            </Row>
+          ))}
+        </Row>
+        <Row style={{paddingRight:'25px'}}> 
+          <Col xs={12} style={{textAlign:'right'}}>  
+            <Button
+              variant="danger"
+              onClick={handleDeleteItems}
+              disabled={selectedItems.length === 0}
+            >
+              Delete Selected Items
+            </Button>
+            <Button variant="success" onClick={handleAddItem}
+            style={{ marginLeft: '10px' }}
+            >
+              <FontAwesomeIcon icon={faPlus} /> Add Item
             </Button>
           </Col>
         </Row>
+        <hr />
+        <Row>
+          <Col xs={6}>
+            <Form.Group controlId="bookingDescription">
+              <Form.Label>
+                <strong>Booking Description</strong>
+              </Form.Label>
+              <Form.Control
+                as="textarea"  // Change to textarea
+                rows={3}       // Optional: specify the number of visible rows
+                placeholder="Describe your booking"
+                value={bookingDescription}
+                onChange={(e) => setBookingDescription(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+
+          <Col xs={6}>
+            <Row >
+              <Row>
+                <Col md={4} style={{ textAlign: 'right', fontSize: '18px',marginBottom:'20px' }}> <strong>Room Price:</strong></Col>
+                <Col md={8}>
+                  <Form.Group >
+                    <Form.Control
+                      type="text"
+                      value={selectedRoomPrice.toFixed(2) +"  per day"}
+                      readOnly
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={4} style={{ textAlign: 'right', fontSize: '18px',marginBottom:'20px' }}> <strong>Item Total:</strong></Col>
+                <Col md={8}>
+                  <Form.Group >
+                    <Form.Control
+                      type="text"
+                      value={totalItemPrice.toFixed(2)}
+                      readOnly
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={4} style={{ textAlign: 'right', fontSize: '18px',marginBottom:'20px' }}> <strong>Net Total:</strong></Col>
+                <Col md={8}>
+                  <Form.Group >
+                    <Form.Control
+                      type="text"
+                      value={invoiceAmount.toFixed(2)}
+                      readOnly
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>  
+
+            </Row>
+          </Col>
+
+
+        </Row>
+        
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          style={{ marginTop: '10px' }}
+        >
+          <FontAwesomeIcon icon={faCheckCircle} /> Submit Booking
+        </Button>
       </Card.Body>
     </Card>
   );

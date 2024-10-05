@@ -64,11 +64,11 @@ public class ContentMasterController {
 	        }
 	    }
 	   
-	   @PutMapping
-	   public ResponseEntity<ContentMaster> editContentMatser(){
-		   return new ResponseEntity<ContentMaster>(HttpStatus.OK);
-	   }
-	   
+//	   @PutMapping
+//	   public ResponseEntity<ContentMaster> editContentMatser(){
+//		   return new ResponseEntity<ContentMaster>(HttpStatus.OK);
+//	   }
+//	   
 	
 	   
 	   @DeleteMapping("/{contentId}")

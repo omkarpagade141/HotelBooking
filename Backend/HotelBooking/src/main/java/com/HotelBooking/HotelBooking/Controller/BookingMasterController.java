@@ -78,9 +78,10 @@ public class BookingMasterController {
 		return bookingMasterService.showDashBoardInfo();
 	}
 	
-	@GetMapping("/available-rooms")
+	@PostMapping("/available-rooms")
 	ResponseEntity<?> showAvilableRooms(@RequestBody BookingDTO bookingMaster)
 	{
+		System.out.println("Avb rooms controller");
 		return bookingMasterService.getAvilableRoomsList(bookingMaster);
 	}
 }
