@@ -21,7 +21,7 @@ function SettingMaster() {
   // Fetch existing settings from API
   const fetchSettingMaster = async () => {
     try {
-      const response = await apiClient.get('http://localhost:8080/api/settings/get-setting/2');
+      const response = await apiClient.get('http://localhost:8080/api/settings/get-setting/1');
       setSettings(response.data);
       console.log(response.data, response.status);
     } catch (error) {
@@ -59,7 +59,7 @@ function SettingMaster() {
     const formdata = new FormData();
     // Append JSON blob
     formdata.append('settingObj', new Blob([JSON.stringify(sendSettingData)], { type: 'application/json' }));
-    if (image) formdata.append('image', image); // Append the image if selected
+      formdata.append('image', image);  
 
     try {
       const response = await apiClient.put('http://localhost:8080/api/settings/addOrUpdate-setting', formdata, {

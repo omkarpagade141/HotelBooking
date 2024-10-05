@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 function EditBooking() {
     const { BookingId } = useParams();
     const [bookingData, setBookingData] = useState(null);
+    const [roomSelected,setRoomSelected]=useState('')
     const [formData, setFormData] = useState({
         checkInDate: '',
         checkInTime: '',
@@ -39,9 +40,10 @@ function EditBooking() {
                 checkInTime: data.checkInTime,
                 checkOutDate: data.checkOutDate,
                 checkOutTime: data.checkOutTime,
-                description: data.description,
-                invoiceamount: data.invoiceamount
+                description: data.bookingDescription,
+                invoiceamount: data.invoiceamount,
             });
+            setRoomSelected(data.roomTypeObj.contentTitle)
             setItems(data.itemList || []);
         } catch (error) {
             console.error("Error fetching booking data:", error);
@@ -75,7 +77,7 @@ function EditBooking() {
         // Update formData with the current total invoice amount
         const updatedFormData = {
             ...formData,
-            invoiceamount: totalInvoiceAmount, // Update invoice amount
+            invoiceamount: formData.invoiceamount+totalInvoiceAmount, // Update invoice amount
         };
 
         const data = new FormData();
@@ -207,7 +209,17 @@ function EditBooking() {
                                 />
                             </Form.Group>
                         </Col>
-                        <Col xs={12} md={4}>
+                        <Col md={2}>
+                            <Form.Group>
+                                <Form.Label><strong>Description</strong></Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    readOnly
+                                    value={roomSelected}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col xs={12} md={2}>
                             <Form.Group controlId="uploadImage">
                                 <Form.Label><strong>Upload Image</strong></Form.Label>
                                 <Form.Control type="file" name="uploadImage" onChange={handleChange} />
@@ -345,7 +357,7 @@ function EditBooking() {
                             </Button>
                         </Col>
                         <Col xs={5}>
-                            <h3>Total Invoice Amount: {totalInvoiceAmount.toFixed(2)}</h3>
+                            <h3>Total Invoice Amount: {(totalInvoiceAmount+ formData.invoiceamount).toFixed(2)}</h3>
 
                         </Col>
 

@@ -121,7 +121,7 @@ function Dashboard() {
   // Fetch customer data
   const fetchAllCustomers = async () => {
     try {
-      const response = await apiClient.get('/api/customer');
+      const response = await apiClient.get('http://localhost:8080/api/customer');
       setAllCustomers(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
