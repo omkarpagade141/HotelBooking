@@ -20,6 +20,7 @@ import com.HotelBooking.HotelBooking.DTO.ActiveRoomIdDTO;
 import com.HotelBooking.HotelBooking.DTO.BookingDTO;
 import com.HotelBooking.HotelBooking.DTO.DashboardDTO;
 import com.HotelBooking.HotelBooking.Entity.BookingMaster;
+import com.HotelBooking.HotelBooking.Entity.ContentMaster;
 import com.HotelBooking.HotelBooking.Entity.CustomerMaster;
 import com.HotelBooking.HotelBooking.Exception.ResourceNotFoundException;
 import com.HotelBooking.HotelBooking.Repository.BookingMasterRepository;
@@ -53,12 +54,12 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 		//New Change
 		CustomerMaster custObj = customerMasterRepository.findById(custId).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Customer does not exist"));
 
-		//ContentMaster cont= contentRepo.findById(book.getRoomContentId()).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Room does not exist"));;
+		ContentMaster cont= contentRepo.findById(book.getRoomContentId()).orElseThrow(()-> new ResourceNotFoundException("Error for Booking!!! Room does not exist"));;
 		
 		BookingMaster bookingMaster = mapper.map(book, BookingMaster.class);
 		
 		bookingMaster.setCustomer(custObj);
-		//bookingMaster.setRoomTypeObj(cont);
+		bookingMaster.setRoomTypeObj(cont);
 		
 		
 			
@@ -199,7 +200,7 @@ public class BookingMasterServiceImpl implements BookingMasterService {
 	public ResponseEntity<?> getAvilableRoomsList(BookingDTO bookingMaster) {
 		// TODO Auto-generated method stub
 		
-		List<ActiveRoomIdDTO> rooms = bookingMasterRepository.findAllAvilableRooms(bookingMaster.getCheckInDate(), bookingMaster.getCheckOutDate());
+		List<ActiveRoomIdDTO> rooms = bookingMasterRepository.findAllAvailableRooms(bookingMaster.getCheckInDate(), bookingMaster.getCheckOutDate(), bookingMaster.getCheckInTime(),bookingMaster.getCheckOutTime());
 		
 		return ResponseEntity.ok(rooms);
 	}

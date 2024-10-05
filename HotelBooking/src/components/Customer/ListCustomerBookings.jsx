@@ -11,12 +11,18 @@ const ContentList = ({ customerData }) => {
   const [customerBookings, setCustomerBookings] = useState([]);
 
   const fetchAllBookings = async () => {
-    const response = await apiClient.get('http://localhost:8080/api/Booking');
-    if (response.status === 200) {
-      setBookingList(response.data);
-      console.log(response.data);
+    try {
+      const response = await apiClient.get('http://localhost:8080/api/Booking');
+      if (response.status === 200) {
+        const bookings = Array.isArray(response.data) ? response.data : [];
+        setBookingList(bookings);
+      }
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      setBookingList([]);  // Set to empty array if an error occurs
     }
   };
+  
   useEffect(() => {
     setCustomerBookings(
       bookingList.filter(

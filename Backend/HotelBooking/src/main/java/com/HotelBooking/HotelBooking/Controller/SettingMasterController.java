@@ -23,7 +23,7 @@ public class SettingMasterController {
 
     @PutMapping("/addOrUpdate-setting")
     public ResponseEntity<String> updateSetting(@RequestPart("settingObj") SettingMaster settingMaster,
-                                                @RequestParam("image") MultipartFile logoImage
+                                                @RequestParam(value = "image",required = false) MultipartFile logoImage
     ) {
 
         try {

@@ -41,7 +41,7 @@ const Login = ({ onLoginSuccess }) => {
       <Container className="d-flex justify-content-center align-items-center login-container">
         <Row>
           <Col>
-            <h1 className='header-of-hotel-billing'>Hotel Billing</h1>
+            <h1 className='header-of-hotel-billing'>Hotel Booking</h1>
             <div className="login-box shadow-lg p-5">
               <h4 className="text-center fw-bold">
                 <FontAwesomeIcon icon={faUser} /> SIGN IN
